@@ -1,0 +1,897 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:body>
+
+		<h:outputScript name="locale-primefaces.js" library="js" />
+
+		<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+		<h:form id="formInteressados" styleClass="semBorda">
+
+			<div id="divMess" align="center" style="width: 100%; height: 10%">
+
+				<p:messages id="messages" showSummary="true" showDetail="true"
+					autoUpdate="true" closable="true" />
+
+
+			</div>
+
+			<p:dialog header="ALERTA!" resizable="false" showEffect="clip"
+				closable="false" hideEffect="clip" widgetVar="dlg_mensagem"
+				modal="true" width="250px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Atualizando Informações..."
+						title="#{manterProcessoMB.mensagem}"
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:panel id="pnlDadosInteressados" header="Dados dos Interessados"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:20px;width : 100%">
+
+					<h:panelGrid columns="2" cellpadding="10" style=" width : 80px;">
+						<h:outputLabel value="CPF:" />
+						<p:inputMask mask="?999.999.999-99" id="inpt_numCPF" size="15"
+							maxlength="15" value="#{manterProcessoMB.numCpf}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="3" cellpadding="10" style="width : 100%">
+						<h:outputLabel value="Nome:*" />
+						<p:autoComplete id="pessoaAutoCmpl" title="Nome Pessoa"
+							style="width : 100%" value="#{manterProcessoMB.pessoa}"
+							var="pessoaAnist" minQueryLength="4" size="100"
+							completeMethod="#{manterProcessoMB.listarPessoaPorNomeLike}"
+							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
+							converter="pessoaConverter" itemValue="#{pessoaAnist}"
+							effect="explode" />
+						<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
+							update=":tabView:formInteressados:"
+							actionListener="#{manterProcessoMB.consultarPessoas}"
+							icon="ui-icon-newwin" title="Consultaraf" />
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<p:panel id="pnlDadosTabelPessoa" header="Lista de Pessoas"
+					rendered="#{manterProcessoMB.habilitaTabePessoa}"
+					style="margin-bottom:20px;width : 100%" toggleable="false">
+
+					<h:panelGrid columns="2" style="margin-bottom:10px;width : 100%"
+						cellpadding="5">
+						<p:outputLabel for="tiposPessoa"
+							style="color:red;font-weight:bold;"
+							value="Tipo Pessoa no Processo:*" />
+						<p:selectManyCheckbox id="tiposPessoa" rendered="true"
+							requiredMessage="Tipo Pessoa no Processo"
+							style="width : 100%;font-weight:bold;"
+							value="#{manterProcessoMB.idTipoPessoaProcesso}">
+							<f:selectItems value="#{manterProcessoMB.listarTipoPessoaProc}"
+								var="item" itemLabel="#{item.descTipo}"
+								itemValue="#{item.idTipoPessoaProcesso}" />
+						</p:selectManyCheckbox>
+					</h:panelGrid>
+
+					<p:dataTable var="pessoaLista"
+						value="#{manterProcessoMB.listarPessoa}" paginator="true" rows="5">
+
+						<p:column headerText="CPF">
+							<h:outputText value="#{pessoaLista.numCpfCnpj}" />
+						</p:column>
+
+						<p:column headerText="Nome">
+							<h:outputText value="#{pessoaLista.nomePessoa}" />
+						</p:column>
+
+						<p:column headerText="Data Nascimento">
+							<h:outputText value="#{pessoaLista.dataNascimento}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+
+						<p:column headerText="Nome Mãe">
+							<h:outputText value="#{pessoaLista.nomeMae}" />
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{pessoaLista.emailPessoa}" />
+						</p:column>
+
+
+						<p:column style="width:32px;text-align: center">
+							<p:commandButton value="Incluir"
+								action="#{manterProcessoMB.incluirNoProcesso}"
+								icon="ui-icon-aply" title="Incluir no Processo" ajax="true"
+								update=":tabView:formInteressados:">
+								<f:setPropertyActionListener value="#{pessoaLista}"
+									target="#{manterProcessoMB.pessoa}" />
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+				<p:dataTable var="processoLista" id="dtbl_processoList"
+					emptyMessage="Nenhuma Pessoa Incluída no Processo"
+					paginatorPosition="top" style="margin-bottom:20px; width : 100%;"
+					sortBy="#{processoLista.tipoPessoaProcesso.idTipoPessoaProcesso}"
+					sortOrder="#{processoLista.tipoPessoaProcesso.idTipoPessoaProcesso}"
+					value="#{manterProcessoMB.listarPessoaProcesso}" rows="10">
+					<p:column headerText="Última Atualização">
+						<h:outputText
+							style="color : #{processoLista.pessoa.dataHoraAtualizacao eq null ? 'red' : 'black'};font-weight:bold;"
+							value="#{processoLista.pessoa.dataHoraAtualizacao eq null ? 'Recadastrar': processoLista.pessoa.dataHoraAtualizacao }"
+							id="dataAtualizacao">
+							<f:convertDateTime locale="pt_BR" dateStyle="long"
+								pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Tipo Pessoa"
+						sortBy="#{processoLista.tipoPessoaProcesso.descTipo}"
+						resizable="true">
+						<h:outputText value="#{processoLista.tipoPessoaProcesso.descTipo}" />
+					</p:column>
+
+					<p:column headerText="Número CPF">
+						<h:outputText value="#{processoLista.pessoa.numCpfCnpj}">
+
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Nome Pessoa"
+						sortBy="#{processoLista.pessoa.nomePessoa}" resizable="true">
+						<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
+					</p:column>
+
+					<p:column style="width:32px;align: center">
+						<p:commandButton value="Editar" id="Editar_Pessoa"
+							actionListener="#{manterProcessoMB.editarPessoaProcesso}"
+							update=":tabView:formInteressados:" icon="ui-icon-search"
+							title="Detalhar Endereço" ajax="true">
+							<f:setPropertyActionListener value="#{processoLista.pessoa}"
+								target="#{manterProcessoMB.pessoaCadastro}" />
+
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:32px;align: center">
+						<p:commandButton value="Remover" id="remover_pessoa_processo"
+							actionListener="#{manterProcessoMB.removerPessoaProcesso}"
+							icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+							update="dtbl_processoList">
+							<f:setPropertyActionListener value="#{processoLista.pessoa}"
+								target="#{manterProcessoMB.pessoaCadastro}" />
+
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+
+
+			<!-- PESSOAS EDITAR -->
+
+			<p:panel id="pnlDadosPessoa" header="Detalhes da Pessoa"
+				visible="#{manterProcessoMB.habilitaEdicaoPessoa}"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:20px;text-align:center; width : 100%;">
+					<p:commandButton id="btnAtualizar" value="Atualizar" ajax="true"
+						update=":tabView:formInteressados:"
+						disabled="#{!manterProcessoMB.habilitaEdicaoPessoa}"
+						actionListener="#{manterProcessoMB.atualziarPessoa}"
+						onclick="PF('dlg_mensagem').show();" icon="ui-icon-disk"
+						title="Salvar Pessoa" />
+
+					<p:commandButton id="btnCancelar" value="Cancelar" ajax="true"
+						update=":tabView:formInteressados:"
+						disabled="#{!manterProcessoMB.habilitaEdicaoPessoa}"
+						actionListener="#{manterProcessoMB.fecharPainelPessoa}"
+						icon="ui-icon-closethick" title="Salvar Pessoa" />
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="3" cellpadding="40"
+					style=" margin-bottom:20px; width : 100%;">
+
+					<h:panelGrid columns="3" cellpadding="10" style=" width : 50px;">
+						<h:inputHidden value="#{manterProcessoMB.pessoaCadastro.idPessoa}" />
+						<p:outputLabel value="CPF:*" />
+						<p:inputMask mask="?999.999.999-99" id="inpt_cpf_pessoa_cadastro"
+							size="15" maxlength="15"
+							value="#{manterProcessoMB.pessoaCadastro.numCpfCnpj}" />
+					</h:panelGrid>
+					<h:panelGrid columns="3" cellpadding="10" style=" width : 150px;">
+						<p:outputLabel value="Nome:*" />
+						<p:inputText id="inpt_cadastro_nomeAnistida"
+							value="#{manterProcessoMB.pessoaCadastro.nomePessoa}" size="100"
+							maxlength="100" />
+
+						<p:selectBooleanCheckbox id="checkNomeConferido" value="true"
+						    label="Comunicado de Óbito" />	
+						
+						<p:tooltip id="toollbNomeConferido" for="checkNomeConferido"
+							value="O Campo (Nome) foi atualizado e conferido pelo usuário (fulano.xxxx) em 15/01/2015 09:14:42, valor anterior: Maria da Silva Bispo"
+							showEffect="clip" hideEffect="clip"  />
+
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="4" cellpadding="40"
+					style="margin-bottom:20px;width : 100%">
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+						<h:outputLabel value="Data Nascimento:" />
+						<p:calendar id="dataNascimentoAnistidado" navigator="true"
+							value="#{manterProcessoMB.pessoaCadastro.dataNascimento}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+						<h:outputLabel value="Sexo:*" />
+						<p:selectOneMenu id="sexoAnistiado"
+							value="#{manterProcessoMB.pessoaCadastro.genero}"
+							style="width:125px">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItem itemLabel="Masculio" itemValue="M" />
+							<f:selectItem itemLabel="Femenino" itemValue="F" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+						<h:outputLabel value="Estado Civil:*" />
+						<p:selectOneMenu
+							value="#{manterProcessoMB.pessoaCadastro.idEstadoCivil}"
+							style=" width : 150px;" effect="explode">
+							<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+							<f:selectItems value="#{manterProcessoMB.listarEstadoCivil}"
+								var="item" itemLabel="#{item.descricao}"
+								itemValue="#{item.idEstadoCivil}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+						<h:outputLabel value="Nacionalidade:*" />
+						<p:inputText id="inpt_cadastro_nacionalidade"
+							value="#{manterProcessoMB.pessoaCadastro.nacionalidade}"
+							size="30" maxlength="30" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10"
+					style=" margin-bottom:20px;width : 100%">
+					<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+						<h:outputLabel value="E-mail::*" />
+						<p:inputText id="inpt_cadastro_email"
+							value="#{manterProcessoMB.pessoaCadastro.emailPessoa}" size="80"
+							maxlength="100" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style=" margin-bottom:20px;width : 100%">
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+						<h:outputLabel value="Nome Mãe:" />
+						<p:inputText id="inpt_cadastro_nomemMae"
+							value="#{manterProcessoMB.pessoaCadastro.nomeMae}" size="80"
+							maxlength="100" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+						<h:outputLabel value="Nome Pai:" />
+						<p:inputText id="inpt_cadastro_nomemPai"
+							value="#{manterProcessoMB.pessoaCadastro.nomePai}" size="80"
+							maxlength="100" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+					<h:outputText value="Comunicado de Óbito: " />
+					<p:selectBooleanCheckbox id="checkAnitObito"
+						value="#{manterProcessoMB.comunicadoObito}"
+						label="Comunicado de Óbito" />
+					<p:ajax event="click" update=":tabView:formInteressados:"
+						listener="#{manterProcessoMB.habilitarPainelObito}" />
+				</h:panelGrid>
+
+				<p:panel id="pnlObitoAnistida" header="Comunicado de Óbito"
+					style="margin-bottom:20px;width : 100%"
+					rendered="#{manterProcessoMB.comunicadoObito}">
+					<h:panelGrid columns="4" cellpadding="10"
+						style=" margin-bottom:20px;width : 100%">
+
+						<h:outputLabel value="Data do Óbito" style=" width : 50%" />
+						<p:calendar id="dataObito_cld"
+							value="#{manterProcessoMB.pessoaCadastro.dataObito}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10"
+							style=" width : 50%" />
+
+						<h:outputLabel value="Data do Comunicado do Óbito"
+							style=" width : 50%" />
+						<p:calendar id="dataComunicadoObito"
+							value="#{manterProcessoMB.pessoaCadastro.dataComunicadoObito}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10"
+							style=" width : 50%" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="30" style=" width : 200px;">
+						<h:outputLabel value="Observações do Comunicado::" />
+						<p:inputTextarea id="txtAreaObservaObitoAnistiado" maxlength="400"
+							rows="4" cols="100"
+							value="#{manterProcessoMB.pessoaCadastro.observacaoObito}" />
+					</h:panelGrid>
+
+				</p:panel>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="align:center;margin-bottom:20px;width : 100%">
+					<p:commandButton value="Incluir Doença" id="BTN_DOENCA"
+						icon="ui-icon-circle-plus" type="button"
+						onclick="PF('dlg_doenca').show();" />
+				</h:panelGrid>
+
+
+				<p:panel id="pnlDadosTabelDoenca" header="Doença"
+					rendered="#{!manterProcessoMB.comunicadoObito}"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+					<p:dataTable var="doencaPessao" id="listaDoenca"
+						rendered="#{not empty manterProcessoMB.listarDoencaPessoa}"
+						value="#{manterProcessoMB.listarDoencaPessoa}" paginator="false"
+						rows="10">
+
+						<p:column headerText="Código CID">
+							<h:outputText value="#{doencaPessao.doenca.codCid}" />
+						</p:column>
+
+						<p:column headerText="Descrição">
+							<h:outputText value="#{doencaPessao.doenca.descDoenca}" />
+						</p:column>
+
+
+						<p:column headerText="Observação">
+							<h:outputText value="#{doencaPessao.observacaoComprovante}" />
+						</p:column>
+
+						<p:column headerText="Data Comprovante">
+							<h:outputText value="#{doencaPessao.dataEntregaComprovante}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_doenca"
+								actionListener="#{manterProcessoMB.editarDoenca}"
+								update=":tabView:formInteressados:" icon="ui-icon-search"
+								title="Detalhar" ajax="true">
+								<f:setPropertyActionListener value="#{doencaPessao}"
+									target="#{manterProcessoMB.doencaPessoa}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_doenca"
+								actionListener="#{manterProcessoMB.removerDoenca}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update=":tabView:formInteressados:">
+								<f:setPropertyActionListener value="#{doencaPessao}"
+									target="#{manterProcessoMB.doencaPessoa}" />
+
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panel>
+
+				<p:panel id="pnlDadosTabelDocumentos" header="Documentos"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style="align:center;margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Documento" id="NovoDocAnist"
+							icon="ui-icon-document" type="button"
+							onclick="PF('dlg_documentos').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="documentosAnisti" id="listaDocumentos"
+						value="#{manterProcessoMB.listarDocumentoPessoa}"
+						paginator="false" rows="10">
+						<p:column headerText="Tipo Documento">
+							<h:outputText value="#{documentosAnisti.tipoDocumento.descricao}" />
+						</p:column>
+
+						<p:column headerText="Numero Documento">
+							<h:outputText value="#{documentosAnisti.numeroDocumento}" />
+						</p:column>
+
+
+						<p:column headerText="Orgão Emissor">
+							<h:outputText value="#{documentosAnisti.descOrgao}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_Doc_anist"
+								actionListener="#{manterProcessoMB.detalharDocumento}"
+								update=":tabView:formInteressados:" icon="ui-icon-search"
+								title="Detalhar" ajax="true">
+								<f:setPropertyActionListener value="#{documentosAnisti}"
+									target="#{manterProcessoMB.documentoPessoa}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_Doc_anist"
+								actionListener="#{manterProcessoMB.removerDocumento}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update=":tabView:formInteressados:listaDocumentos">
+								<f:setPropertyActionListener value="#{documentosAnisti}"
+									target="#{manterProcessoMB.documentoPessoa}" />
+
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+				<p:panel id="pnlDadosTabelEnderecos" header="Endereços"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style=" margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Endereço" id="NovoEndAnistr"
+							type="button" onclick="PF('dlg_endereco').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="enderecosAnistia" id="listaEnderecos"
+						value="#{manterProcessoMB.listarEnderecos}" paginator="false"
+						rows="10">
+						<p:column headerText="Tipo Endereço">
+							<h:outputText value="#{enderecosAnistia.tipoEndereco.descricao}" />
+						</p:column>
+
+						<p:column headerText="Logradouro">
+							<h:outputText value="#{enderecosAnistia.logradouro}" />
+						</p:column>
+
+
+						<p:column headerText="Cidade">
+							<h:outputText value="#{enderecosAnistia.cidade}" />
+						</p:column>
+
+						<p:column headerText="UF">
+							<h:outputText value="#{enderecosAnistia.uf}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_Endereco_anist"
+								actionListener="#{manterProcessoMB.detalharEndereco}"
+								update=":tabView:formInteressados:" icon="ui-icon-search"
+								title="Detalhar Endereço" ajax="true">
+								<f:setPropertyActionListener value="#{enderecosAnistia}"
+									target="#{manterProcessoMB.endereco}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_Endereco_anist"
+								actionListener="#{manterProcessoMB.removerEndereco}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update=":tabView:formInteressados:listaEnderecos">
+								<f:setPropertyActionListener value="#{enderecosAnistia}"
+									target="#{manterProcessoMB.endereco}" />
+
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+				<p:panel id="pnlDadosTabelTelefones" header="Telefones"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style=" margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Telefone" id="NovoTelefoneAnistr"
+							type="button" onclick="PF('dlg_telefone').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="telefoneAnistia" id="listaTelefones"
+						value="#{manterProcessoMB.listarTelefones}" paginator="false"
+						rows="10">
+						<p:column headerText="Tipo Telefone">
+							<h:outputText value="#{telefoneAnistia.tipoTelefone.descricao}" />
+						</p:column>
+
+						<p:column headerText="Número">
+							<h:outputText value="#{telefoneAnistia.numTelefone}" />
+						</p:column>
+
+						<p:column headerText="Observação">
+							<h:outputText value="#{telefoneAnistia.observacao}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_telefone_anist"
+								actionListener="#{manterProcessoMB.detalharTelefone}"
+								update=":tabView:formInteressados:listaTelefones"
+								icon="ui-icon-search" title="Detalhar" ajax="true">
+								<f:setPropertyActionListener value="#{telefoneAnistia}"
+									target="#{manterProcessoMB.telefonePessoa}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_telefone_anist"
+								actionListener="#{manterProcessoMB.removerTelefone}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update=":tabView:formInteressados:listaTelefones">
+								<f:setPropertyActionListener value="#{telefoneAnistia}"
+									target="#{manterProcessoMB.telefonePessoa}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+				</p:panel>
+
+
+			</p:panel>
+
+
+
+
+			<!-- DIALOG -->
+
+
+
+			<!-- DOENÇA PESSOA -->
+
+			<p:dialog header="Doença Pessao" resizable="false" showEffect="clip"
+				hideEffect="clip" widgetVar="dlg_doenca" modal="true" height="100%"
+				width="70%">
+				<p:outputPanel id="doencaDetalhe">
+					<h:panelGrid columns="1"
+						style=" margin-bottom:20px; width : 100%; height : 100%">
+
+						<h:panelGrid columns="4" style=" margin-bottom:20px;width : 100%">
+							<h:outputLabel value="Código CID*" style=" width : 50px;" />
+							<p:inputText id="txtCodigoCID"
+								value="#{manterProcessoMB.doencaPessoa.doenca.codCid}" size="10"
+								maxlength="10"
+								valueChangeListener="#{manterProcessoMB.cidDoencaChanged}">
+								<p:ajax event="blur" process="@this"
+									update="inpt_doenca_descricao_dg" />
+							</p:inputText>
+
+							<h:outputLabel value="Descrição" style=" width : 100px;" />
+							<p:inputText id="inpt_doenca_descricao_dg"
+								value="#{manterProcessoMB.doencaPessoa.doenca.descDoenca}"
+								size="50" maxlength="100" />
+
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" style=" margin-bottom:20px;width : 100%">
+							<h:panelGrid columns="1" cellpadding="10" style=" width : 140px;">
+								<h:outputLabel value="Data Comprovante:" />
+								<p:calendar id="dataComprovanteDoenca" navigator="true"
+									value="#{manterProcessoMB.doencaPessoa.dataEntregaComprovante}"
+									showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 180px;">
+								<h:outputLabel value="Observação Comprovante" />
+								<p:inputText id="inpt_doenca_ob_dg"
+									value="#{manterProcessoMB.doencaPessoa.observacaoComprovante}"
+									size="140" maxlength="200" />
+							</h:panelGrid>
+						</h:panelGrid>
+
+						<h:panelGrid columns="2"
+							style="margin-bottom:20px;position:center;">
+							<p:commandButton id="btnAddDoenca" value="Adicionar"
+								update=":tabView:formInteressados:" ajax="true"
+								style="horizontal-align:center"
+								action="#{manterProcessoMB.addDoenca}"
+								icon="ui-icon-circle-plus" title="Doença">
+							</p:commandButton>
+							<p:commandButton value="Fechar" id="fechEdcDoencar"
+								style="horizontal-align:center" type="button"
+								icon="ui-icon-closethick" onclick="PF('dlg_doenca').hide();" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+
+
+			<p:dialog header="Documentos" resizable="false" showEffect="clip"
+				hideEffect="clip" widgetVar="dlg_documentos" modal="true"
+				height="100%" width="70%">
+				<p:outputPanel id="documentoDetalhe">
+					<h:panelGrid columns="4"
+						style=" margin-bottom:20px; width : 100%; height : 100%">
+						<h:panelGrid columns="1" style=" width : 80px;">
+							<h:outputLabel value="Tipo Documento:*" style=" width : 150px;" />
+							<p:selectOneMenu id="TipoDocumentoAnist" required="false"
+								value="#{manterProcessoMB.tipoDocumento.idTipoDocumento}"
+								style="width:150px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarTipoDocumento}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.idTipoDocumento}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Número:*" style=" width : 100px;" />
+							<p:inputText id="inpt_ducmento_numero"
+								value="#{manterProcessoMB.documentoPessoa.numeroDocumento}"
+								size="50" maxlength="100" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Data Emissão:" />
+							<p:calendar id="dataEmissaoAnistidado"
+								value="#{manterProcessoMB.documentoPessoa.dataEmissao}"
+								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+						<h:outputLabel value="Órgão Emissor:*" style=" width : 100px;" />
+						<p:inputText id="inpt_ducmento_descOrgao"
+							value="#{manterProcessoMB.documentoPessoa.descOrgao}" size="120"
+							maxlength="120" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Livro:" style=" width : 60px;" />
+							<p:inputText id="inpt_observacao_livro"
+								value="#{manterProcessoMB.documentoPessoa.observacao}" size="80"
+								maxlength="80" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Zona Eleitoral" style=" width : 50px;" />
+							<p:inputText id="inpt_observacao_zona"
+								value="#{manterProcessoMB.documentoPessoa.zonaEleitoral}"
+								size="40" maxlength="40" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Seção" style=" width : 50px;" />
+							<p:inputText id="inpt_observacao_secao"
+								value="#{manterProcessoMB.documentoPessoa.secao}" size="40"
+								maxlength="40" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+
+
+						<h:panelGrid columns="1"
+							style="margin-bottom:40px;  width : 100%; height : 100%">
+							<h:outputLabel value="País de Origem:*" style=" width : 100px;" />
+							<p:inputText id="inpt_ducmento_paisOrigem"
+								value="#{manterProcessoMB.documentoPessoa.paisOrigem}"
+								size="120" maxlength="120" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Validade:" />
+							<p:calendar id="dataValidadeAnistidado"
+								value="#{manterProcessoMB.documentoPessoa.dataValidade}"
+								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;position:center;">
+						<p:commandButton id="btnSalvarDocumentoAnistiado"
+							value="Adicionar"
+							update=":tabView:formInteressados:listaDocumentos" ajax="true"
+							style="horizontal-align:center"
+							action="#{manterProcessoMB.addDocumento}"
+							icon="ui-icon-circle-plus" title="Documentos">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharDocumentoAnistr"
+							style="horizontal-align:center" type="button"
+							icon="ui-icon-closethick" onclick="PF('dlg_documentos').hide();" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog header="Endereços" resizable="false" showEffect="clip"
+				hideEffect="clip" widgetVar="dlg_endereco" modal="true"
+				height="100%" width="70%">
+				<p:outputPanel id="enderecoDetalhe">
+
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px; width : 100%; height : 100%">
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Tipo" style=" width : 100px;" />
+							<p:selectOneMenu id="TipoEnderecoAnist"
+								value="#{manterProcessoMB.tipoEndereco.idTipoEndereco}"
+								style="width:100px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listaTipoEnderecos}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.idTipoEndereco}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="UF:" style=" width : 100px;" />
+							<p:selectOneMenu id="IDUF"
+								value="#{manterProcessoMB.endereco.uf}" style="width:100px">
+								<p:ajax listener="#{manterProcessoMB.onEstadoChange}"
+									update="IDCidaddes" />
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarUF}" var="item"
+									itemLabel="#{item.sigla}" itemValue="#{item.sigla}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="1" style=" width : 312px;">
+							<h:outputLabel value="Cidade:" style=" width : 10px;" />
+							<p:selectOneMenu id="IDCidaddes" editable="true"
+								value="#{manterProcessoMB.cidade.nome}" style="width:300px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarCidades}"
+									var="item" itemLabel="#{item.nome}" itemValue="#{item.nome}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px; width : 100%;height : 100% ">
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Logradouro:*" style=" width : 100px;" />
+							<p:inputText id="inpt_endereo_Logradouro"
+								value="#{manterProcessoMB.endereco.logradouro}" size="70"
+								maxlength="150" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" style=" width : 150px;">
+							<h:outputLabel value="Bairro:" />
+							<p:inputText id="inpt_cadastro_bairro_anist"
+								value="#{manterProcessoMB.endereco.bairro}" size="50"
+								maxlength="100" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px; width : 100%;height : 100% ">
+
+						<h:panelGrid columns="1" style=" width : 20px;">
+							<h:outputLabel value="Número:" />
+							<p:inputText id="inpt_cadastro_numero_anist"
+								value="#{manterProcessoMB.endereco.numero}" size="20"
+								maxlength="20" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Complemento:" />
+							<p:inputText id="inpt_cadastro_complemento_anist"
+								value="#{manterProcessoMB.endereco.complemento}" size="80"
+								maxlength="80" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 40px;">
+							<h:outputLabel value="Cep:" />
+							<p:inputMask mask="99.999-999" id="inpt_cadastro_cep_anist"
+								value="#{manterProcessoMB.endereco.cep}" size="20"
+								maxlength="20" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;position:center;">
+						<p:commandButton id="btnSalvarEndereco" value="Adicionar"
+							update="listaEnderecos" ajax="true"
+							style="horizontal-align:center"
+							action="#{manterProcessoMB.addEndereco}"
+							icon="ui-icon-circle-plus" title="Endereço">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharEndAnistrr"
+							style="horizontal-align:center" type="button"
+							onclick="PF('dlg_endereco').hide();" />
+					</h:panelGrid>
+				</p:outputPanel>
+
+			</p:dialog>
+
+			<p:dialog header="Telefones" resizable="false" showEffect="clip"
+				hideEffect="clip" widgetVar="dlg_telefone" modal="true"
+				height="100%" width="70%">
+
+				<p:outputPanel id="detalheTelefone">
+
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px; width : 100%; height : 100%">
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Tipo Telefone:" style=" width : 100px;" />
+							<p:selectOneMenu id="TipoTelefoneist"
+								value="#{manterProcessoMB.tipoTelefone.codTipo}"
+								style="width:100px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarTipoTelefone}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.codTipo}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 40px;">
+							<h:outputLabel value="NumTelefone:" />
+							<p:inputMask mask="?99-99999999999"
+								id="inpt_cadastro_num_telefone_anist"
+								value="#{manterProcessoMB.telefonePessoa.numTelefone}" size="20"
+								maxlength="20" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 40px;">
+							<h:outputLabel value="Observação:" />
+							<p:inputText id="inpt_cadastro_observ_telefone_anist"
+								value="#{manterProcessoMB.telefonePessoa.observacao}" size="100"
+								maxlength="100" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;position:center;">
+						<p:commandButton id="btnSalvarTelefone" value="Adicionar"
+							update="listaTelefones" ajax="true"
+							style="horizontal-align:center"
+							actionListener="#{manterProcessoMB.addTelefone}"
+							icon="ui-icon-circle-plus" title="Telefones">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharTelefAnistrr"
+							style="horizontal-align:center" type="button"
+							onclick="PF('dlg_telefone').hide();" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</h:body>
+</ui:composition>

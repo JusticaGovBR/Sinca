@@ -1,0 +1,672 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:body>
+
+			<h:outputScript name="locale-primefaces.js" library="js" />
+
+			<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+			<h:form id="formFormularioAnistiado_Cadastro" styleClass="semBorda">
+
+				<div id="divMess" align="center" style="width: 70%; height: 10%">
+					<!--
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+				-->
+					<p:growl id="growl" showDetail="" sticky="true" />
+				</div>
+
+
+
+				<p:panel id="pnlConsultaAnistiados" header="Consultar Pessoas"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+					<h:panelGrid columns="4" cellpadding="10"
+						style="margin-bottom:20px;width : 670px;">
+						<h:panelGrid columns="2" cellpadding="10" style=" width : 182px;">
+							<h:outputLabel value="CPF:" />
+							<p:inputMask mask="999.999.999-99" id="inpt_numCPF_Anistiado"
+								size="15" maxlength="15"
+								value="#{manterAnistiadoMB.numCpfAnistiado}" />
+						</h:panelGrid>
+						<h:panelGrid columns="3" cellpadding="40" style=" width : 150px;">
+							<h:outputLabel value="Nome:*" />
+							<p:autoComplete id="pessoaAnistList" minQueryLength="5"
+								title="Nome Pessoa Anistiado"
+								value="#{manterAnistiadoMB.pessoaAnistiado}" var="pessoaAnist"
+								size="50" maxlength="120"
+								completeMethod="#{manterAnistiadoMB.listaPessoaPorNomeLk}"
+								scrollHeight="100" itemLabel="#{pessoaAnist.nomePessoa}"
+								converter="pessoaConverter" itemValue="#{pessoaAnist}"
+								effect="fade" />
+							<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
+								update="pnlDadosTabelAnistiados"
+								action="#{manterAnistiadoMB.consultarPessoasAnistiada}"
+								icon="ui-icon-newwin" title="Consultaraf" />
+
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10"
+						style="text-align:center; width : 100%;">
+						<p:commandButton id="btnSalvar" value="Salvar" ajax="false"
+							update="pnlDadosTabelAnistiados"
+							actionListener="#{manterAnistiadoMB.salvarPessoaAnistia}"
+							icon="ui-icon-newwin" title="Salvar Pessoa" />
+
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="pnlDadosAnistiado" header="Detalhes da Pessoa"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="3" cellpadding="40" style=" width : 100%;">
+
+						<h:panelGrid columns="3" cellpadding="10" style=" width : 50px;">
+						    <h:inputHidden value="#{manterAnistiadoMB.pessoaAnistCadasto.idPessoa}"/>
+							<p:outputLabel value="CPF:*" />
+							<p:inputMask mask="?999.999.999-99"
+								id="inpt_cadastro_numCPF_Anistiado" size="15" maxlength="15"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.numCpfCnpj}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="10" style=" width : 150px;">
+							<p:outputLabel value="Nome:*" />
+							<p:inputText id="inpt_cadastro_nomeAnistida"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePessoa}"
+								size="100" maxlength="100" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="1"
+						style="font-family:Arial;font-size:7px;font-weight:normal;
+									font-style:normal;text-decoration:none;color:#333333;height : 36px; width : 200px;">
+						<h:outputLabel value="Mesmo Requerente:*" />
+						<p:selectBooleanCheckbox label="Mesmo Requerente"
+							value="#{manterAnistiadoMB.mesmoRequerente}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="4" cellpadding="40"
+						style="margin-bottom:20px;width : 100%">
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Data Nascimento:" />
+							<p:calendar id="dataNascimentoAnistidado"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.dataNascimento}"
+								showOn="button" locale="pt" size="10" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+							<h:outputLabel value="Sexo:*" />
+							<p:selectOneMenu id="sexoAnistiado"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.genero}"
+								style="width:125px">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItem itemLabel="Masculio" itemValue="M" />
+								<f:selectItem itemLabel="Femenino" itemValue="F" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Estado Civil:" />
+							<p:selectOneMenu
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.idEstadoCivil}"
+								style=" width : 150px;" effect="fade">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterAnistiadoMB.listarEstadoCivil}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.idEstadoCivil}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+							<h:outputLabel value="Nacionalidade:*" />
+							<p:inputText id="inpt_cadastro_nacionalidade"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.nacionalidade}"
+								size="30" maxlength="30" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style=" margin-bottom:20px;width : 100%">
+						<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+							<h:outputLabel value="Email:*" />
+							<p:inputText id="inpt_cadastro_emailAnistiado" 
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.emailPessoa}"
+								size="80" maxlength="100" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style=" margin-bottom:20px;width : 100%">
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+							<h:outputLabel value="Nome Mãe:" />
+							<p:inputText id="inpt_cadastro_nomemMae"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomeMae}"
+								size="80" maxlength="100" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+							<h:outputLabel value="Nome Pai:" />
+							<p:inputText id="inpt_cadastro_nomemPai"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePai}"
+								size="80" maxlength="100" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+						<h:outputText value="Comunicado de Óbito: " />
+						<p:selectBooleanCheckbox id="checkAnitObito"
+							value="#{manterAnistiadoMB.comunicadoObito}"
+							label="Comunicado de Óbito" />
+						<p:ajax event="click" update="pnlObitoAnistida"
+							listener="#{manterAnistiadoMB.habilitarPainelObito}" />
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="pnlObitoAnistida" header="Comunicado de Óbito"
+					style="margin-bottom:20px;width : 100%" toggleable="true"
+					visible="#{manterAnistiadoMB.comunicadoObito}">
+
+					<h:panelGrid columns="4" cellpadding="10"
+						style=" margin-bottom:20px;width : 100%">
+
+						<h:outputLabel value="Data do Óbito" style=" width : 50%" />
+						<p:calendar id="dataObito_anistiado"
+							value="#{manterAnistiadoMB.pessoaAnistCadasto.dataObito}"
+							showOn="button" locale="pt" size="10" style=" width : 50%" />
+
+						<h:outputLabel value="Data do Comunicado do Óbito"
+							style=" width : 50%" />
+						<p:calendar id="dataComunicadoObito_anistiado"
+							value="#{manterAnistiadoMB.pessoaAnistCadasto.dataComunicadoObito}"
+							showOn="button" locale="pt" size="10" style=" width : 50%" />
+
+
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="30" style=" width : 200px;">
+						<h:outputLabel value="Observações do Comunicado::" />
+						<p:inputTextarea id="txtAreaObservaObitoAnistiado" maxlength="400"
+							rows="4" cols="100"
+							value="#{manterAnistiadoMB.pessoaAnistCadasto.observacaoObito}" />
+					</h:panelGrid>
+
+
+				</p:panel>
+
+				<p:panel id="pnlDadosTabelDocumentosAnistia" header="Documentos"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style="align:center;margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Documento" id="NovoDocAnist"
+							type="button" onclick="PF('dlg_documentos_anistiado').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="documentosAnisti" id="listaDocumentos"
+						value="#{manterAnistiadoMB.listarDocumentoPessoa}"
+						paginator="false" rows="10">
+						<p:column headerText="Tipo Documento">
+							<h:outputText value="#{documentosAnisti.tipoDocumento.descricao}" />
+						</p:column>
+
+						<p:column headerText="Numero Documento">
+							<h:outputText value="#{documentosAnisti.numeroDocumento}" />
+						</p:column>
+
+
+						<p:column headerText="Orgão Emissor">
+							<h:outputText value="#{documentosAnisti.descOrgao}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_Doc_anist"
+								actionListener="#{manterAnistiadoMB.detalharDocumentoAnistia}"
+								update=":formFormularioAnistiado_Cadastro:documentoDetalhe"
+								icon="ui-icon-search" title="Detalhar" ajax="true">
+								<f:setPropertyActionListener value="#{documentosAnisti}"
+									target="#{manterAnistiadoMB.documentoPessDetalhar}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_Doc_anist"
+								actionListener="#{manterAnistiadoMB.removerDocumento}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update="listaDocumentos">
+								<f:setPropertyActionListener value="#{documentosAnisti}"
+									target="#{manterAnistiadoMB.documentoPessDetalhar}" />
+
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+
+				<p:panel id="pnlDadosTabelEnderecosAnistia" header="Endereços"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style=" margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Endereço" id="NovoEndAnistr"
+							type="button" onclick="PF('dlg_endereco_anistiado').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="enderecosAnistia" id="listaEnderecos"
+						value="#{manterAnistiadoMB.listarEnderecoAnistia}"
+						paginator="false" rows="10">
+						<p:column headerText="Tipo Endereço">
+							<h:outputText value="#{enderecosAnistia.tipoEndereco.descricao}" />
+						</p:column>
+
+						<p:column headerText="Rua/Quadra">
+							<h:outputText value="#{enderecosAnistia.logradouro}" />
+						</p:column>
+
+
+						<p:column headerText="Cidade">
+							<h:outputText value="#{enderecosAnistia.cidade}" />
+						</p:column>
+
+						<p:column headerText="UF">
+							<h:outputText value="#{enderecosAnistia.uf}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_Endereco_anist"
+								actionListener="#{manterAnistiadoMB.detalharEnderecoAnistia}"
+								update=":formFormularioAnistiado_Cadastro:enderecoDetalhe" icon="ui-icon-search"
+								title="Detalhar Endereço" ajax="true">
+								<f:setPropertyActionListener value="#{enderecosAnistia}"
+									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_Endereco_anist"
+								actionListener="#{manterAnistiadoMB.removerEndereco}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update="listaEnderecos">
+								<f:setPropertyActionListener value="#{enderecosAnistia}"
+									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+				<p:panel id="pnlDadosTabelTelefonesAnistia" header="Telefones"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style=" margin-bottom:20px;width : 100%">
+						<p:commandButton value="Novo Telefone" id="NovoTelefoneAnistr"
+							type="button" onclick="PF('dlg_telefone_anistiado').show();" />
+					</h:panelGrid>
+
+					<p:dataTable var="telefoneAnistia" id="listaTelefonesAnistiado"
+						value="#{manterAnistiadoMB.listarTelefonePessoa}"
+						paginator="false" rows="10">
+						<p:column headerText="Tipo Telefone">
+							<h:outputText value="#{telefoneAnistia.tipoTelefone.descricao}" />
+						</p:column>
+
+						<p:column headerText="Número">
+							<h:outputText value="#{telefoneAnistia.numTelefone}" />
+						</p:column>
+
+						<p:column headerText="Observação">
+							<h:outputText value="#{telefoneAnistia.observacao}" />
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Editar" id="Editar_telefone_anist"
+								actionListener="#{manterAnistiadoMB.detalharTelefoneAnistia}"
+								update=":formFormularioAnistiado_Cadastro:detalheTelefone"
+								icon="ui-icon-search" title="Detalhar" ajax="true">
+								<f:setPropertyActionListener value="#{enderecosAnistia}"
+									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir" id="Excluir_telefone_anist"
+								actionListener="#{manterAnistiadoMB.removerTelefone}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update="listaTelefonesAnistiado">
+								<f:setPropertyActionListener value="#{telefoneAnistia}"
+									target="#{manterAnistiadoMB.telefonePessoa}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+				</p:panel>
+
+				<p:dialog header="Consultar Pessoa" widgetVar="dlg_pessoa_anistiado"
+					modal="true" height="70%" width="60%">
+					<p:panel id="pnlDadosTabelAnistiados" header="Lista de Pessoas"
+						style="margin-bottom:20px;width : 100%" toggleable="false">
+
+						<p:dataTable var="pessoaLista"
+							value="#{manterAnistiadoMB.listarPessoaAnistiado}"
+							paginator="true" rows="5">
+							<p:column headerText="CPF">
+								<h:outputText value="#{pessoaLista.numCpfCnpj}" />
+							</p:column>
+
+							<p:column headerText="Nome">
+								<h:outputText value="#{pessoaLista.nomePessoa}" />
+							</p:column>
+
+
+							<p:column headerText="Nome Mãe">
+								<h:outputText value="#{pessoaLista.nomeMae}" />
+							</p:column>
+
+							<p:column headerText="Email">
+								<h:outputText value="#{pessoaLista.emailPessoa}" />
+							</p:column>
+
+
+							<p:column style="width:32px;text-align: center">
+								<p:commandButton value="Visualizar"
+									action="#{manterAnistiadoMB.detalharAnistiado}"
+									icon="ui-icon-search" title="Detalhar" ajax="false">
+									<f:setPropertyActionListener value="#{pessoaLista}"
+										target="#{manterAnistiadoMB.pessoa}" />
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+					</p:panel>
+				</p:dialog>
+
+
+				<p:dialog header="Documentos do Anistiado" resizable="false"
+					showEffect="fade" hideEffect="fade"
+					widgetVar="dlg_documentos_anistiado" modal="true" height="100%"
+					width="70%">
+                    <p:outputPanel id="documentoDetalhe">
+					<h:panelGrid columns="4"
+						style=" margin-bottom:20px; width : 100%; height : 100%">
+						<h:panelGrid columns="1" style=" width : 80px;">
+							<h:outputLabel value="Tipo Documento:*" style=" width : 150px;" />
+							<p:selectOneMenu id="TipoDocumentoAnist"
+								value="#{manterAnistiadoMB.tipoDocumento.idTipoDocumento}"
+								style="width:150px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterAnistiadoMB.listarTipoDocumento}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.idTipoDocumento}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Número:*" style=" width : 100px;" />
+							<p:inputText id="inpt_ducmento_numero"
+								value="#{manterAnistiadoMB.documentoPessoa.numeroDocumento}"
+								size="50" maxlength="100" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Data Emissão:" />
+							<p:calendar id="dataEmissaoAnistidado"
+								value="#{manterAnistiadoMB.documentoPessoa.dataEmissao}"
+								showOn="button" locale="pt" size="10" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+						<h:outputLabel value="Órgão Emissor:*" style=" width : 100px;" />
+						<p:inputText id="inpt_ducmento_descOrgao"
+							value="#{manterAnistiadoMB.documentoPessoa.descOrgao}" size="120"
+							maxlength="120" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Livro:" style=" width : 60px;" />
+							<p:inputText id="inpt_observacao_livro"
+								value="#{manterAnistiadoMB.documentoPessoa.observacao}"
+								size="80" maxlength="80" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Zona Eleitoral" style=" width : 50px;" />
+							<p:inputText id="inpt_observacao_zona"
+								value="#{manterAnistiadoMB.documentoPessoa.zonaEleitoral}"
+								size="40" maxlength="40" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style="width : 60%; height :60%">
+							<h:outputLabel value="Seção" style=" width : 50px;" />
+							<p:inputText id="inpt_observacao_secao"
+								value="#{manterAnistiadoMB.documentoPessoa.secao}" size="40"
+								maxlength="40" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;  width : 100%; height : 100%">
+
+
+						<h:panelGrid columns="1"
+							style="margin-bottom:40px;  width : 100%; height : 100%">
+							<h:outputLabel value="País de Origem:*" style=" width : 100px;" />
+							<p:inputText id="inpt_ducmento_paisOrigem"
+								value="#{manterAnistiadoMB.documentoPessoa.paisOrigem}"
+								size="120" maxlength="120" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Validade:" />
+							<p:calendar id="dataValidadeAnistidado"
+								value="#{manterAnistiadoMB.documentoPessoa.dataValidade}"
+								showOn="button" locale="pt" size="10" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;position:center;">
+						<p:commandButton id="btnSalvarDocumentoAnistiado"
+							value="Adicionar" update="listaDocumentos" ajax="true"
+							style="horizontal-align:center"
+							action="#{manterAnistiadoMB.addDocumentoAnistia}"
+							icon="ui-icon-newwin" title="Documentos">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharDocumentoAnistr"
+							style="horizontal-align:center" type="button"
+							onclick="PF('dlg_documentos_anistiado').hide();" />
+					</h:panelGrid>
+				</p:outputPanel>
+				</p:dialog>
+
+				<p:dialog header="Endereços do Anistiado" resizable="false"
+					showEffect="fade" hideEffect="fade"
+					widgetVar="dlg_endereco_anistiado" modal="true" height="100%"
+					width="70%">
+					<p:outputPanel id="enderecoDetalhe">
+
+						<h:panelGrid columns="3"
+							style="margin-bottom:20px; width : 100%; height : 100%">
+
+							<h:panelGrid columns="1" style=" width : 50px;">
+								<h:outputLabel value="Tipo" style=" width : 100px;" />
+								<p:selectOneMenu id="TipoEnderecoAnist"
+									value="#{manterAnistiadoMB.tipoEndereco.idTipoEndereco}"
+									style="width:100px">
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems
+										value="#{manterAnistiadoMB.listaTipoEnderecoAnistiado}"
+										var="item" itemLabel="#{item.descricao}"
+										itemValue="#{item.idTipoEndereco}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 50px;">
+								<h:outputLabel value="UF:" style=" width : 100px;" />
+								<p:selectOneMenu id="IDUF"
+									value="#{manterAnistiadoMB.endereco.uf}" style="width:100px">
+									<p:ajax listener="#{manterAnistiadoMB.onEstadoChange}"
+										update="IDCidaddes" />
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems value="#{manterAnistiadoMB.listarEstadouf}"
+										var="item" itemLabel="#{item.sigla}" itemValue="#{item.sigla}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" cellpadding="1" style=" width : 312px;">
+								<h:outputLabel value="Cidade:" style=" width : 10px;" />
+								<p:selectOneMenu id="IDCidaddes" editable="true"
+									value="#{manterAnistiadoMB.cidadeAnistiado.nome}"
+									style="width:300px">
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems value="#{manterAnistiadoMB.listarCidades}"
+										var="item" itemLabel="#{item.nome}" itemValue="#{item.nome}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</h:panelGrid>
+
+
+						<h:panelGrid columns="2"
+							style="margin-bottom:20px; width : 100%;height : 100% ">
+
+							<h:panelGrid columns="1" style=" width : 50px;">
+								<h:outputLabel value="Rua/Quadra:*" style=" width : 100px;" />
+								<p:inputText id="inpt_endereo_Logradouro"
+									value="#{manterAnistiadoMB.enderecoAnistCadastro.logradouro}"
+									size="70" maxlength="150" />
+							</h:panelGrid>
+							<h:panelGrid columns="1" style=" width : 150px;">
+								<h:outputLabel value="Bairro:" />
+								<p:inputText id="inpt_cadastro_bairro_anist"
+									value="#{manterAnistiadoMB.enderecoAnistCadastro.bairro}"
+									size="50" maxlength="100" />
+							</h:panelGrid>
+							
+						</h:panelGrid>
+						<h:panelGrid columns="3"
+							style="margin-bottom:20px; width : 100%;height : 100% ">
+
+							<h:panelGrid columns="1" style=" width : 20px;">
+								<h:outputLabel value="Número:" />
+								<p:inputText id="inpt_cadastro_numero_anist"
+									value="#{manterAnistiadoMB.enderecoAnistCadastro.numero}"
+									size="20" maxlength="20" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 50px;">
+								<h:outputLabel value="Complemento:" />
+								<p:inputText id="inpt_cadastro_complemento_anist"
+									value="#{manterAnistiadoMB.enderecoAnistCadastro.complemento}"
+									size="80" maxlength="80" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 40px;">
+								<h:outputLabel value="Cep:" />
+								<p:inputMask mask="99.999-999" id="inpt_cadastro_cep_anist"
+									value="#{manterAnistiadoMB.enderecoAnistCadastro.cep}"
+									size="20" maxlength="20" />
+							</h:panelGrid>
+						</h:panelGrid>
+
+
+						<h:panelGrid columns="2"
+							style="margin-bottom:20px;position:center;">
+							<p:commandButton id="btnSalvarEndereco" value="Adicionar"
+								update="listaEnderecos" ajax="true"
+								style="horizontal-align:center"
+								action="#{manterAnistiadoMB.addEnderecoAnistia}"
+								icon="ui-icon-newwin" title="Endereço">
+							</p:commandButton>
+							<p:commandButton value="Fechar" id="FecharEndAnistrr"
+								style="horizontal-align:center" type="button"
+								onclick="PF('dlg_endereco_anistiado').hide();" />
+						</h:panelGrid>
+					</p:outputPanel>
+
+				</p:dialog>
+
+				<p:dialog header="Telefones do Anistiado" resizable="false"
+					showEffect="fade" hideEffect="fade"
+					widgetVar="dlg_telefone_anistiado" modal="true" height="100%"
+					width="70%">
+					
+					<p:outputPanel id="detalheTelefone">
+					
+					<h:panelGrid columns="3"
+						style="margin-bottom:20px; width : 100%; height : 100%">
+
+						<h:panelGrid columns="1" style=" width : 50px;">
+							<h:outputLabel value="Tipo Telefone:" style=" width : 100px;" />
+							<p:selectOneMenu id="TipoTelefoneist"
+								value="#{manterAnistiadoMB.tipoTelefone.codTipo}"
+								style="width:100px">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+								<f:selectItems value="#{manterAnistiadoMB.listarTipoTelefone}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item.codTipo}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 40px;">
+							<h:outputLabel value="NumTelefone:" />
+							<p:inputMask mask="?99-99999999999"
+								id="inpt_cadastro_num_telefone_anist"
+								value="#{manterAnistiadoMB.telefonePessoa.numTelefone}"
+								size="20" maxlength="20" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style=" width : 40px;">
+							<h:outputLabel value="Observação:" />
+							<p:inputText id="inpt_cadastro_observ_telefone_anist"
+								value="#{manterAnistiadoMB.telefonePessoa.observacao}"
+								size="100" maxlength="100" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="2"
+						style="margin-bottom:20px;position:center;">
+						<p:commandButton id="btnSalvarTelefone" value="Adicionar"
+							update="listaTelefonesAnistiado" ajax="true"
+							style="horizontal-align:center"
+							actionListener="#{manterAnistiadoMB.addTelefoneAnistia}"
+							icon="ui-icon-newwin" title="Telefones">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharTelefAnistrr"
+							style="horizontal-align:center" type="button"
+							onclick="PF('dlg_telefone_anistiado').hide();" />
+					</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+
+
+			</h:form>
+		</h:body>
+	</ui:define>
+</ui:composition>

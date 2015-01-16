@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="common-style.css" library="css" />
+	<h:outputScript name="locale-primefaces.js" library="js" />
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/resources/css/common-style.css" />
+		
+
+</h:head>
+
+<h:body style="position: absolute;
+	width: 100%;
+	background: #5D869B url(resources/imagens/degrade1.png) repeat-x center top">
+
+	<div id="page" style="" align="center">
+
+		<div id="header"
+			style="height: 100px; background: #5D869B url(resources/imagens/degrade1.png)">
+			<ui:insert name="header">
+				<ui:include src="/templates/header.xhtml" />
+			</ui:insert>
+		</div>
+
+		<!--
+		<div id="content" style="height: 600px"> 
+		 -->
+
+		<div id="menu" style="height: 100%; width: 95%">
+
+			<ui:insert name="menu">
+				<ui:include src="/templates/menu.xhtml" />
+			</ui:insert>
+
+		</div>
+
+		<div id="content" style="height: 600px; width: 95%">
+
+			<ui:insert name="content">
+			</ui:insert>
+
+		</div>
+
+		<div id="footer" class="header">
+			<ui:insert name="footer" style="height: 100px;">
+				<ui:include src="/templates/footer.xhtml" />
+			</ui:insert>
+		</div>
+
+	</div>
+
+</h:body>
+
+</html>
+

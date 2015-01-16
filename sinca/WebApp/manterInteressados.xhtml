@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:body>
+
+			<h:outputScript name="locale-primefaces.js" library="js" />
+
+			<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+
+			<h:form id="formFormularioAnistiado" styleClass="semBorda">
+
+				<div id="divMess" align="center" style="width: 70%; height: 10%">
+					<!--
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+				-->
+					<p:growl id="growl" showDetail="false" sticky="true" />
+				</div>
+
+				<!-- CADASTRO DE INTERESSADOS -->
+				<p:tabView dynamic="true" cache="false" effect="fade"
+					styleClass="semBorda" orientation="top">
+
+					<p:tab title="Anistiando" id="Anistiando_2">
+
+						<p:panel id="pnlConsultaAnistiados" header="Consultar Pessoas"
+							style="margin-bottom:20px;width : 100%" toggleable="true">
+							<h:panelGrid columns="4" cellpadding="10" style=" width : 670px;">
+								<h:panelGrid columns="2" cellpadding="10"
+									style=" width : 182px;">
+									<h:outputLabel value="CPF:" />
+									<p:inputMask mask="999.999.999-99" id="inpt_numCPF_Anistiado"
+										size="15" maxlength="15"
+										value="#{manterProcessoMB.numCpfAnistiado}" />
+								</h:panelGrid>
+								<h:panelGrid columns="3" cellpadding="40"
+									style=" width : 150px;">
+									<h:outputLabel value="Nome:*" />
+									<p:autoComplete id="pessoaAnistList" minQueryLength="5"
+										title="Nome Pessoa Anistiado"
+										value="#{manterProcessoMB.pessoaAnistiado}" var="pessoaAnist"
+										size="50" maxlength="120"
+										completeMethod="#{manterProcessoMB.listaPessoaPorNomeLk}"
+										scrollHeight="100" itemLabel="#{pessoaAnist.nomePessoa}"
+										converter="pessoaConverter" itemValue="#{pessoaAnist}"
+										effect="fade" />
+									<p:commandButton id="btnConsultar" value="Consultar"
+										ajax="true" update="pnlDadosTabelAnistiados"
+										action="#{manterProcessoMB.consultarPessoasAnistiada}"
+										icon="aplicar" title="Consultaraf" />
+
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:panel>
+
+						<p:panel id="pnlDadosAnistiado" header="Detalhes da Pessoa"
+							style="margin-bottom:20px;width : 100%" toggleable="true">
+
+							<h:panelGrid columns="3" cellpadding="40" style=" width : 100%;">
+
+								<h:panelGrid columns="2" cellpadding="10" style=" width : 50px;">
+									<h:outputLabel value="CPF:*" />
+									<p:inputMask mask="999.999.999-99"
+										id="inpt_cadastro_numCPF_Anistiado" size="15" maxlength="15"
+										value="#{manterProcessoMB.pessoaAnistCadasto.numCpfCnpj}" />
+								</h:panelGrid>
+								<h:panelGrid columns="2" cellpadding="10"
+									style=" width : 150px;">
+									<h:outputLabel value="Nome:*" />
+									<p:inputText id="inpt_cadastro_nomeAnistida"
+										value="#{manterProcessoMB.pessoaAnistCadasto.nomePessoa}"
+										size="100" maxlength="100" />
+								</h:panelGrid>
+							</h:panelGrid>
+							<h:panelGrid columns="2" cellpadding="1"
+								style="font-family:Arial;font-size:7px;font-weight:normal;
+									font-style:normal;text-decoration:none;color:#333333;height : 36px; width : 200px;">
+								<h:outputLabel value="Mesmo Requerente:*" />
+								<p:selectBooleanCheckbox label="Mesmo Requerente"
+									value="#{manterProcessoMB.mesmoRequerente}" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="4" cellpadding="40" style=" width : 100%;">
+
+								<h:panelGrid columns="1" cellpadding="10"
+									style=" width : 150px;">
+									<h:outputLabel value="Data Nascimento:" />
+									<p:calendar id="dataNascimentoAnistidado"
+										value="#{manterProcessoMB.pessoaAnistCadasto.dataNascimento}"
+										showOn="button" locale="pt" size="10" />
+								</h:panelGrid>
+								<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+									<h:outputLabel value="Sexo:*" />
+									<p:selectOneMenu id="sexoAnistiado"
+										value="#{manterProcessoMB.pessoaAnistCadasto.genero}"
+										style="width:125px">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItem itemLabel="Masculio" itemValue="M" />
+										<f:selectItem itemLabel="Femenino" itemValue="F" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<h:panelGrid columns="1" cellpadding="10"
+									style=" width : 150px;">
+									<h:outputLabel value="Estado Civil:" />
+									<p:selectOneMenu
+										value="#{manterProcessoMB.pessoaAnistCadasto.idEstadoCivil}"
+										style=" width : 150px;" effect="fade">
+										<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{manterProcessoMB.listarEstadoCivil}"
+											var="item" itemLabel="#{item.descricao}"
+											itemValue="#{item.idEstadoCivil}" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
+									<h:outputLabel value="Nacionalidade:*" />
+									<p:inputText id="inpt_cadastro_nacionalidade"
+										value="#{manterProcessoMB.pessoaAnistCadasto.nacionalidade}"
+										size="30" maxlength="30" />
+								</h:panelGrid>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2" cellpadding="40" style=" width : 100%;">
+
+								<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+									<h:outputLabel value="Nome Mãe:" />
+									<p:inputText id="inpt_cadastro_nomemMae"
+										value="#{manterProcessoMB.pessoaAnistCadasto.nomeMae}"
+										size="80" maxlength="100" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+									<h:outputLabel value="Nome Pai:" />
+									<p:inputText id="inpt_cadastro_nomemPai"
+										value="#{manterProcessoMB.pessoaAnistCadasto.nomePai}"
+										size="80" maxlength="100" />
+								</h:panelGrid>
+
+							</h:panelGrid>
+						</p:panel>
+
+						<p:panel id="pnlEnderecosAnistiado" header="Endereços da Pessoa"
+							style="margin-bottom:20px;width : 100%" toggleable="true">
+
+							<h:panelGrid columns="3" style=" width : 100%; height : 100%">
+
+								<h:panelGrid columns="1" style=" width : 50px;">
+									<h:outputLabel value="UF:" style=" width : 100px;" />
+									<p:selectOneMenu id="IDUF"
+										value="#{manterProcessoMB.endereco.uf}" style="width:100px">
+										<p:ajax listener="#{manterProcessoMB.onEstadoChange}"
+											update="IDCidaddes" />
+										<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{manterProcessoMB.listarEstadouf}"
+											var="item" itemLabel="#{item.sigla}"
+											itemValue="#{item.sigla}" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+
+								<h:panelGrid columns="1" cellpadding="1" style=" width : 312px;">
+									<h:outputLabel value="Cidade:" style=" width : 10px;" />
+									<p:selectOneMenu id="IDCidaddes" editable="true"
+										value="#{manterProcessoMB.cidadeAnistiado.nome}"
+										style="width:300px">
+										<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{manterProcessoMB.listarCidades}"
+											var="item" itemLabel="#{item.nome}" itemValue="#{item.nome}" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+
+								<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
+									<h:outputLabel value="Email:*" />
+									<p:inputText id="inpt_cadastro_emailAnistiado"
+										value="#{manterProcessoMB.pessoaAnistCadasto.emailPessoa}"
+										size="80" maxlength="100" />
+								</h:panelGrid>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2" style=" width : 100%;height : 100% ">
+
+								<h:panelGrid columns="1" style=" width : 50px;">
+									<h:outputLabel value="Lougadouro:*" style=" width : 100px;" />
+									<p:inputText id="inpt_endereo_Lougadouro"
+										value="#{manterProcessoMB.enderecoAnistCadastro.logradouro}"
+										size="50" maxlength="100" />
+								</h:panelGrid>
+								<h:panelGrid columns="1" style=" width : 150px;">
+									<h:outputLabel value="Bairro:" />
+									<p:inputText id="inpt_cadastro_bairro_anist"
+										value="#{manterProcessoMB.enderecoAnistCadastro.bairro}"
+										size="100" maxlength="100" />
+								</h:panelGrid>
+
+							</h:panelGrid>
+
+
+						</p:panel>
+						
+
+						<p:dialog header="Consultar Pessoa" widgetVar="dlg_pessoa_anistiado"
+							modal="true" height="70%" width="60%">
+							<p:panel id="pnlDadosTabelAnistiados" header="Lista de Pessoas"
+								style="margin-bottom:20px;width : 100%" toggleable="false">
+
+								<p:dataTable var="pessoaLista"
+									value="#{manterProcessoMB.listarPessoaAnistiado}"
+									paginator="true" rows="5">
+									<p:column headerText="CPF">
+										<h:outputText value="#{pessoaLista.numCpfCnpj}" />
+									</p:column>
+
+									<p:column headerText="Nome">
+										<h:outputText value="#{pessoaLista.nomePessoa}" />
+									</p:column>
+
+
+									<p:column headerText="Nome Mãe">
+										<h:outputText value="#{pessoaLista.nomeMae}" />
+									</p:column>
+
+									<p:column headerText="Email">
+										<h:outputText value="#{pessoaLista.emailPessoa}" />
+									</p:column>
+
+
+									<p:column style="width:32px;text-align: center">
+										<p:commandButton value="Visualizar"
+											action="#{manterProcessoMB.detalharAnistiado}"
+											icon="ui-icon-search" title="Detalhar" ajax="false">
+											<f:setPropertyActionListener value="#{pessoaLista}"
+												target="#{manterProcessoMB.pessoa}" />
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</p:dialog>
+
+						
+
+
+					</p:tab>
+					<!-- FIM ANISTIDADOs -->
+
+
+
+
+
+					<p:tab title="Requrente" id="Part_3" disabled="false">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText value="Em Construção" />
+						</h:panelGrid>
+					</p:tab>
+
+				</p:tabView>
+
+			</h:form>
+
+
+		</h:body>
+	</ui:define>
+</ui:composition>

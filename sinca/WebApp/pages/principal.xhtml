@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:body>
+
+			<h:outputScript name="locale-primefaces.js" library="js" />
+
+			<style type="text/css">
+.save {
+	background-image: url("../gecon/resources/imagens/save.png") !important;
+}
+
+.grid {
+	background-image: url("../gecon/resources/imagens/grid2.png") !important;
+}
+
+.remove {
+	background-image: url("../gecon/resources/imagens/remov_16.png")
+		!important;
+}
+</style>
+
+			<h:form id="formFormularioProcesso">
+
+				<div id="divMess" align="center" style="width: 70%; height: 10%">
+					<!--
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+				-->
+					<p:growl id="growl" showDetail="false" sticky="true" />
+				</div>
+
+				<p:tabView dynamic="true" cache="false" effect="fade"
+					orientation="top" effectDuration="fast">
+					<p:tab title="Godfather Part I" id="Part_I">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText value="The story begins as Don Vito Corleone..." />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Godfather Part II" id="Part_2">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText value="Francis Ford Coppola's legendary..." />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Godfather Part III" id="Part_3">
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputText value="After a break of more than 15 years..." />
+						</h:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</h:body>
+	</ui:define>
+</ui:composition>

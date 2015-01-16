@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="body">
+
+		<h:body>
+
+			<h:outputScript name="locale-primefaces.js" library="js" />
+
+			<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+
+			<p:panel id="pnAnalise" header="Análise do Processo / Recomendações"
+				style="margin-bottom:10px;width : 100%" toggleable="false">
+
+				<h:panelGrid columns="2" cellpadding="10" style="margin-bottom:10px;width :100%;">				
+					<h:panelGrid columns="2" cellpadding="10" style="width :250px;">
+						<h:outputLabel value="Número Processo SEI:" />
+						<h:outputLabel
+							value="#{manterAnaliseMB.analiseProcesso.processo.numProtocoloMj}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
+						<h:outputLabel value="Data Cadastro SEI:" />
+						<h:outputLabel
+							value="#{manterAnaliseMB.analiseProcesso.processo.dataProtocoloMJ}">
+							<f:convertDateTime locale="pt_BR" dateStyle="long"
+								pattern="dd/MM/yyyy" />
+
+						</h:outputLabel>
+					</h:panelGrid>
+				</h:panelGrid>				
+				<h:panelGrid columns="2" cellpadding="10" style="width :100%;">				
+					<h:panelGrid columns="2" cellpadding="10" style="width :250px;">
+						<h:outputLabel value="Número Requerimento:" />
+						<h:outputLabel
+							value="#{manterAnaliseMB.analiseProcesso.processo.numProtocoloCa}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
+						<h:outputLabel value="Data Requerimento:" />
+						<h:outputLabel
+							value="#{manterAnaliseMB.analiseProcesso.processo.dataProtocoloCa}">
+							<f:convertDateTime locale="pt_BR" dateStyle="long"
+								pattern="dd/MM/yyyy" />
+
+						</h:outputLabel>
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</p:panel>
+
+
+			<p:tabView id="tabView">
+
+				<p:tab id="tab_analise_processo" title="Análise">
+					<!-- INTERESSADOS -->
+					<ui:insert name="analise">
+						<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
+					</ui:insert>
+
+				</p:tab>
+
+				<p:tab id="tab_recomendacoes" title="Recomendações">
+					<ui:insert name="recomendacoes">
+						<ui:include
+							src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
+					</ui:insert>
+				</p:tab>
+
+
+			</p:tabView>
+
+		</h:body>
+	</ui:define>
+</ui:composition>
