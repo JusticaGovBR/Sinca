@@ -31,9 +31,9 @@
 						closable="true" />
 				</div>
 
-				<p:dialog header="Consultando!" resizable="false" showEffect="explode"
-					closable="false" hideEffect="explode" widgetVar="dlg_mensagem"
-					modal="true" width="250px">
+				<p:dialog header="Consultando!" resizable="false"
+					showEffect="explode" closable="false" hideEffect="explode"
+					widgetVar="dlg_mensagem" modal="true" width="250px">
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:20px;text-align:center;">
 						<h:outputLabel value="Obtendo Informações..."
@@ -54,24 +54,25 @@
 
 						<h:outputLabel for="dataProtocoloMJ"
 							value="Data Protocolo MJ-SEI:" style=" width : 100%" />
-								
-						<p:calendar id="dataProtocoloMJ" navigator="true"  
-								value="#{consultarProcessoMB.dataProtocoloMJ}"
-								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />	
+
+						<p:calendar id="dataProtocoloMJ" navigator="true"
+							value="#{consultarProcessoMB.dataProtocoloMJ}" showOn="button"
+							locale="pt" pattern="dd/MM/yyyy" size="10" />
 
 
 						<h:outputLabel for="inpt_numProtocoloCa"
 							value="Nº Requerimento CA:" style=" width : 100%" />
 						<p:inputMask mask="?9999999999" id="inpt_numProtocoloCa" size="20"
 							maxlength="20" value="#{consultarProcessoMB.numProcessoCA}" />
-							
-							
-						<h:outputLabel for="dataProtocoloCA"
-							value="Data Protocolo CA:" style=" width : 100%" />
-								
-						<p:calendar id="dataProtocoloCA" navigator="true" 
-								value="#{consultarProcessoMB.dataProtocoloCA}" mindate="01/01/1990"
-								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />	
+
+
+						<h:outputLabel for="dataProtocoloCA" value="Data Protocolo CA:"
+							style=" width : 100%" />
+
+						<p:calendar id="dataProtocoloCA" navigator="true"
+							value="#{consultarProcessoMB.dataProtocoloCA}"
+							mindate="01/01/1990" showOn="button" locale="pt"
+							pattern="dd/MM/yyyy" size="10" />
 
 					</h:panelGrid>
 
@@ -84,16 +85,19 @@
 							var="pessoa" size="100" maxlength="120" minQueryLength="3"
 							completeMethod="#{consultarProcessoMB.listaPessoaPorNomeLk}"
 							scrollHeight="500" itemLabel="#{pessoa.nomePessoa}"
-							converter="pessoaConverter" itemValue="#{pessoa}" effect="explode" />
+							converter="pessoaConverter" itemValue="#{pessoa}"
+							effect="explode" />
 
 					</h:panelGrid>
 
 
-					<h:panelGrid columns="1" cellpadding="10" style="text-align:center; width : 100%;">
+					<h:panelGrid columns="1" cellpadding="10"
+						style="text-align:center; width : 100%;">
 						<p:commandButton id="btnConsultarProcesso" value="Consultar"
-							ajax="true" actionListener="#{consultarProcessoMB.consultarProcesso}"
-							update=":formProcesso:"
-							onclick="PF('dlg_mensagem').show();" icon="ui-icon-document" />
+							ajax="true"
+							actionListener="#{consultarProcessoMB.consultarProcesso}"
+							update=":formProcesso:" onclick="PF('dlg_mensagem').show();"
+							icon="ui-icon-document" />
 					</h:panelGrid>
 				</p:panel>
 
@@ -101,10 +105,11 @@
 					visible="#{not empty consultarProcessoMB.listarPessoaProcesso}"
 					style="margin-bottom:20px;width : 100%" toggleable="false">
 
-					<p:dataTable var="processoLista" paginatorPosition="top"
-						sortMode="multiple"
+					<p:dataTable id="processotb" var="processoLista"
+						paginatorPosition="top" sortMode="multiple"
 						value="#{consultarProcessoMB.listarPessoaProcesso}"
 						paginator="true" rows="20">
+
 						<p:column headerText="Última Atualização">
 							<h:outputText
 								style="color : #{processoLista.processo.dataHoraAtualizacao eq null ? 'red' : 'black'}; font-weight:bold;"
@@ -130,23 +135,45 @@
 							<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
 						</p:column>
 
+						<p:column headerText="Nome Pessoa"
+							sortBy="#{processoLista.pessoa.nomePessoa}" resizable="true">
+							<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
+						</p:column>
+
 
 						<p:column style="width:32px;text-align:center;"
-							headerText="Detalhar">
+							headerText="Detalhar" exportable="false">
 							<p:commandButton value="Atualizar"
 								action="#{consultarProcessoMB.detalharProcesso}"
-								update=":formProcesso:"
-								icon="ui-icon-search" title="Detalhar" ajax="true">
+								update=":formProcesso:" icon="ui-icon-search" title="Detalhar"
+								ajax="true">
 								<f:setPropertyActionListener value="#{processoLista}"
 									target="#{consultarProcessoMB.pessoaProcesso}" />
 							</p:commandButton>
 						</p:column>
-
 					</p:dataTable>
 				</p:panel>
+				<p:panel header="Exporte estes dados da tela para:">
+					<h:commandLink>
+						<p:graphicImage library="images" url="../../imagens/iconeExcel.png" />
+						<p:dataExporter type="exe" target="processotb"
+							fileName="processos" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="images" url="../../imagens/iconePDF.png" />
+						<p:dataExporter type="pdf" target="processotb"
+							fileName="processos" />
+					</h:commandLink>
 
 
+					<h:commandLink>
+						<p:graphicImage library="images" url="../../imagens/iconeWord.png" />
+						<p:dataExporter type="doc" target="processotb"
+							fileName="processos" />
+					</h:commandLink>
 
+				</p:panel>
 
 			</h:form>
 		</h:body>
