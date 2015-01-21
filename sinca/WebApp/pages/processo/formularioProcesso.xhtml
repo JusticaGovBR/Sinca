@@ -31,6 +31,18 @@
 
 			</div>
 
+			<p:dialog header="Consultando!" resizable="false"
+				showEffect="explode" closable="false" hideEffect="explode"
+				widgetVar="dlg_mensagem" modal="true" width="250px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Obtendo Informações..."
+						title="#{manterProcessoMB.mensagem}"
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</h:panelGrid>
+			</p:dialog>
+
 
 			<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
 				hideEffect="clip" style="margin-bottom:20px;"
@@ -83,11 +95,31 @@
 				toggleSpeed="500" closeSpeed="500"
 				style="margin-bottom:20px;width : 100%" toggleable="true">
 
+				<h:panelGrid columns="3" cellpadding="10"
+					style=" margin-bottom:20px;width : 770px;">
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 100px;">
+						<h:outputLabel value="Prioridate em Turma:" />
+						<p:inputText  size="25"		value=""
+							maxlength="25" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 100px;">
+						<h:outputLabel value="Prioridate em Plenário:" />
+						<p:inputText  size="25"		value=""
+							maxlength="25" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 350px;">
+						<h:outputLabel value="Prioridate em Bloco Temático:" />
+						<p:inputText  size="25"		value=""
+							maxlength="25" />
+					</h:panelGrid>
+				</h:panelGrid>
 
-				<h:panelGrid columns="5" cellpadding="10" style=" margin-bottom:20px;width : 770px;">
+
+				<h:panelGrid columns="5" cellpadding="10"
+					style=" margin-bottom:20px;width : 770px;">
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 						<h:outputLabel value="Nº Protocolo MJ-SEI:" />
-						<p:inputMask mask="?99999?.?999999?/?9999?-?99"
+						<p:inputMask mask="?99999.999999/9999-99"
 							id="inpt_numProtocoloMJ_SEI" size="25"
 							value="#{manterProcessoMB.processo.numProtocoloMj}"
 							maxlength="25" />
@@ -120,7 +152,7 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Consultar/Obter no SEI" />
 						<p:commandButton id="btnConsultarSei" value="Consultar Sei"
-							ajax="false" icon="aplicar"
+							ajax="false" icon="aplicar" onclick="PF('dlg_mensagem').hide();"
 							actionListener="#{manterProcessoMB.consultarProcesso}">
 							<f:ajax execute="inpt_numProtocoloMJ_SEI"
 								render="input_dataProtocoMJ_SEI" />
@@ -132,7 +164,8 @@
 				<h:panelGrid columns="1" cellpadding="10"
 					style=" margin-bottom:30px; width : 100%;">
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
-						<p:lightBox  iframe="true"  id="lighboxDocSei" width="960px" height="580px" iframeTitle="Andamento Processo SEI">
+						<p:lightBox iframe="true" id="lighboxDocSei" width="960px"
+							height="580px" iframeTitle="Andamento Processo SEI">
 							<h:outputLink value="#{manterProcessoMB.linkDocSel}"
 								title="Andamento Processo SEI">
 								<h:outputText value="Andamento do Processo no SEI" />

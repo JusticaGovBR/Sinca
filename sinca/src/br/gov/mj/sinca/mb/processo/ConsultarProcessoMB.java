@@ -1,5 +1,7 @@
 package br.gov.mj.sinca.mb.processo;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,15 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 
 import br.gov.mj.sinca.dao.PessoaDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
@@ -16,6 +27,12 @@ import br.gov.mj.sinca.entidades.Pessoa;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.util.JSFUtil;
+
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
 
 @ManagedBean(name = "consultarProcessoMB")
 @ViewScoped
@@ -61,7 +78,7 @@ public class ConsultarProcessoMB implements Serializable {
 
     public String detalharProcesso() {
 	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
-	return "/pages/processo/manterProcesso"+"?faces-redirect=true";
+	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
 
     public List<Pessoa> consultarPessoas() {
@@ -108,7 +125,7 @@ public class ConsultarProcessoMB implements Serializable {
 	try {
 	    JSFUtil.getSessionMap().put(LISTA_SESSAO, null);
 	    List<PessoaProcesso> lista = null;
-	    numProcessoCA = ((numProcessoCA == null || numProcessoCA == 0)? null : numProcessoCA);
+	    numProcessoCA = ((numProcessoCA == null || numProcessoCA == 0) ? null : numProcessoCA);
 	    numProcessoMJ = (numProcessoMJ == null ? numProcessoMJ : (numProcessoMJ.equals("") ? null : numProcessoMJ));
 
 	    if (dataProtocoloCA != null || dataProtocoloMJ != null) {
@@ -149,8 +166,37 @@ public class ConsultarProcessoMB implements Serializable {
     public List<Pessoa> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1, nome);
 	return pessoas;
+    }
+
+    public void postProcessXLS(Object document) {
+	HSSFWorkbook wb = (HSSFWorkbook) document;
+	HSSFSheet sheet = wb.getSheetAt(0);
+	HSSFRow header = sheet.getRow(0);
+
+	HSSFCellStyle cellStyle = wb.createCellStyle();
+	cellStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+	cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+	for (int i = 0; i < header.getPhysicalNumberOfCells(); i++) {
+	    HSSFCell cell = header.getCell(i);
+
+	    cell.setCellStyle(cellStyle);
+	}
+    }
+
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+	Document pdf = (Document) document;
+	pdf.open();
+	pdf.setPageSize(PageSize.A4);
+
+	ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
+		.getContext();
+	String logo = servletContext.getRealPath("") + File.separator + "resources" + File.separator + "themes"
+		+ File.separator + "imagem" + File.separator + "cabecalho_3.png";
+
+	pdf.add(Image.getInstance(logo));
     }
 
     public String getNumProcessoMJ() {

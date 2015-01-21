@@ -12,7 +12,7 @@
 
 		<h:outputScript name="locale-primefaces.js" library="js" />
 
-		<style type="text/css">
+<style type="text/css">
 .aplicar {
 	background-image: url("../sinca/resources/imagens/apply.png") !important;
 }
@@ -21,7 +21,19 @@
 	background-image: url("../sinca/resources/imagens/icoEnquete.png")
 		!important;
 }
+
 </style>
+
+
+	<script type="text/javascript">
+		function mascara(o,f){ 
+			v_obj=o 
+			v_fun=f 
+			setTimeout("execmascara()",1) 
+		} 
+	}
+	</script>
+	
 		<h:form id="formInteressados" styleClass="semBorda">
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
@@ -56,7 +68,7 @@
 							maxlength="15" value="#{manterProcessoMB.numCpf}" />
 					</h:panelGrid>
 
-					<h:panelGrid columns="3" cellpadding="10" style="width : 100%">
+					<h:panelGrid columns="2" cellpadding="10" style="width : 100%">
 						<h:outputLabel value="Nome:*" />
 						<p:autoComplete id="pessoaAutoCmpl" title="Nome Pessoa"
 							style="width : 100%" value="#{manterProcessoMB.pessoa}"
@@ -65,10 +77,22 @@
 							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
 							converter="pessoaConverter" itemValue="#{pessoaAnist}"
 							effect="explode" />
+
+					</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="10"
+						style="text-align:right; width : 10%;">
+
 						<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
 							update=":tabView:formInteressados:"
 							actionListener="#{manterProcessoMB.consultarPessoas}"
 							icon="ui-icon-newwin" title="Consultaraf" />
+
+						<p:commandButton id="btnIncluir" value="Novo" ajax="true"
+							update=":tabView:formInteressados:" icon="ui-icon-newwin"
+							title="Novo Interessado!">
+							<f:setPropertyActionListener value="true"
+									target="#{manterProcessoMB.habilitaEdicaoPessoa}" />
+						</p:commandButton>
 
 					</h:panelGrid>
 				</h:panelGrid>
@@ -201,7 +225,7 @@
 					<p:commandButton id="btnAtualizar" value="Atualizar" ajax="true"
 						update=":tabView:formInteressados:"
 						disabled="#{!manterProcessoMB.habilitaEdicaoPessoa}"
-						actionListener="#{manterProcessoMB.atualziarPessoa}"
+						actionListener="#{manterProcessoMB.salvarInteressado}"
 						onclick="PF('dlg_mensagem').show();" icon="ui-icon-disk"
 						title="Salvar Pessoa" />
 
@@ -230,11 +254,11 @@
 							maxlength="100" />
 
 						<p:selectBooleanCheckbox id="checkNomeConferido" value="true"
-						    label="Comunicado de Óbito" />	
-						
+							label="Comunicado de Óbito" />
+
 						<p:tooltip id="toollbNomeConferido" for="checkNomeConferido"
 							value="O Campo (Nome) foi atualizado e conferido pelo usuário (fulano.xxxx) em 15/01/2015 09:14:42, valor anterior: Maria da Silva Bispo"
-							showEffect="clip" hideEffect="clip"  />
+							showEffect="clip" hideEffect="clip" />
 
 					</h:panelGrid>
 
@@ -266,8 +290,7 @@
 							style=" width : 150px;" effect="explode">
 							<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 							<f:selectItems value="#{manterProcessoMB.listarEstadoCivil}"
-								var="item" itemLabel="#{item.descricao}"
-								itemValue="#{item.idEstadoCivil}" />
+								var="item" itemLabel="#{item.descricao}" itemValue="#{item.idEstadoCivil}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">

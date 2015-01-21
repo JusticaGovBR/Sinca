@@ -28,7 +28,8 @@
 			<p:panel id="pnAnalise" header="Análise do Processo / Recomendações"
 				style="margin-bottom:10px;width : 100%" toggleable="false">
 
-				<h:panelGrid columns="2" cellpadding="10" style="margin-bottom:10px;width :100%;">				
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px;width :100%;">
 					<h:panelGrid columns="2" cellpadding="10" style="width :250px;">
 						<h:outputLabel value="Número Processo SEI:" />
 						<h:outputLabel
@@ -44,8 +45,8 @@
 
 						</h:outputLabel>
 					</h:panelGrid>
-				</h:panelGrid>				
-				<h:panelGrid columns="2" cellpadding="10" style="width :100%;">				
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10" style="width :100%;">
 					<h:panelGrid columns="2" cellpadding="10" style="width :250px;">
 						<h:outputLabel value="Número Requerimento:" />
 						<h:outputLabel
@@ -62,6 +63,16 @@
 						</h:outputLabel>
 					</h:panelGrid>
 				</h:panelGrid>
+				
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center; width : 100%;">
+					<p:commandButton id="btnSalvarAnalise" value="Salvar"
+						update="@this" ajax="true"
+						action="#{manterAnaliseMB.salvarAnalise}" icon="ui-icon-disk"
+						title="Salvar Processo" />
+
+				</h:panelGrid>
+
 
 			</p:panel>
 
@@ -80,6 +91,20 @@
 					<ui:insert name="recomendacoes">
 						<ui:include
 							src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
+					</ui:insert>
+				</p:tab>
+
+				<p:tab id="tab_julgamento_processo" title="Julgamento">
+					<!-- INTERESSADOS -->
+					<ui:insert name="analise">
+						<ui:include src="/pages/julgamento/formularioJulgamento.xhtml" />
+					</ui:insert>
+
+				</p:tab>
+
+				<p:tab id="tab_finalizacoes" title="Finalização">
+					<ui:insert name="finalizacao">
+
 					</ui:insert>
 				</p:tab>
 

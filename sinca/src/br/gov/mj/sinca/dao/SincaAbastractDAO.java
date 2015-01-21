@@ -51,8 +51,10 @@ public abstract class SincaAbastractDAO<T> {
 //
 //	List<T> resultado = this.getEntityManager().createQuery(c).getResultList();
 //	return resultado;
-	return getEntityManager().createQuery("select o from " + this.persistentClass.getSimpleName() + " o")
+	List<T> resultado =  getEntityManager().createQuery("select o from " + this.persistentClass.getSimpleName() + " o")
 		.getResultList();
+	
+	return resultado;
     }
 
     public T salvar(T objeto) {

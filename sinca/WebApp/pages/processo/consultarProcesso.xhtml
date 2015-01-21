@@ -105,12 +105,29 @@
 					visible="#{not empty consultarProcessoMB.listarPessoaProcesso}"
 					style="margin-bottom:20px;width : 100%" toggleable="false">
 
+					<h:panelGrid columns="2" cellpadding="10"
+						style="text-align:right; width : 10%;">
+
+						<h:commandLink>
+							<p:graphicImage library="images" url="../../imagens/excel.png" />
+							<p:dataExporter type="xls" target="processotb"
+								postProcessor="#{consultarProcessoMB.postProcessXLS}"
+								fileName="processos" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage library="images" url="../../imagens/pdf.png" />
+							<p:dataExporter type="pdf" target="processotb"
+								preProcessor="#{consultarProcessoMB.preProcessPDF}"
+								fileName="processos" />
+						</h:commandLink>
+					</h:panelGrid>
 					<p:dataTable id="processotb" var="processoLista"
 						paginatorPosition="top" sortMode="multiple"
 						value="#{consultarProcessoMB.listarPessoaProcesso}"
 						paginator="true" rows="20">
 
-						<p:column headerText="Última Atualização">
+						<p:column headerText="Última Atualização" exportable="false">
 							<h:outputText
 								style="color : #{processoLista.processo.dataHoraAtualizacao eq null ? 'red' : 'black'}; font-weight:bold;"
 								value="#{processoLista.processo.dataHoraAtualizacao eq null ? 'Recadastrar': processoLista.processo.dataHoraAtualizacao }"
@@ -121,25 +138,44 @@
 						</p:column>
 
 						<p:column headerText="Número Processo SEI">
+							<f:facet name="header">
+								<h:outputText value="Número Processo SEI" />
+							</f:facet>
 							<h:outputText value="#{processoLista.processo.numProtocoloMj}" />
 						</p:column>
+
 						<p:column headerText="Número Requerimento" resizable="true">
+							<f:facet name="header">
+								<h:outputText value="Número Requerimento" />
+							</f:facet>
 							<h:outputText value="#{processoLista.processo.numProtocoloCa}" />
 						</p:column>
-						<p:column headerText="Tipo Pessoa" resizable="true">
+
+						<p:column headerText="Tipo Pessoa"
+							sortBy="#{processoLista.tipoPessoaProcesso.descTipo}"
+							resizable="true">
+							<f:facet name="header">
+								<h:outputText value="Tipo Pessoa no Processo" />
+							</f:facet>
+
 							<h:outputText
 								value="#{processoLista.tipoPessoaProcesso.descTipo}" />
 						</p:column>
-						<p:column headerText="Nome Pessoa"
-							sortBy="#{processoLista.pessoa.nomePessoa}" resizable="true">
-							<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
+
+						<p:column headerText="Número CPF"
+							sortBy="#{processoLista.pessoa.numCpfCnpj}" resizable="true">
+							<f:facet name="header">
+								<h:outputText value="Número CPF" />
+							</f:facet>
+							<h:outputText value="#{processoLista.pessoa.numCpfCnpj}" />
 						</p:column>
 
-						<p:column headerText="Nome Pessoa"
-							sortBy="#{processoLista.pessoa.nomePessoa}" resizable="true">
+						<p:column headerText="Nome Pessoa" disabledSelection="">
+							<f:facet name="header">
+								<h:outputText value="Nome Pessoa" />
+							</f:facet>
 							<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
 						</p:column>
-
 
 						<p:column style="width:32px;text-align:center;"
 							headerText="Detalhar" exportable="false">
@@ -153,27 +189,7 @@
 						</p:column>
 					</p:dataTable>
 				</p:panel>
-				<p:panel header="Exporte estes dados da tela para:">
-					<h:commandLink>
-						<p:graphicImage library="images" url="../../imagens/iconeExcel.png" />
-						<p:dataExporter type="exe" target="processotb"
-							fileName="processos" />
-					</h:commandLink>
 
-					<h:commandLink>
-						<p:graphicImage library="images" url="../../imagens/iconePDF.png" />
-						<p:dataExporter type="pdf" target="processotb"
-							fileName="processos" />
-					</h:commandLink>
-
-
-					<h:commandLink>
-						<p:graphicImage library="images" url="../../imagens/iconeWord.png" />
-						<p:dataExporter type="doc" target="processotb"
-							fileName="processos" />
-					</h:commandLink>
-
-				</p:panel>
 
 			</h:form>
 		</h:body>

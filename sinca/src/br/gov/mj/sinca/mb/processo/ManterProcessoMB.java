@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
+import org.apache.axis.AxisFault;
 import org.primefaces.event.FlowEvent;
 
 import br.gov.mj.sinca.ConstantSinca;
@@ -252,9 +253,9 @@ public class ManterProcessoMB implements Serializable {
     }
 
     private void instanciaAtributos() {
-	
+
 	linkDocSel = "http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=12&infra_hash=ca477862c7589a4dab02c7bb0d936f92";
-	//linkDocSel ="http://www.globo.com";
+	// linkDocSel ="http://www.globo.com";
 
 	listarPessoa = new ArrayList<Pessoa>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
@@ -298,27 +299,36 @@ public class ManterProcessoMB implements Serializable {
     public String consultarProcesso() {
 	try {
 	    // 08000.000002/2014-14
-	    JSFUtil.retornarMensagem(null, "Consultando WebServices do SEI, processo:" + processo.getNumProtocoloMj());
+	    // JSFUtil.retornarMensagem(null,
+	    // "Consultando WebServices do SEI, processo:" +
+	    // processo.getNumProtocoloMj());
+	    this.mensagem = "Consultando Serviço do SEI...";
 	    SeiServiceLocator locator = new SeiServiceLocator();
 	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
 		    "110000834", processo.getNumProtocoloMj(), null, null, null, null, null, null, null, null, null);
 	    if (retorno != null) {
 		System.out.println("retorno " + retorno.getLinkAcesso() + " " + retorno.getDataAutuacao());
 		processo.setDataProtocoloMJ(new SimpleDateFormat("dd/MM/yyyy").parse(retorno.getDataAutuacao()));
-		this.linkDocSel = retorno.getLinkAcesso(); 
+		this.linkDocSel = retorno.getLinkAcesso();
 	    }
+	    
+	} catch (AxisFault eAxis) {
+	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
+		    "Error na Consultando WebServices do SEI: " + eAxis.getFaultString());
+	    eAxis.printStackTrace();
 	} catch (Exception e) {
 	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
-		    "Error na Consultando WebServices do SEI, processo:" + processo.getNumProtocoloMj());
+		    "Error na Consultando WebServices do SEI: " + e.getMessage());
 	    e.printStackTrace();
 	}
+	JSFUtil.getRequestContext().execute("PF('dlg_mensagem').hide()");
 	return null;
     }
 
     public List<Pessoa> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1, nome);
 	return pessoas;
     }
 
@@ -349,7 +359,7 @@ public class ManterProcessoMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeLk(1, nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -358,7 +368,7 @@ public class ManterProcessoMB implements Serializable {
 		    return pessoas;
 		}
 
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(1,numCpf.replace(".", "").replace("-", "").trim(),
+		pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(1, numCpf.replace(".", "").replace("-", "").trim(),
 			nomePessoa);
 	    }
 	    setListarPessoa(pessoas);
@@ -465,7 +475,7 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
-    public void atualziarPessoa() {
+    public void salvarInteressado() {
 	try {
 	    if (pessoaCadastro.getIdEstadoCivil() == null || pessoaCadastro.getIdEstadoCivil() == 0) {
 		JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_ERROR,
@@ -476,6 +486,11 @@ public class ManterProcessoMB implements Serializable {
 	    pessoaCadastro.setPessoaEnderecos(null);
 	    pessoaCadastro.setDocumentoPessoa(null);
 	    pessoaCadastro.setTelefonePessoas(null);
+	    
+	    if(pessoaCadastro.getDataHoraCadastro()==null){
+		pessoaCadastro.setDataHoraCadastro(new Date());
+	    }
+	    
 	    Pessoa pessoaSalva = new PessoaDAO().salvar(pessoaCadastro);
 
 	    if (pessoaSalva.getIdPessoa() != null) {
@@ -750,23 +765,21 @@ public class ManterProcessoMB implements Serializable {
 	    JSFUtil.getRequestContext().execute("PF('dlg_telefone').show()");
 	}
     }
-    
+
     public void addDoenca() {
 
-	if (doencaPessoa.getDoenca() == null 
-		|| doencaPessoa.getDoenca().getCodCid()==null
-		|| doencaPessoa.getDoenca().getCodCid().equals("")
-		|| doencaPessoa.getDoenca().getDescDoenca()==null
+	if (doencaPessoa.getDoenca() == null || doencaPessoa.getDoenca().getCodCid() == null
+		|| doencaPessoa.getDoenca().getCodCid().equals("") || doencaPessoa.getDoenca().getDescDoenca() == null
 		|| doencaPessoa.getDoenca().getDescDoenca().equals("")) {
 	    JSFUtil.retornarMensagemModal("", "Código CID  e Descrição da Doença são Obrigatórios!");
 	    return;
 	}
 	List<DoencaPessoa> lista = new ArrayList<DoencaPessoa>();
 	for (DoencaPessoa doencaP : getListarDoencaPessoa()) {
-	     if(!doencaPessoa.getDoenca().getCodCid().equalsIgnoreCase(doencaP.getDoenca().getCodCid()) 
-		     && !doencaPessoa.getDoenca().getDescDoenca().equalsIgnoreCase(doencaP.getDoenca().getDescDoenca())){
-		 lista.add(doencaP);
-	     }
+	    if (!doencaPessoa.getDoenca().getCodCid().equalsIgnoreCase(doencaP.getDoenca().getCodCid())
+		    && !doencaPessoa.getDoenca().getDescDoenca().equalsIgnoreCase(doencaP.getDoenca().getDescDoenca())) {
+		lista.add(doencaP);
+	    }
 	}
 	setListarDoencaPessoa(lista);
 
@@ -778,21 +791,20 @@ public class ManterProcessoMB implements Serializable {
 	DoencaPessoa doencaRm = (DoencaPessoa) JSFUtil.getRequestMap().get("doencaPessao");
 	List<DoencaPessoa> lista = new ArrayList<DoencaPessoa>();
 	for (DoencaPessoa doencaP : getListarDoencaPessoa()) {
-	     if(!doencaRm.getDoenca().getCodCid().equalsIgnoreCase(doencaP.getDoenca().getCodCid()) 
-		     && !doencaRm.getDoenca().getDescDoenca().equalsIgnoreCase(doencaP.getDoenca().getDescDoenca())){
-		 lista.add(doencaPessoa);
-	     }
+	    if (!doencaRm.getDoenca().getCodCid().equalsIgnoreCase(doencaP.getDoenca().getCodCid())
+		    && !doencaRm.getDoenca().getDescDoenca().equalsIgnoreCase(doencaP.getDoenca().getDescDoenca())) {
+		lista.add(doencaPessoa);
+	    }
 	}
 	setListarDoencaPessoa(lista);
 	JSFUtil.getRequestContext().execute("PF('dlg_doenca').hide()");
     }
 
     public void editarDoenca() {
-	this.doencaPessoa = (DoencaPessoa) JSFUtil.getRequestMap().get("doencaPessao");	
+	this.doencaPessoa = (DoencaPessoa) JSFUtil.getRequestMap().get("doencaPessao");
 	JSFUtil.getRequestContext().execute("PF('dlg_doenca').show()");
     }
-  
-    
+
     public void onEstadoChange() {
 	if (endereco.getUf() != null && !endereco.getUf().equals("")) {
 	    for (Estado estado : getListarUF()) {
@@ -819,7 +831,7 @@ public class ManterProcessoMB implements Serializable {
 	    if (doenca.getCodCid().trim().equalsIgnoreCase(codCid)) {
 		doencaPessoa.setDoenca(doenca);
 		return;
-	    } 
+	    }
 	}
     }
 
@@ -1414,11 +1426,11 @@ public class ManterProcessoMB implements Serializable {
     }
 
     public String getLinkDocSel() {
-        return linkDocSel;
+	return linkDocSel;
     }
 
     public void setLinkDocSel(String linkDocSel) {
-        this.linkDocSel = linkDocSel;
+	this.linkDocSel = linkDocSel;
     }
 
 }

@@ -35,7 +35,8 @@
 
 
 
-				<p:panel id="pnlConsultaAnistiados" header="Consultar Pessoas Jurídica"
+				<p:panel id="pnlConsultaAnistiados"
+					header="Consultar Pessoas Jurídica"
 					style="margin-bottom:20px;width : 100%" toggleable="true">
 					<h:panelGrid columns="4" cellpadding="10"
 						style="margin-bottom:20px;width : 100%;">
@@ -48,7 +49,7 @@
 						<h:panelGrid columns="3" cellpadding="40" style=" width : 100%;">
 							<h:outputLabel value="Razão Social:" />
 							<p:autoComplete id="pessoaAnistList" minQueryLength="5"
-								title="Nome Pessoa Anistiado"
+								title="Razão Social"
 								value="#{manterAnistiadoMB.pessoaAnistiado}" var="pessoaAnist"
 								size="90" maxlength="120"
 								completeMethod="#{manterAnistiadoMB.listaPessoaPorNomeLk}"
@@ -73,27 +74,39 @@
 				</p:panel>
 
 				<p:panel id="pnlDadosAnistiado" header="Detalhes da Pessoa Jurídica"
-					style="margin-bottom:20px;width : 100%" toggleable="true">
+					style="margin-bottom:20px;width : 100%" toggleable="true" >
 
-					<h:inputHidden value="#{manterAnistiadoMB.codTipoPessoa}"/>
-
-					<h:panelGrid columns="3" cellpadding="40" style=" width : 100%;">
-						<h:panelGrid columns="3" cellpadding="10" style=" width : 50px;">
-						    <h:inputHidden value="#{manterAnistiadoMB.pessoaAnistCadasto.idPessoa}"/>
-							<p:outputLabel value="CPF:*" />
-							<p:inputMask mask="?999.999.999-99"
-								id="inpt_cadastro_numCPF_Anistiado" size="15" maxlength="15"
+					<h:panelGrid columns="2" cellpadding="40" style="margin-bottom:10px; width : 100%;">
+						<h:panelGrid columns="2" cellpadding="10" style=" width : 200px;">
+							<p:outputLabel value="CNPJ:*" />
+							<p:inputMask mask="?99.999.999/999-99"
+								id="inpt_cadastro_numCPJJ_Anistiado" size="15" maxlength="15"
 								value="#{manterAnistiadoMB.pessoaAnistCadasto.numCpfCnpj}" />
 						</h:panelGrid>
-						<h:panelGrid columns="2" cellpadding="10" style=" width : 150px;">
-							<p:outputLabel value="Nome:*" />
+						<h:panelGrid columns="2" cellpadding="10" style=" margin-bottom:20px;width : 100%">
+							<p:outputLabel value="Razão Social:*" />
 							<p:inputText id="inpt_cadastro_pessoaJuriduca"
 								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePessoa}"
-								size="100" maxlength="100" />
+								size="80" maxlength="100" />
 						</h:panelGrid>
 					</h:panelGrid>
-				</p:panel>
 
+					<h:panelGrid columns="2" cellpadding="40" style="margin-bottom:10px;width : 100%;">
+						<h:panelGrid columns="2" cellpadding="10" style=" width : 200px;">
+							<p:outputLabel value="Inscrição Estadual:*" />
+							<p:inputMask mask="?999999999999999"
+								id="inpt_cadastro_numInscricao" size="15" maxlength="15"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.numCpfCnpj}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="10" style=" width : 100%;">
+							<p:outputLabel value="Nome Fantasia:*" />
+							<p:inputText id="inpt_cadastro_nomefantasia"
+								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePessoa}"
+								size="80" maxlength="100" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+				</p:panel>
 
 
 				<p:panel id="pnlDadosTabelEnderecosAnistia" header="Endereços"
@@ -128,8 +141,8 @@
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Editar" id="Editar_Endereco_anist"
 								actionListener="#{manterAnistiadoMB.detalharEnderecoAnistia}"
-								update=":formJuridica_Cadastro:enderecoDetalhe" icon="ui-icon-search"
-								title="Detalhar Endereço" ajax="true">
+								update=":formJuridica_Cadastro:enderecoDetalhe"
+								icon="ui-icon-search" title="Detalhar Endereço" ajax="true">
 								<f:setPropertyActionListener value="#{enderecosAnistia}"
 									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
 
@@ -288,7 +301,7 @@
 									value="#{manterAnistiadoMB.enderecoAnistCadastro.bairro}"
 									size="50" maxlength="100" />
 							</h:panelGrid>
-							
+
 						</h:panelGrid>
 						<h:panelGrid columns="3"
 							style="margin-bottom:20px; width : 100%;height : 100% ">
@@ -336,54 +349,54 @@
 					showEffect="fade" hideEffect="fade"
 					widgetVar="dlg_telefone_anistiado" modal="true" height="100%"
 					width="70%">
-					
+
 					<p:outputPanel id="detalheTelefone">
-					
-					<h:panelGrid columns="3"
-						style="margin-bottom:20px; width : 100%; height : 100%">
 
-						<h:panelGrid columns="1" style=" width : 50px;">
-							<h:outputLabel value="Tipo Telefone:" style=" width : 100px;" />
-							<p:selectOneMenu id="TipoTelefoneist"
-								value="#{manterAnistiadoMB.tipoTelefone.codTipo}"
-								style="width:100px">
-								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-								<f:selectItems value="#{manterAnistiadoMB.listarTipoTelefone}"
-									var="item" itemLabel="#{item.descricao}"
-									itemValue="#{item.codTipo}" />
-							</p:selectOneMenu>
+						<h:panelGrid columns="3"
+							style="margin-bottom:20px; width : 100%; height : 100%">
+
+							<h:panelGrid columns="1" style=" width : 50px;">
+								<h:outputLabel value="Tipo Telefone:" style=" width : 100px;" />
+								<p:selectOneMenu id="TipoTelefoneist"
+									value="#{manterAnistiadoMB.tipoTelefone.codTipo}"
+									style="width:100px">
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems value="#{manterAnistiadoMB.listarTipoTelefone}"
+										var="item" itemLabel="#{item.descricao}"
+										itemValue="#{item.codTipo}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 40px;">
+								<h:outputLabel value="NumTelefone:" />
+								<p:inputMask mask="?99-99999999999"
+									id="inpt_cadastro_num_telefone_anist"
+									value="#{manterAnistiadoMB.telefonePessoa.numTelefone}"
+									size="20" maxlength="20" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" style=" width : 40px;">
+								<h:outputLabel value="Observação:" />
+								<p:inputText id="inpt_cadastro_observ_telefone_anist"
+									value="#{manterAnistiadoMB.telefonePessoa.observacao}"
+									size="100" maxlength="100" />
+							</h:panelGrid>
+
 						</h:panelGrid>
 
-						<h:panelGrid columns="1" style=" width : 40px;">
-							<h:outputLabel value="NumTelefone:" />
-							<p:inputMask mask="?99-99999999999"
-								id="inpt_cadastro_num_telefone_anist"
-								value="#{manterAnistiadoMB.telefonePessoa.numTelefone}"
-								size="20" maxlength="20" />
+
+						<h:panelGrid columns="2"
+							style="margin-bottom:20px;position:center;">
+							<p:commandButton id="btnSalvarTelefone" value="Adicionar"
+								update="listaTelefonesAnistiado" ajax="true"
+								style="horizontal-align:center"
+								actionListener="#{manterAnistiadoMB.addTelefoneAnistia}"
+								icon="ui-icon-newwin" title="Telefones">
+							</p:commandButton>
+							<p:commandButton value="Fechar" id="FecharTelefAnistrr"
+								style="horizontal-align:center" type="button"
+								onclick="PF('dlg_telefone_anistiado').hide();" />
 						</h:panelGrid>
-
-						<h:panelGrid columns="1" style=" width : 40px;">
-							<h:outputLabel value="Observação:" />
-							<p:inputText id="inpt_cadastro_observ_telefone_anist"
-								value="#{manterAnistiadoMB.telefonePessoa.observacao}"
-								size="100" maxlength="100" />
-						</h:panelGrid>
-
-					</h:panelGrid>
-
-
-					<h:panelGrid columns="2"
-						style="margin-bottom:20px;position:center;">
-						<p:commandButton id="btnSalvarTelefone" value="Adicionar"
-							update="listaTelefonesAnistiado" ajax="true"
-							style="horizontal-align:center"
-							actionListener="#{manterAnistiadoMB.addTelefoneAnistia}"
-							icon="ui-icon-newwin" title="Telefones">
-						</p:commandButton>
-						<p:commandButton value="Fechar" id="FecharTelefAnistrr"
-							style="horizontal-align:center" type="button"
-							onclick="PF('dlg_telefone_anistiado').hide();" />
-					</h:panelGrid>
 					</p:outputPanel>
 				</p:dialog>
 

@@ -2,41 +2,46 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template_sm_menu.xhtml">
 
 	<ui:define name="body">
 
 		<h:body>
 
-			<div id="principal">
-				<p:layout style="min-width:400px;min-height:250px;" id="layout">
-					<p:layoutUnit position="west" resizable="true" size="200"
-						minSize="250">
-						<div id="msg1">Seja Bem vindo</div>
-						<br />
-						<div id="msg2">Identifique-se por favor para utilizar o
-							sistema.</div>
-						<br />
-						<h:panelGrid columns="2">
-							<h:outputLabel value="Nome:" for="nome" />
-							<h:inputText id="nome" label="Nome" value="#{loginMB.nome}"
-								required="true" />
-							<h:outputLabel value="Senha:" for="senha" />
-							<h:inputSecret id="senha" label="Senha" value="#loginMB.senha}"
-								required="true" />
-						</h:panelGrid>
-						<br />
-						<h:commandButton action="#{loginMB.salvar}" value="Salvar" />
-						<br />
-						<div id="msg2">
-							Esqueceu sua senha?
-							<h:commandLink action="inicio" value="Enviar Senha" />
-						</div>
-						<br />
-					</p:layoutUnit>
+			<h:outputScript name="locale-primefaces.js" library="js" />
 
-				</p:layout>
-			</div>
+			<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+			<h:form>
+				<p:messages id="messages" />
+				<p:panelGrid columns="2" style="text-align:center; width : 300px;">
+					
+					<p:outputLabel for="nome" value="Nome:" />
+					
+					<p:inputText  id="nome" value="#" />
+					
+					<p:outputLabel for="senha" value="Senha:" />
+					
+					<p:inputText id="senha" value="#" />
+					
+					<p:commandButton value="Cadastrar" icon="ui-icon-star" action="#"
+						update="messages">
+					</p:commandButton>
+					
+				</p:panelGrid>
+				
+				
+			</h:form>
+
 
 		</h:body>
 	</ui:define>

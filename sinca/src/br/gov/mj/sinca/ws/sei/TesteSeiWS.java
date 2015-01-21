@@ -14,20 +14,17 @@ public class TesteSeiWS {
 	SeiServiceLocator locator = new SeiServiceLocator();
 	try {
 	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
-		    "110000834", "08000.000002/2014-14", null, null, null, null, null, null, null, null, null);
-
+		    "110000834", "08004.000002/2014-14", null, null, null, null, null, null, null, null, null);
+	    
 	    //locator.getSeiPortService().incluirDocumento(siglaSistema, identificacaoServico, idUnidade, documento)
 	    
 	    System.out.println(retorno.getLinkAcesso());
 	    // 08000.000010/2014-61
 
-	    // Usuario[] usuario =
-	    // locator.getSeiPortService().listarUsuarios("SEI", "lu",
-	    // "110000834", "");
-	    // for (Usuario us : usuario) {
-	    // System.out.println("Usuario :" + us.getNome() + " sigla " +
-	    // us.getSigla() + " id " + us.getIdUsuario());
-	    // }
+	    Usuario[] usuario = locator.getSeiPortService().listarUsuarios("SEI", "lu", "110000834", "");
+	    for (Usuario us : usuario) {
+		System.out.println("Usuario :" + us.getNome() + " sigla " + us.getSigla() + " id " + us.getIdUsuario());
+	    }
 
 	    // locator.getSeiPortService().consultarProcedimento(siglaSistema,
 	    // identificacaoServico, idUnidade,
