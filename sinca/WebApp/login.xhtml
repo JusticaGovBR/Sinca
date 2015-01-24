@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template_sm_menu.xhtml">
+
+	<ui:define name="body">
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+			draggable="false" closable="false" resizable="false"
+			style="padding-top:5px">
+			<p:graphicImage value="imagens/ajaxloadingbar.gif" />
+		</p:dialog>
+
+
+		<h:form id="form" styleClass="semBorda">
+
+
+			<p:dialog id="autenticacaoDialog"
+				header="SINCA - Sistema de Informações da Comissão de Anistia"
+				modal="false" draggable="false" closable="false" resizable="false"
+				showEffect="clip" hideEffect=""
+				visible="true" position="center">
+
+				<h:messages />
+
+
+				<p:panelGrid columns="2"
+					style="margin-bottom:10px;text-align:center; width : 100%;">
+
+					<h:outputLabel for="authUsuario" value="Usuário:" />
+					<p:inputText id="authUsuario" required="true"
+						title="Usuário" requiredMessage="O campo usuário é obrigatório" />
+
+					<h:outputLabel for="authSenha" value="Senha:" />
+					<p:password id="authSenha" required="true" title="Senha"
+						requiredMessage="O campo senha é obrigatório" />
+
+				</p:panelGrid>
+
+				<h:panelGrid columns="1" style="text-align:center; width : 100%;">
+					<p:commandButton id="btnAutenticar" value="Autenticar"
+						update=":form:autenticacaoDialog" />
+				</h:panelGrid>
+
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
