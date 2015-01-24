@@ -85,6 +85,11 @@ public class Processo implements Serializable {
     @JoinColumn(name = "ID_STATUS_PROCESSO")
     private StatusProcesso statusProcesso;
 
+    // bi-directional many-to-one association to StatusProcesso
+    @ManyToOne
+    @JoinColumn(name = "COD_SITUACAO_CADASTRO")
+    private SituacaoCadastro situacaoCadastro;
+
     // bi-directional many-to-one association to SubGrupoProcessual
     @ManyToOne
     @JoinColumn(name = "ID_SUB_GRUPO_PROCESSUAL")
@@ -295,6 +300,14 @@ public class Processo implements Serializable {
 
     public void setDataHoraAtualizacao(Date dataHoraAtualizacao) {
         this.dataHoraAtualizacao = dataHoraAtualizacao;
+    }
+
+    public SituacaoCadastro getSituacaoCadastro() {
+        return situacaoCadastro;
+    }
+
+    public void setSituacaoCadastro(SituacaoCadastro situacaoCadastro) {
+        this.situacaoCadastro = situacaoCadastro;
     }
     
 

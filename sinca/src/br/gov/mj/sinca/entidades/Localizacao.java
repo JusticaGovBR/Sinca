@@ -26,6 +26,9 @@ public class Localizacao implements Serializable {
 	@Column(name="DESC_LOCALIZACAO", length=500)
 	private String descLocalizacao;
 
+	@Column(name="SIGLA", length=500)
+	private String sigla;
+
 	public Localizacao() {
 	}
 
@@ -45,4 +48,13 @@ public class Localizacao implements Serializable {
 		this.descLocalizacao = descLocalizacao;
 	}
 
+	public String getSigla() {
+	    return sigla;
+	}
+
+	public void setSigla(String sigla) {
+	    this.sigla = sigla;
+	}
+
+	
 }

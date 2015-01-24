@@ -115,25 +115,30 @@
 								fileName="processos" />
 						</h:commandLink>
 
+						<!-- 
 						<h:commandLink>
 							<p:graphicImage library="images" url="../../imagens/pdf.png" />
 							<p:dataExporter type="pdf" target="processotb"
 								preProcessor="#{consultarProcessoMB.preProcessPDF}"
 								fileName="processos" />
 						</h:commandLink>
+						 -->
+						 
 					</h:panelGrid>
 					<p:dataTable id="processotb" var="processoLista"
 						paginatorPosition="top" sortMode="multiple"
 						value="#{consultarProcessoMB.listarPessoaProcesso}"
 						paginator="true" rows="20">
 
-						<p:column headerText="Última Atualização" exportable="false">
+
+						<p:column headerText="Situação do Cadastro" exportable="true">
+							<f:facet name="header">
+								<h:outputText value="Situação do Cadastro" />
+							</f:facet>
 							<h:outputText
-								style="color : #{processoLista.processo.dataHoraAtualizacao eq null ? 'red' : 'black'}; font-weight:bold;"
-								value="#{processoLista.processo.dataHoraAtualizacao eq null ? 'Recadastrar': processoLista.processo.dataHoraAtualizacao }"
-								id="dataAtualizacao">
-								<f:convertDateTime locale="pt_BR" dateStyle="long"
-									pattern="dd/MM/yyyy HH:mm:ss" />
+								style="color : #{processoLista.processo.situacaoCadastro.codSituacao == 1 ? 'red' : 'black'}; font-weight:bold;"
+								value="#{processoLista.processo.situacaoCadastro.descSituacao}"
+								id="DescSituacaoCadastro">
 							</h:outputText>
 						</p:column>
 
@@ -170,11 +175,21 @@
 							<h:outputText value="#{processoLista.pessoa.numCpfCnpj}" />
 						</p:column>
 
-						<p:column headerText="Nome Pessoa" disabledSelection="">
+						<p:column headerText="Nome Pessoa" resizable="true">
 							<f:facet name="header">
 								<h:outputText value="Nome Pessoa" />
 							</f:facet>
 							<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
+						</p:column>
+
+						<p:column headerText="Última Atualização" exportable="false">
+							<h:outputText
+								style="color : #{processoLista.processo.dataHoraAtualizacao eq null ? 'red' : 'black'}; font-weight:bold;"
+								value="#{processoLista.processo.dataHoraAtualizacao eq null ? 'Recadastrar': processoLista.processo.dataHoraAtualizacao }"
+								id="dataAtualizacao">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
 						</p:column>
 
 						<p:column style="width:32px;text-align:center;"

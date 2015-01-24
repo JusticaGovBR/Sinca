@@ -7,14 +7,17 @@ import java.util.List;
 import javax.xml.rpc.ServiceException;
 
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
+import br.gov.mj.sinca.entidades.Localizacao;
 
 public class TesteSeiWS {
 
     public static void main(String[] args) {
 	SeiServiceLocator locator = new SeiServiceLocator();
 	try {
+	    
 	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
-		    "110000834", "08004.000002/2014-14", null, null, null, null, null, null, null, null, null);
+		    "110000834", "08000.000010/2014-61", null, null, null, null, null, null, null, null, null);
+	    
 	    
 	    //locator.getSeiPortService().incluirDocumento(siglaSistema, identificacaoServico, idUnidade, documento)
 	    
@@ -69,15 +72,28 @@ public class TesteSeiWS {
 		    null));
 	    LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
 	    for (Unidade unidade : listaUnidades) {
-		System.out.println(unidade.getIdUnidade() + " Singla " + unidade.getDescricao());
-//		 Localizacao localizacao = new Localizacao();
-//		 localizacao.setDescLocalizacao(unidade.getDescricao());
-//		 localizacao.setIdLocalizacao(Integer.valueOf(unidade.getIdUnidade()));
-//		 localizacaoDAO.abrirTransacao();
-//		 localizacaoDAO.getEntityManager().merge(localizacao);
-//		 localizacaoDAO.gravarTransacao();
+		System.out.println(unidade.getIdUnidade() + " Desc " + unidade.getDescricao()+" Singla "+unidade.getSigla());
+		 Localizacao localizacao = new Localizacao();
+		 localizacao.setDescLocalizacao(unidade.getDescricao());
+		 localizacao.setSigla(unidade.getSigla());
+		 localizacao.setIdLocalizacao(Integer.valueOf(unidade.getIdUnidade()));
+		 
+		 localizacaoDAO.abrirTransacao();
+		 localizacaoDAO.getEntityManager().merge(localizacao);
+		 localizacaoDAO.gravarTransacao();
 	    }
+	    
+	    System.out.println("############################## USUÁRIOS DA COMISSÃO DE ANISTIA...");
 
+	    for (Unidade unidade : listaUnidades) {
+		 if(unidade.getDescricao().contains("anistia")){
+		    usuario = locator.getSeiPortService().listarUsuarios("SEI", "lu", unidade.getIdUnidade(), "");
+        	    System.out.println("");
+        	    for (Usuario us : usuario) {
+        		System.out.println("Usuario :" + us.getNome() + " sigla " + us.getSigla() + " id " + us.getIdUsuario()+" Unidade "+unidade.getDescricao());
+        	    }
+    	        }
+	    }
 	    // System.out.println(retornoDoc.getDocumentoFormatado());
 
 	} catch (RemoteException e) {

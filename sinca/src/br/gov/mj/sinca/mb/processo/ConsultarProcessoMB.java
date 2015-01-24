@@ -29,10 +29,12 @@ import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.util.JSFUtil;
 
 import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.BaseFont;
 
 @ManagedBean(name = "consultarProcessoMB")
 @ViewScoped
@@ -189,7 +191,14 @@ public class ConsultarProcessoMB implements Serializable {
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
 	Document pdf = (Document) document;
 	pdf.open();
-	pdf.setPageSize(PageSize.A4);
+
+	BaseFont helvetica = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
+	Font font = new Font(helvetica, 12, Font.NORMAL);
+	Chunk chunk = new Chunk("",font);
+	pdf.add(chunk);
+	
+	
+	//pdf.setPageSize(PageSize.CROWN_QUARTO);
 
 	ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
 		.getContext();
