@@ -33,17 +33,19 @@
 					style="margin-bottom:10px;text-align:center; width : 100%;">
 
 					<h:outputLabel for="authUsuario" value="Usuário:" />
-					<p:inputText id="authUsuario" required="true"
+					<p:inputText id="authUsuario" required="true" value="#{loginMB.nome}"
 						title="Usuário" requiredMessage="O campo usuário é obrigatório" />
 
 					<h:outputLabel for="authSenha" value="Senha:" />
 					<p:password id="authSenha" required="true" title="Senha"
+					    value="#{loginMB.senha}"
 						requiredMessage="O campo senha é obrigatório" />
 
 				</p:panelGrid>
 
 				<h:panelGrid columns="1" style="text-align:center; width : 100%;">
 					<p:commandButton id="btnAutenticar" value="Autenticar"
+					    action="#{loginMB.acaoAutenticar}"
 						update=":form:autenticacaoDialog" />
 				</h:panelGrid>
 

@@ -1,16 +1,11 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
- * The persistent class for the tipo_endereco database table.
+ * The persistent class for the tipo_analise_julgamento database table.
  * 
  */
 @Entity
@@ -20,29 +15,28 @@ public class TipoAnaliseJulgamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-
-	@Column(name="COD_TIPO", unique=true, nullable=false)
+	@Column(name="COD_TIPO")
 	private Integer codTipo;
 
-	@Column(name="DECSCRICAO")
-	private String descricao;
+	private String decscricao;
+
+	public TipoAnaliseJulgamento() {
+	}
 
 	public Integer getCodTipo() {
-	    return codTipo;
+		return this.codTipo;
 	}
 
 	public void setCodTipo(Integer codTipo) {
-	    this.codTipo = codTipo;
+		this.codTipo = codTipo;
 	}
 
-	public String getDescricao() {
-	    return descricao;
+	public String getDecscricao() {
+		return this.decscricao;
 	}
 
-	public void setDescricao(String descricao) {
-	    this.descricao = descricao;
+	public void setDecscricao(String decscricao) {
+		this.decscricao = decscricao;
 	}
-
-	
 
 }

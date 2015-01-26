@@ -1,7 +1,6 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
 
 
@@ -17,24 +16,24 @@ public class TelefonePessoa implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_TELEFONE_PESSOA", unique=true, nullable=false)
+	@Column(name="ID_TELEFONE_PESSOA")
 	private Integer idTelefonePessoa;
 
-	@Column(name="NUM_TELEFONE", length=20)
+	@Column(name="NUM_TELEFONE")
 	private String numTelefone;
 
+	private String observacao;
+
+	//bi-directional many-to-one association to Pessoa
 	@ManyToOne
 	@JoinColumn(name="ID_PESSOA")
 	private Pessoa pessoa;
 
+	//bi-directional many-to-one association to TipoTelefone
 	@ManyToOne
 	@JoinColumn(name="COD_TIPO")
 	private TipoTelefone tipoTelefone;
-	
-	@Column(name="OBSERVACAO")
-	private String observacao;
 
-	
 	public TelefonePessoa() {
 	}
 
@@ -46,20 +45,20 @@ public class TelefonePessoa implements Serializable {
 		this.idTelefonePessoa = idTelefonePessoa;
 	}
 
-	public TipoTelefone getTipoTelefone() {
-	    return tipoTelefone;
-	}
-
-	public void setTipoTelefone(TipoTelefone tipoTelefone) {
-	    this.tipoTelefone = tipoTelefone;
-	}
-
 	public String getNumTelefone() {
 		return this.numTelefone;
 	}
 
 	public void setNumTelefone(String numTelefone) {
 		this.numTelefone = numTelefone;
+	}
+
+	public String getObservacao() {
+		return this.observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 	public Pessoa getPessoa() {
@@ -70,12 +69,12 @@ public class TelefonePessoa implements Serializable {
 		this.pessoa = pessoa;
 	}
 
-	public String getObservacao() {
-	    return observacao;
+	public TipoTelefone getTipoTelefone() {
+		return this.tipoTelefone;
 	}
 
-	public void setObservacao(String observacao) {
-	    this.observacao = observacao;
+	public void setTipoTelefone(TipoTelefone tipoTelefone) {
+		this.tipoTelefone = tipoTelefone;
 	}
 
 }

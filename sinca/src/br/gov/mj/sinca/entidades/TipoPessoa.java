@@ -1,48 +1,70 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import javax.persistence.*;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 /**
- * The persistent class for the tipo_endereco database table.
+ * The persistent class for the tipo_pessoa database table.
  * 
  */
 @Entity
-@Table(name = "tipo_pessoa")
-@NamedQuery(name = "TipoEndereco.java.findAll", query = "SELECT t FROM TipoPessoa t")
+@Table(name="tipo_pessoa")
+@NamedQuery(name="TipoPessoa.findAll", query="SELECT t FROM TipoPessoa t")
 public class TipoPessoa implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "COD_TIPO")
-    private Integer codTipo;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="COD_TIPO")
+	private Integer codTipo;
 
-    @Column(name="DESCRICAO")
-    private String descricao;
+	private String descricao;
 
-    public TipoPessoa() {
-    }
+	//bi-directional many-to-one association to Pessoa
+	@OneToMany(mappedBy="tipoPessoa")
+	private List<Pessoa> pessoas;
 
-    public Integer getCodTipo() {
-        return codTipo;
-    }
+	public TipoPessoa() {
+	}
 
-    public String getDescricao() {
-        return descricao;
-    }
+	public Integer getCodTipo() {
+		return this.codTipo;
+	}
 
-    public void setCodTipo(Integer codTipo) {
-        this.codTipo = codTipo;
-    }
+	public void setCodTipo(Integer codTipo) {
+		this.codTipo = codTipo;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public String getDescricao() {
+		return this.descricao;
+	}
 
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public List<Pessoa> getPessoas() {
+		return this.pessoas;
+	}
+
+	public void setPessoas(List<Pessoa> pessoas) {
+		this.pessoas = pessoas;
+	}
+
+	public Pessoa addPessoa(Pessoa pessoa) {
+		getPessoas().add(pessoa);
+		pessoa.setTipoPessoa(this);
+
+		return pessoa;
+	}
+
+	public Pessoa removePessoa(Pessoa pessoa) {
+		getPessoas().remove(pessoa);
+		pessoa.setTipoPessoa(null);
+
+		return pessoa;
+	}
 
 }

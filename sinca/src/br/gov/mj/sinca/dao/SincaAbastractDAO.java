@@ -17,7 +17,7 @@ public abstract class SincaAbastractDAO<T> {
     @SuppressWarnings("unchecked")
     public SincaAbastractDAO() {
 	super();
-
+	
 	// pegar a classe persistente por reflexão
 	Type tipo = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	this.persistentClass = (Class<T>) tipo;

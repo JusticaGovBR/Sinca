@@ -326,7 +326,7 @@ public class ManterAnistiadosMB implements Serializable {
 	JSFUtil.getSessionMap().put(ConstantSinca.LISTA_DOCIUMENTOS_ANISTIADO, null);
 	listarDocumentoPessoa = new ArrayList<DocumentoPessoa>();
 	if (pessoa.getIdPessoa() > 0) {
-	    for (DocumentoPessoa doc : pessoa.getDocumentoPessoa()) {
+	    for (DocumentoPessoa doc : pessoa.getDocumentoPessoas()) {
 		getListarDocumentoPessoa().add(doc);
 	    }
 	    setPessoaAnistCadasto(pessoa);

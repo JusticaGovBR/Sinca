@@ -1,9 +1,7 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
 
 

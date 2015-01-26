@@ -1,134 +1,128 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the analista_processo database table.
  * 
  */
 @Entity
-@Table(name = "analista_processo")
-@NamedQuery(name = "AnalistaProcesso.findAll", query = "SELECT a FROM AnalistaProcesso a")
+@Table(name="analista_processo")
+@NamedQuery(name="AnalistaProcesso.findAll", query="SELECT a FROM AnalistaProcesso a")
 public class AnalistaProcesso implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_ANALISTA_PROCESSO")
-    private Long idAnalistaProcesso;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ID_ANALISTA_PROCESSO")
+	private Long idAnalistaProcesso;
 
-    @Column(name = "ID_ANALISE")
-    private Long idAnalise;
+	private BigInteger acoes;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_PESSOA")
-    private Pessoa pessoa;
+	private String complemento;
 
-    @Column(name = "ID_SUB_STATUS_PROCESSO")
-    private Integer idSubStatusProcesso;
+	@Temporal(TemporalType.DATE)
+	@Column(name="DATA_CADASTRO")
+	private Date dataCadastro;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_CADASTRO")
-    private Date dataCadastro;
+	@Temporal(TemporalType.DATE)
+	@Column(name="DATA_CONLUSAO")
+	private Date dataConlusao;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_CONLUSAO")
-    private Date dataConlusao;
+	@Temporal(TemporalType.DATE)
+	@Column(name="DATA_RECEBIMENTO")
+	private Date dataRecebimento;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_RECEBIMENTO")
-    private Date dataRecebimento;
+	@Column(name="ID_SUB_STATUS_PROCESSO")
+	private int idSubStatusProcesso;
 
-    private String acoes;
+	//bi-directional many-to-one association to AnaliseProcesso
+	@ManyToOne
+	@JoinColumn(name="ID_ANALISE")
+	private AnaliseProcesso analiseProcesso;
 
-    private String complemento;
+	//bi-directional many-to-one association to Pessoa
+	@ManyToOne
+	@JoinColumn(name="ID_PESSOA")
+	private Pessoa pessoa;
 
-    public AnalistaProcesso() {
-    }
+	public AnalistaProcesso() {
+	}
 
-    public Long getIdAnalistaProcesso() {
-	return idAnalistaProcesso;
-    }
+	public Long getIdAnalistaProcesso() {
+		return this.idAnalistaProcesso;
+	}
 
-    public Long getIdAnalise() {
-	return idAnalise;
-    }
+	public void setIdAnalistaProcesso(Long idAnalistaProcesso) {
+		this.idAnalistaProcesso = idAnalistaProcesso;
+	}
 
-    public Integer getIdSubStatusProcesso() {
-	return idSubStatusProcesso;
-    }
+	public BigInteger getAcoes() {
+		return this.acoes;
+	}
 
-    public Date getDataCadastro() {
-	return dataCadastro;
-    }
+	public void setAcoes(BigInteger acoes) {
+		this.acoes = acoes;
+	}
 
-    public Date getDataConlusao() {
-	return dataConlusao;
-    }
+	public String getComplemento() {
+		return this.complemento;
+	}
 
-    public Date getDataRecebimento() {
-	return dataRecebimento;
-    }
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
 
-    public String getAcoes() {
-	return acoes;
-    }
+	public Date getDataCadastro() {
+		return this.dataCadastro;
+	}
 
-    public String getComplemento() {
-	return complemento;
-    }
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
 
-    public void setIdAnalistaProcesso(Long idAnalistaProcesso) {
-	this.idAnalistaProcesso = idAnalistaProcesso;
-    }
+	public Date getDataConlusao() {
+		return this.dataConlusao;
+	}
 
-    public void setIdAnalise(Long idAnalise) {
-	this.idAnalise = idAnalise;
-    }
+	public void setDataConlusao(Date dataConlusao) {
+		this.dataConlusao = dataConlusao;
+	}
 
-    public void setIdSubStatusProcesso(Integer idSubStatusProcesso) {
-	this.idSubStatusProcesso = idSubStatusProcesso;
-    }
+	public Date getDataRecebimento() {
+		return this.dataRecebimento;
+	}
 
-    public void setDataCadastro(Date dataCadastro) {
-	this.dataCadastro = dataCadastro;
-    }
+	public void setDataRecebimento(Date dataRecebimento) {
+		this.dataRecebimento = dataRecebimento;
+	}
 
-    public void setDataConlusao(Date dataConlusao) {
-	this.dataConlusao = dataConlusao;
-    }
+	public int getIdSubStatusProcesso() {
+		return this.idSubStatusProcesso;
+	}
 
-    public void setDataRecebimento(Date dataRecebimento) {
-	this.dataRecebimento = dataRecebimento;
-    }
+	public void setIdSubStatusProcesso(int idSubStatusProcesso) {
+		this.idSubStatusProcesso = idSubStatusProcesso;
+	}
 
-    public void setAcoes(String acoes) {
-	this.acoes = acoes;
-    }
+	public AnaliseProcesso getAnaliseProcesso() {
+		return this.analiseProcesso;
+	}
 
-    public void setComplemento(String complemento) {
-	this.complemento = complemento;
-    }
+	public void setAnaliseProcesso(AnaliseProcesso analiseProcesso) {
+		this.analiseProcesso = analiseProcesso;
+	}
 
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
+	public Pessoa getPessoa() {
+		return this.pessoa;
+	}
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
 
 }

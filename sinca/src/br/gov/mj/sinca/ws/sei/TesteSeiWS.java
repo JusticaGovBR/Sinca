@@ -11,13 +11,33 @@ import br.gov.mj.sinca.entidades.Localizacao;
 
 public class TesteSeiWS {
 
+
     public static void main(String[] args) {
 	SeiServiceLocator locator = new SeiServiceLocator();
 	try {
 	    
 	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
 		    "110000834", "08000.000010/2014-61", null, null, null, null, null, null, null, null, null);
+	} catch (RemoteException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (ServiceException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }	
+    
+    public static void main2(String[] args) {
+	SeiServiceLocator locator = new SeiServiceLocator();
+	try {
 	    
+	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
+		    "110000834", "08000.000010/2014-61", null, null, null, null, null, null, null, null, null);
+
+	    
+//	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
+//		    "110000834", "08000.000010/2014-61", null, null, null, null, null, null, null, null, null);
+//	    
 	    
 	    //locator.getSeiPortService().incluirDocumento(siglaSistema, identificacaoServico, idUnidade, documento)
 	    

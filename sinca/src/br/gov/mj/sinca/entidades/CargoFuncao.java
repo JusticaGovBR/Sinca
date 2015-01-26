@@ -1,8 +1,14 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -17,32 +23,27 @@ public class CargoFuncao implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_CARGO_FUNCAO", unique=true, nullable=false)
-	private int idCargoFuncao;
+	@Column(name="ID_CARGO_FUNCAO")
+	private Integer idCargoFuncao;
 
-	@Column(name="DESC_CARGO_FUNCAO", length=500)
+	@Column(name="DESC_CARGO_FUNCAO")
 	private String descCargoFuncao;
-
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="cargoFuncao")
-	private List<Processo> processos;
 
 	public CargoFuncao() {
 	}
 
 	
-	public CargoFuncao(int idCargoFuncao) {
-		super();
-		this.idCargoFuncao = idCargoFuncao;
+	public CargoFuncao(Integer idCargoFuncao) {
+	    super();
+	    this.idCargoFuncao = idCargoFuncao;
 	}
 
 
-
-	public int getIdCargoFuncao() {
+	public Integer getIdCargoFuncao() {
 		return this.idCargoFuncao;
 	}
 
-	public void setIdCargoFuncao(int idCargoFuncao) {
+	public void setIdCargoFuncao(Integer idCargoFuncao) {
 		this.idCargoFuncao = idCargoFuncao;
 	}
 
@@ -52,28 +53,6 @@ public class CargoFuncao implements Serializable {
 
 	public void setDescCargoFuncao(String descCargoFuncao) {
 		this.descCargoFuncao = descCargoFuncao;
-	}
-
-	public List<Processo> getProcessos() {
-		return this.processos;
-	}
-
-	public void setProcessos(List<Processo> processos) {
-		this.processos = processos;
-	}
-
-	public Processo addProcesso(Processo processo) {
-		getProcessos().add(processo);
-		processo.setCargoFuncao(this);
-
-		return processo;
-	}
-
-	public Processo removeProcesso(Processo processo) {
-		getProcessos().remove(processo);
-		processo.setCargoFuncao(null);
-
-		return processo;
 	}
 
 }

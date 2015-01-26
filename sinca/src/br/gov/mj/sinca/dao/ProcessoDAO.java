@@ -52,7 +52,7 @@ public class ProcessoDAO extends SincaAbastractDAO<Processo> {
 	}
 	public static void main(String[] args) {
 		System.out.println(new ProcessoDAO().bustaUltimoNumeroProcessoCA());
-		System.out.println(new ProcessoDAO().lerTodos().size());
+		//System.out.println(new ProcessoDAO().lerTodos().size());
 
 		
 

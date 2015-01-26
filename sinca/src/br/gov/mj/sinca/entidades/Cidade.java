@@ -9,19 +9,16 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="cidade")
 @NamedQuery(name="Cidade.findAll", query="SELECT c FROM Cidade c")
 public class Cidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
-	private int cidadeId;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer cidadeId;
 
-	@Column(nullable=false)
 	private byte capital;
 
-	@Column(nullable=false, length=120)
 	private String nome;
 
 	//bi-directional many-to-one association to Estado
@@ -32,11 +29,11 @@ public class Cidade implements Serializable {
 	public Cidade() {
 	}
 
-	public int getCidadeId() {
+	public Integer getCidadeId() {
 		return this.cidadeId;
 	}
 
-	public void setCidadeId(int cidadeId) {
+	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
 	}
 

@@ -11,13 +11,14 @@ import java.util.Date;
  */
 @Entity
 @Table(name="reparacao_analise")
+@NamedQuery(name="ReparacaoAnalise.findAll", query="SELECT r FROM ReparacaoAnalise r")
 public class ReparacaoAnalise implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_REPARACAO")
-	private int idReparacao;
+	private Long idReparacao;
 
 	private String acao;
 
@@ -37,11 +38,11 @@ public class ReparacaoAnalise implements Serializable {
 	public ReparacaoAnalise() {
 	}
 
-	public int getIdReparacao() {
+	public Long getIdReparacao() {
 		return this.idReparacao;
 	}
 
-	public void setIdReparacao(int idReparacao) {
+	public void setIdReparacao(Long idReparacao) {
 		this.idReparacao = idReparacao;
 	}
 

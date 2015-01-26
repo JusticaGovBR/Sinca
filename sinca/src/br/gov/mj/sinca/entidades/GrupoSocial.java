@@ -4,32 +4,28 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the grupo_social database table.
  * 
  */
 @Entity
-@Table(name = "grupo_social")
-@NamedQuery(name = "GrupoSocial.findAll", query = "SELECT g FROM GrupoSocial g")
+@Table(name="grupo_social")
+@NamedQuery(name="GrupoSocial.findAll", query="SELECT g FROM GrupoSocial g")
 public class GrupoSocial implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID_GRUPO_SOCIAL", unique = true, nullable = false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ID_GRUPO_SOCIAL")
 	private Integer idGrupoSocial;
 
-	@Column(name = "DESC_GRUPO_SOCIAL", length = 500)
+	@Column(name="DESC_GRUPO_SOCIAL")
 	private String descGrupoSocial;
 
-	// bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy = "grupoSocial")
+	//bi-directional many-to-one association to Processo
+	@OneToMany(mappedBy="grupoSocial")
 	private List<Processo> processos;
-
-	public GrupoSocial(int idGrupoSocial) {
-		super();
-		this.idGrupoSocial = idGrupoSocial;
-	}
 
 	public GrupoSocial() {
 	}

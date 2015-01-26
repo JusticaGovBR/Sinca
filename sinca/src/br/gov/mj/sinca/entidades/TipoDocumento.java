@@ -1,14 +1,8 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -23,11 +17,14 @@ public class TipoDocumento implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_TIPO_DOCUMENTO", unique=true, nullable=false)
+	@Column(name="ID_TIPO_DOCUMENTO")
 	private Integer idTipoDocumento;
 
-	@Column(length=200)
 	private String descricao;
+
+	//bi-directional many-to-one association to DocumentoPessoa
+	@OneToMany(mappedBy="tipoDocumento")
+	private List<DocumentoPessoa> documentoPessoas;
 
 	public TipoDocumento() {
 	}
@@ -48,5 +45,26 @@ public class TipoDocumento implements Serializable {
 		this.descricao = descricao;
 	}
 
-	
+	public List<DocumentoPessoa> getDocumentoPessoas() {
+		return this.documentoPessoas;
+	}
+
+	public void setDocumentoPessoas(List<DocumentoPessoa> documentoPessoas) {
+		this.documentoPessoas = documentoPessoas;
+	}
+
+	public DocumentoPessoa addDocumentoPessoa(DocumentoPessoa documentoPessoa) {
+		getDocumentoPessoas().add(documentoPessoa);
+		documentoPessoa.setTipoDocumento(this);
+
+		return documentoPessoa;
+	}
+
+	public DocumentoPessoa removeDocumentoPessoa(DocumentoPessoa documentoPessoa) {
+		getDocumentoPessoas().remove(documentoPessoa);
+		documentoPessoa.setTipoDocumento(null);
+
+		return documentoPessoa;
+	}
+
 }

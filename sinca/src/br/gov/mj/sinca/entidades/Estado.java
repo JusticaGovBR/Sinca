@@ -10,16 +10,14 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="estado")
 @NamedQuery(name="Estado.findAll", query="SELECT e FROM Estado e")
 public class Estado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer estadoId;
 
-	@Column(nullable=false, length=2)
 	private String sigla;
 
 	//bi-directional many-to-one association to Cidade

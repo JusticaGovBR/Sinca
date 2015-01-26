@@ -1,8 +1,14 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -17,25 +23,14 @@ public class SubGrupoSocial implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_SUB_GRUPO_SOCIAL", unique=true, nullable=false)
+	@Column(name="ID_SUB_GRUPO_SOCIAL")
 	private Integer idSubGrupoSocial;
 
-	@Column(name="DESC_SUB_GRUPO_SOCIAL", length=500)
+	@Column(name="DESC_SUB_GRUPO_SOCIAL")
 	private String descSubGrupoSocial;
-
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="subGrupoSocial")
-	private List<Processo> processos;
 
 	public SubGrupoSocial() {
 	}
-	
-
-	public SubGrupoSocial(Integer idSubGrupoSocial) {
-		super();
-		this.idSubGrupoSocial = idSubGrupoSocial;
-	}
-
 
 	public Integer getIdSubGrupoSocial() {
 		return this.idSubGrupoSocial;
@@ -53,26 +48,6 @@ public class SubGrupoSocial implements Serializable {
 		this.descSubGrupoSocial = descSubGrupoSocial;
 	}
 
-	public List<Processo> getProcessos() {
-		return this.processos;
-	}
-
-	public void setProcessos(List<Processo> processos) {
-		this.processos = processos;
-	}
-
-	public Processo addProcesso(Processo processo) {
-		getProcessos().add(processo);
-		processo.setSubGrupoSocial(this);
-
-		return processo;
-	}
-
-	public Processo removeProcesso(Processo processo) {
-		getProcessos().remove(processo);
-		processo.setSubGrupoSocial(null);
-
-		return processo;
-	}
+	
 
 }

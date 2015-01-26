@@ -1,8 +1,8 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -16,20 +16,21 @@ public class TipoTelefone implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="COD_TIPO", unique=true, nullable=false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="COD_TIPO")
 	private Integer codTipo;
 
-	@Column(nullable=false, length=200)
 	private String descricao;
-	
-	
 
-	public TipoTelefone(Integer codTipo) {
-	    super();
-	    this.codTipo = codTipo;
-	}
+	//bi-directional many-to-one association to TelefonePessoa
+	@OneToMany(mappedBy="tipoTelefone")
+	private List<TelefonePessoa> telefonePessoas;
 
 	public TipoTelefone() {
+	}
+
+	public TipoTelefone(Integer codTipo) {
+	    this.codTipo = codTipo;
 	}
 
 	public Integer getCodTipo() {
@@ -46,6 +47,28 @@ public class TipoTelefone implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public List<TelefonePessoa> getTelefonePessoas() {
+		return this.telefonePessoas;
+	}
+
+	public void setTelefonePessoas(List<TelefonePessoa> telefonePessoas) {
+		this.telefonePessoas = telefonePessoas;
+	}
+
+	public TelefonePessoa addTelefonePessoa(TelefonePessoa telefonePessoa) {
+		getTelefonePessoas().add(telefonePessoa);
+		telefonePessoa.setTipoTelefone(this);
+
+		return telefonePessoa;
+	}
+
+	public TelefonePessoa removeTelefonePessoa(TelefonePessoa telefonePessoa) {
+		getTelefonePessoas().remove(telefonePessoa);
+		telefonePessoa.setTipoTelefone(null);
+
+		return telefonePessoa;
 	}
 
 }

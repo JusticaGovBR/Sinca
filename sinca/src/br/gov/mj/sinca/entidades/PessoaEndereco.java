@@ -1,17 +1,7 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -26,11 +16,11 @@ public class PessoaEndereco implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_PESSOA_ENDERECO", unique=true, nullable=false)
-	private Integer idPessoaEndereco;
+	@Column(name="ID_PESSOA_ENDERECO")
+	private Long idPessoaEndereco;
 
 	//bi-directional many-to-one association to Endereco
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="ID_ENDERECO")
 	private Endereco endereco;
 
@@ -42,12 +32,12 @@ public class PessoaEndereco implements Serializable {
 	public PessoaEndereco() {
 	}
 
-	public Integer getIdPessoaEndereco() {
-	    return idPessoaEndereco;
+	public Long getIdPessoaEndereco() {
+		return this.idPessoaEndereco;
 	}
 
-	public void setIdPessoaEndereco(Integer idPessoaEndereco) {
-	    this.idPessoaEndereco = idPessoaEndereco;
+	public void setIdPessoaEndereco(Long idPessoaEndereco) {
+		this.idPessoaEndereco = idPessoaEndereco;
 	}
 
 	public Endereco getEndereco() {

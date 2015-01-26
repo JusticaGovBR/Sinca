@@ -1,18 +1,8 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 /**
@@ -20,36 +10,27 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="endereco")
 @NamedQuery(name="Endereco.findAll", query="SELECT e FROM Endereco e")
 public class Endereco implements Serializable {
-	
-         private static final long serialVersionUID = 145454545454564564L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_ENDERECO", unique=true, nullable=false)
+	@Column(name="ID_ENDERECO")
 	private Integer idEndereco;
 
-	@Column(length=200)
 	private String bairro;
 
-	@Column(length=30)
 	private String cep;
 
-	@Column(length=200)
 	private String cidade;
 
-	@Column(name="COMPLEMENTO")
 	private String complemento;
 
-	@Column(name="LOGRADOURO")
 	private String logradouro;
 
-	@Column(length=20)
 	private String numero;
 
-	@Column(length=50)
 	private String uf;
 
 	//bi-directional many-to-one association to TipoEndereco
@@ -104,13 +85,12 @@ public class Endereco implements Serializable {
 		this.complemento = complemento;
 	}
 
-	
 	public String getLogradouro() {
-	    return logradouro;
+		return this.logradouro;
 	}
 
 	public void setLogradouro(String logradouro) {
-	    this.logradouro = logradouro;
+		this.logradouro = logradouro;
 	}
 
 	public String getNumero() {

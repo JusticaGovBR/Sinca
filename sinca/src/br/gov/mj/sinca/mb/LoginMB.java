@@ -13,13 +13,43 @@ public class LoginMB implements Serializable {
      * 
      */
     private static final long serialVersionUID = 7487051267288610892L;
-    
+
     private String nome;
     private String senha;
-    
-    public void salvar(){
-	
+
+    public String acaoAutenticar() {
+	//Usuario usuarioDoBanco = dao.lerPorLogin(this.getLogin());
+
+//	if (usuarioDoBanco == null) {
+//	    JSFUtil.retornarMensagem(null, "Usuário não existe.");
+//	    return "login";
+//	} else if (usuarioDoBanco.senhaCorreta(this.getSenha())) {
+//	    // guardar o obteto usuário
+//	    this.setUsuario(usuarioDoBanco);
+//	    this.autenticado = true;
+//
+//	    return "home";
+//	} else {
+//	    JSFUtil.retornarMensagem(null, "Senha inválida.");
+//	    return "login";
+//	}
+	return "index";
     }
+
+    /**
+	 * 
+	 */
+//    public String acaoLogout() {
+//	this.usuario = null;
+//	this.autenticado = false;
+//	this.login = null;
+//	this.senha = null;
+//
+//	// encerrar a sessão atual
+//	JSFUtil.getHttpSession().invalidate();
+//
+//	return "login";
+//    }
 
     public String getNome() {
 	return nome;

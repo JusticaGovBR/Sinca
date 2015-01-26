@@ -2,9 +2,13 @@ package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
-
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -19,23 +23,13 @@ public class SubStatusProcesso implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_SUB_STATUS_PROCESSO", unique=true, nullable=false)
+	@Column(name="ID_SUB_STATUS_PROCESSO")
 	private Integer idSubStatusProcesso;
 
-	@Column(name="DESC_SUB_STATUS_PROCESSO", length=500)
+	@Column(name="DESC_SUB_STATUS_PROCESSO")
 	private String descSubStatusProcesso;
 
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="subStatusProcesso")
-	private List<Processo> processos;
-	
-
 	public SubStatusProcesso() {
-		super();
-	}
-
-	public SubStatusProcesso(Integer idSubStatusProcesso) {
-		this.idSubStatusProcesso = idSubStatusProcesso;
 	}
 
 	public Integer getIdSubStatusProcesso() {
@@ -53,27 +47,5 @@ public class SubStatusProcesso implements Serializable {
 	public void setDescSubStatusProcesso(String descSubStatusProcesso) {
 		this.descSubStatusProcesso = descSubStatusProcesso;
 	}
-
-	public List<Processo> getProcessos() {
-		return this.processos;
-	}
-
-	public void setProcessos(List<Processo> processos) {
-		this.processos = processos;
-	}
-
-	public Processo addProcesso(Processo processo) {
-		getProcessos().add(processo);
-		processo.setSubStatusProcesso(this);
-
-		return processo;
-	}
-
-	public Processo removeProcesso(Processo processo) {
-		getProcessos().remove(processo);
-		processo.setSubStatusProcesso(null);
-
-		return processo;
-	}
-
+	
 }

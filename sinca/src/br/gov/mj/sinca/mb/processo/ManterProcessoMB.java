@@ -19,21 +19,17 @@ import org.apache.axis.AxisFault;
 import org.primefaces.event.FlowEvent;
 
 import br.gov.mj.sinca.ConstantSinca;
-import br.gov.mj.sinca.dao.AssuntoDAO;
 import br.gov.mj.sinca.dao.CargoFuncaoDAO;
 import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.DoencaDAO;
-import br.gov.mj.sinca.dao.EspecieDAO;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
-import br.gov.mj.sinca.dao.NaturezaDAO;
 import br.gov.mj.sinca.dao.PessoaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
-import br.gov.mj.sinca.dao.ProcedenciaDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.dao.StatusProcessoDAO;
 import br.gov.mj.sinca.dao.SubGrupoProcesssualDAO;
@@ -43,27 +39,21 @@ import br.gov.mj.sinca.dao.TelefonePessoaDAO;
 import br.gov.mj.sinca.dao.TipoDocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.TipoEnderecoDAO;
 import br.gov.mj.sinca.dao.TipoPessoaProcessoDAO;
-import br.gov.mj.sinca.dao.TipoProcessoDAO;
 import br.gov.mj.sinca.dao.TipoTelefoneDAO;
-import br.gov.mj.sinca.entidades.Assunto;
 import br.gov.mj.sinca.entidades.CargoFuncao;
 import br.gov.mj.sinca.entidades.Cidade;
-import br.gov.mj.sinca.entidades.DadosAdicionais;
 import br.gov.mj.sinca.entidades.DocumentoPessoa;
 import br.gov.mj.sinca.entidades.Doenca;
 import br.gov.mj.sinca.entidades.DoencaPessoa;
 import br.gov.mj.sinca.entidades.Endereco;
-import br.gov.mj.sinca.entidades.Especie;
 import br.gov.mj.sinca.entidades.Estado;
 import br.gov.mj.sinca.entidades.EstadoCivil;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
 import br.gov.mj.sinca.entidades.GrupoSocial;
 import br.gov.mj.sinca.entidades.Localizacao;
-import br.gov.mj.sinca.entidades.Natureza;
 import br.gov.mj.sinca.entidades.Pessoa;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
-import br.gov.mj.sinca.entidades.Procedencia;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.StatusProcesso;
 import br.gov.mj.sinca.entidades.SubGrupoProcessual;
@@ -73,7 +63,6 @@ import br.gov.mj.sinca.entidades.TelefonePessoa;
 import br.gov.mj.sinca.entidades.TipoDocumento;
 import br.gov.mj.sinca.entidades.TipoEndereco;
 import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
-import br.gov.mj.sinca.entidades.TipoProcesso;
 import br.gov.mj.sinca.entidades.TipoTelefone;
 import br.gov.mj.sinca.util.CpfCnpjUtil;
 import br.gov.mj.sinca.util.JSFUtil;
@@ -96,7 +85,7 @@ public class ManterProcessoMB implements Serializable {
 
     private String mensagem;
 
-    private Integer idLocalizacao;
+    private Long idLocalizacao;
     private Integer idStatusProcesso;
     private Integer idSubStatusProcesso;
     private Integer idGrupoProcessual;
@@ -121,11 +110,6 @@ public class ManterProcessoMB implements Serializable {
     private List<CargoFuncao> listarCargoFuncao = new ArrayList<CargoFuncao>();
     private List<GrupoSocial> listarGrupoSocial = new ArrayList<GrupoSocial>();
     private List<SubGrupoSocial> listarSubGrupoSocial = new ArrayList<SubGrupoSocial>();
-    private List<Assunto> listarAssunto = new ArrayList<Assunto>();
-    private List<Especie> listarEspecie = new ArrayList<Especie>();
-    private List<Natureza> listarNatureza = new ArrayList<Natureza>();
-    private List<Procedencia> listarProcedencia = new ArrayList<Procedencia>();
-    private List<TipoProcesso> listarTipoProcesso = new ArrayList<TipoProcesso>();
 
     private List<Pessoa> listarPessoa;
     private List<Processo> listarProcessos;
@@ -162,7 +146,6 @@ public class ManterProcessoMB implements Serializable {
     private DocumentoPessoa documentoPessoa = new DocumentoPessoa();
     private TipoDocumento tipoDocumento = new TipoDocumento();
     private TipoEndereco tipoEndereco = new TipoEndereco();
-    private DadosAdicionais dadosAdicionais = new DadosAdicionais();
 
     private Integer[] idTipoPessoaProcesso;
     private boolean habilitaEdicaoPessoa;
@@ -206,20 +189,7 @@ public class ManterProcessoMB implements Serializable {
 	    if (idCargoFuncao > 0) {
 		processo.setCargoFuncao(new CargoFuncao(idCargoFuncao));
 	    }
-	    if (idGrupoProcessual > 0)
-		processo.setGrupoProcessual(new GrupoProcessual(idGrupoProcessual));
-	    if (idGrupoSocial > 0)
-		processo.setGrupoSocial(new GrupoSocial(idGrupoSocial));
-	    if (idLocalizacao > 0)
-		processo.setIdLocalizacao(idLocalizacao);
-	    if (idStatusProcesso > 0)
-		processo.setStatusProcesso(new StatusProcesso(idStatusProcesso));
-	    if (idSubGrupoProcessual > 0)
-		processo.setSubGrupoProcessual(new SubGrupoProcessual(idSubGrupoProcessual));
-	    if (idSubGrupoSocial > 0)
-		processo.setSubGrupoSocial(new SubGrupoSocial(idSubGrupoSocial));
-	    if (idSubStatusProcesso > 0)
-		processo.setSubStatusProcesso(new SubStatusProcesso(idSubStatusProcesso));
+	   
 
 	    if (processo.getIdProcesso() == null || processo.getIdProcesso() == 0) {
 		processo.setDataCadastro(new Date());
@@ -419,10 +389,10 @@ public class ManterProcessoMB implements Serializable {
 	    setListarDocumentoPessoa(new ArrayList<DocumentoPessoa>());
 	    if (pessoaCadastro.getIdPessoa() > 0) {
 		pessoaCadastro = new PessoaDAO().lerPorId(pessoaCadastro.getIdPessoa());
-		pessoaCadastro.getDocumentoPessoa().size();
+		pessoaCadastro.getDocumentoPessoas().size();
 		pessoaCadastro.getPessoaEnderecos().size();
 		pessoaCadastro.getTelefonePessoas().size();
-		pessoaCadastro.getDoencaPessoa().size();
+		pessoaCadastro.getDoencaPessoas().size();
 
 		carregarDocumentosPessoa(pessoaCadastro);
 		carregarEnderecosPessoa(pessoaCadastro);
@@ -484,7 +454,7 @@ public class ManterProcessoMB implements Serializable {
 	    }
 	    pessoaCadastro.setDataHoraAtualizacao(new Timestamp(new Date().getTime()));
 	    pessoaCadastro.setPessoaEnderecos(null);
-	    pessoaCadastro.setDocumentoPessoa(null);
+	    pessoaCadastro.setDocumentoPessoas(null);
 	    pessoaCadastro.setTelefonePessoas(null);
 	    
 	    if(pessoaCadastro.getDataHoraCadastro()==null){
@@ -607,7 +577,7 @@ public class ManterProcessoMB implements Serializable {
     private void carregarDocumentosPessoa(Pessoa pessoa) {
 	listarDocumentoPessoa = new ArrayList<DocumentoPessoa>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
-	    for (DocumentoPessoa doc : pessoaCadastro.getDocumentoPessoa()) {
+	    for (DocumentoPessoa doc : pessoaCadastro.getDocumentoPessoas()) {
 		getListarDocumentoPessoa().add(doc);
 	    }
 	}
@@ -634,7 +604,7 @@ public class ManterProcessoMB implements Serializable {
     private void carregarDoencaPessoa(Pessoa pessoa) {
 	listarDoencaPessoa = new ArrayList<DoencaPessoa>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
-	    for (DoencaPessoa doencaPessoa : pessoaCadastro.getDoencaPessoa()) {
+	    for (DoencaPessoa doencaPessoa : pessoaCadastro.getDoencaPessoas()) {
 		getListarDoencaPessoa().add(doencaPessoa);
 	    }
 	}
@@ -1098,11 +1068,11 @@ public class ManterProcessoMB implements Serializable {
 	this.telefonePessoa = telefonePessoa;
     }
 
-    public Integer getIdLocalizacao() {
+    public Long getIdLocalizacao() {
 	return idLocalizacao;
     }
 
-    public void setIdLocalizacao(Integer idLocalizacao) {
+    public void setIdLocalizacao(Long idLocalizacao) {
 	this.idLocalizacao = idLocalizacao;
     }
 
@@ -1312,69 +1282,6 @@ public class ManterProcessoMB implements Serializable {
 
     public void setListarSubGrupoSocial(List<SubGrupoSocial> listarSubGrupoSocial) {
 	this.listarSubGrupoSocial = listarSubGrupoSocial;
-    }
-
-    public List<Assunto> getListarAssunto() {
-	if (listarAssunto.isEmpty()) {
-	    listarAssunto = new AssuntoDAO().lerTodos();
-	}
-	return listarAssunto;
-    }
-
-    public void setListarAssunto(List<Assunto> listarAssunto) {
-	this.listarAssunto = listarAssunto;
-    }
-
-    public List<Especie> getListarEspecie() {
-	if (listarEspecie.isEmpty()) {
-	    listarEspecie = new EspecieDAO().lerTodos();
-	}
-	return listarEspecie;
-    }
-
-    public void setListarEspecie(List<Especie> listarEspecie) {
-	this.listarEspecie = listarEspecie;
-    }
-
-    public List<Natureza> getListarNatureza() {
-	if (listarNatureza.isEmpty()) {
-	    listarNatureza = new NaturezaDAO().lerTodos();
-	}
-	return listarNatureza;
-    }
-
-    public void setListarNatureza(List<Natureza> listarNatureza) {
-	this.listarNatureza = listarNatureza;
-    }
-
-    public List<Procedencia> getListarProcedencia() {
-	if (listarProcedencia.isEmpty()) {
-	    listarProcedencia = new ProcedenciaDAO().lerTodos();
-	}
-	return listarProcedencia;
-    }
-
-    public void setListarProcedencia(List<Procedencia> listarProcedencia) {
-	this.listarProcedencia = listarProcedencia;
-    }
-
-    public List<TipoProcesso> getListarTipoProcesso() {
-	if (listarTipoProcesso.isEmpty()) {
-	    listarTipoProcesso = new TipoProcessoDAO().lerTodos();
-	}
-	return listarTipoProcesso;
-    }
-
-    public DadosAdicionais getDadosAdicionais() {
-	return dadosAdicionais;
-    }
-
-    public void setDadosAdicionais(DadosAdicionais dadosAdicionais) {
-	this.dadosAdicionais = dadosAdicionais;
-    }
-
-    public void setListarTipoProcesso(List<TipoProcesso> listarTipoProcesso) {
-	this.listarTipoProcesso = listarTipoProcesso;
     }
 
     public String getMensagem() {

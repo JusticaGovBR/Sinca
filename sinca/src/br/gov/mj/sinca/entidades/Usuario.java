@@ -6,28 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the usario database table.
+ * The persistent class for the usuario database table.
  * 
  */
 @Entity
-@Table(name="usuario")
 @NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_USUARIO", unique=true, nullable=false)
+	@Column(name="ID_USUARIO")
 	private Integer idUsuario;
 
-	@Column(name="DESC_USUARIO", length=500)
+	@Column(name="DESC_USUARIO")
 	private String descUsuario;
 
-	@Column(name="SGL_USUARIO", length=100)
+	@Column(name="SGL_USUARIO")
 	private String sglUsuario;
 
 	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="usario",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="usuario")
 	private List<Processo> processos;
 
 	public Usuario() {
@@ -67,14 +66,14 @@ public class Usuario implements Serializable {
 
 	public Processo addProcesso(Processo processo) {
 		getProcessos().add(processo);
-		processo.setUsario(this);
+		processo.setUsuario(this);
 
 		return processo;
 	}
 
 	public Processo removeProcesso(Processo processo) {
 		getProcessos().remove(processo);
-		processo.setUsario(null);
+		processo.setUsuario(null);
 
 		return processo;
 	}

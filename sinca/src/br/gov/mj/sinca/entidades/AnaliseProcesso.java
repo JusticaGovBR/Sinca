@@ -1,19 +1,9 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 /**
@@ -60,11 +50,26 @@ public class AnaliseProcesso implements Serializable {
 	@Column(name="DESC_COMPLEMENTO_PEDIDO")
 	private String descComplementoPedido;
 
+	@Column(name="DESC_LITERATURA_ASSUNTO")
+	private String descLiteraturaAssunto;
+
+	@Column(name="DESC_LOCAIS_PERSEGUICOES")
+	private String descLocaisPerseguicoes;
+
+	@Column(name="DESC_OUTRAS_FONTES")
+	private String descOutrasFontes;
+
+	@Column(name="DESC_PESSOAS_ENVOLVIDAS")
+	private String descPessoasEnvolvidas;
+
+	@Column(name="DESC_RELATO_REQUERENTE")
+	private String descRelatoRequerente;
+
+	@Column(name="DESC_TESTEMUNHAS")
+	private String descTestemunhas;
+
 	@Column(name="DESC_TIPO_BENEF_ANT")
 	private String descTipoBenefAnt;
-
-	@Column(name="ID_PROCESSO")
-	private Processo processo;
 
 	private String observacoes;
 
@@ -79,28 +84,21 @@ public class AnaliseProcesso implements Serializable {
 
 	@Column(name="TIPO_ANISTIANDO")
 	private byte tipoAnistiando;
-	
-	@Column(name="DESC_RELATO_REQUERENTE")
-	private String descRelatoRequerente;
 
-	@Column(name="DESC_TESTEMUNHAS")
-	private String descTestemunhas;
+	//bi-directional many-to-one association to Processo
+	@ManyToOne
+	@JoinColumn(name="ID_PROCESSO")
+	private Processo processo;
 
-	@Column(name="DESC_LOCAIS_PERSEGUICOES")
-	private String descLocaisPerseguicoes;
+	//bi-directional many-to-one association to AnalistaProcesso
+	@OneToMany(mappedBy="analiseProcesso")
+	private List<AnalistaProcesso> analistaProcessos;
 
-	@Column(name="DESC_OUTRAS_FONTES")
-	private String descOutrasFontes;
-	
-	@Column(name="DESC_LITERATURA_ASSUNTO")
-	private String descLiteraturaAssunto;
-
-	@Column(name="DESC_PESSOAS_ENVOLVIDAS")
-	private String descPessoasEnvolvidas;
-
+	//bi-directional many-to-one association to PerseguicaoAnalise
 	@OneToMany(mappedBy="analiseProcesso")
 	private List<PerseguicaoAnalise> perseguicaoAnalises;
 
+	//bi-directional many-to-one association to ReparacaoAnalise
 	@OneToMany(mappedBy="analiseProcesso")
 	private List<ReparacaoAnalise> reparacaoAnalises;
 
@@ -171,7 +169,6 @@ public class AnaliseProcesso implements Serializable {
 		this.dataCadastro = dataCadastro;
 	}
 
-	
 	public Date getDataPrimeiroProtocolo() {
 		return this.dataPrimeiroProtocolo;
 	}
@@ -188,20 +185,60 @@ public class AnaliseProcesso implements Serializable {
 		this.descComplementoPedido = descComplementoPedido;
 	}
 
+	public String getDescLiteraturaAssunto() {
+		return this.descLiteraturaAssunto;
+	}
+
+	public void setDescLiteraturaAssunto(String descLiteraturaAssunto) {
+		this.descLiteraturaAssunto = descLiteraturaAssunto;
+	}
+
+	public String getDescLocaisPerseguicoes() {
+		return this.descLocaisPerseguicoes;
+	}
+
+	public void setDescLocaisPerseguicoes(String descLocaisPerseguicoes) {
+		this.descLocaisPerseguicoes = descLocaisPerseguicoes;
+	}
+
+	public String getDescOutrasFontes() {
+		return this.descOutrasFontes;
+	}
+
+	public void setDescOutrasFontes(String descOutrasFontes) {
+		this.descOutrasFontes = descOutrasFontes;
+	}
+
+	public String getDescPessoasEnvolvidas() {
+		return this.descPessoasEnvolvidas;
+	}
+
+	public void setDescPessoasEnvolvidas(String descPessoasEnvolvidas) {
+		this.descPessoasEnvolvidas = descPessoasEnvolvidas;
+	}
+
+	public String getDescRelatoRequerente() {
+		return this.descRelatoRequerente;
+	}
+
+	public void setDescRelatoRequerente(String descRelatoRequerente) {
+		this.descRelatoRequerente = descRelatoRequerente;
+	}
+
+	public String getDescTestemunhas() {
+		return this.descTestemunhas;
+	}
+
+	public void setDescTestemunhas(String descTestemunhas) {
+		this.descTestemunhas = descTestemunhas;
+	}
+
 	public String getDescTipoBenefAnt() {
 		return this.descTipoBenefAnt;
 	}
 
 	public void setDescTipoBenefAnt(String descTipoBenefAnt) {
 		this.descTipoBenefAnt = descTipoBenefAnt;
-	}
-
-	public Processo getProcesso() {
-	    return processo;
-	}
-
-	public void setProcesso(Processo processo) {
-	    this.processo = processo;
 	}
 
 	public String getObservacoes() {
@@ -242,6 +279,36 @@ public class AnaliseProcesso implements Serializable {
 
 	public void setTipoAnistiando(byte tipoAnistiando) {
 		this.tipoAnistiando = tipoAnistiando;
+	}
+
+	public Processo getProcesso() {
+		return this.processo;
+	}
+
+	public void setProcesso(Processo processo) {
+		this.processo = processo;
+	}
+
+	public List<AnalistaProcesso> getAnalistaProcessos() {
+		return this.analistaProcessos;
+	}
+
+	public void setAnalistaProcessos(List<AnalistaProcesso> analistaProcessos) {
+		this.analistaProcessos = analistaProcessos;
+	}
+
+	public AnalistaProcesso addAnalistaProcesso(AnalistaProcesso analistaProcesso) {
+		getAnalistaProcessos().add(analistaProcesso);
+		analistaProcesso.setAnaliseProcesso(this);
+
+		return analistaProcesso;
+	}
+
+	public AnalistaProcesso removeAnalistaProcesso(AnalistaProcesso analistaProcesso) {
+		getAnalistaProcessos().remove(analistaProcesso);
+		analistaProcesso.setAnaliseProcesso(null);
+
+		return analistaProcesso;
 	}
 
 	public List<PerseguicaoAnalise> getPerseguicaoAnalises() {
@@ -286,54 +353,6 @@ public class AnaliseProcesso implements Serializable {
 		reparacaoAnalis.setAnaliseProcesso(null);
 
 		return reparacaoAnalis;
-	}
-
-	public String getDescRelatoRequerente() {
-	    return descRelatoRequerente;
-	}
-
-	public String getDescTestemunhas() {
-	    return descTestemunhas;
-	}
-
-	public String getDescLocaisPerseguicoes() {
-	    return descLocaisPerseguicoes;
-	}
-
-	public String getDescOutrasFontes() {
-	    return descOutrasFontes;
-	}
-
-	public String getDescLiteraturaAssunto() {
-	    return descLiteraturaAssunto;
-	}
-
-	public String getDescPessoasEnvolvidas() {
-	    return descPessoasEnvolvidas;
-	}
-
-	public void setDescRelatoRequerente(String descRelatoRequerente) {
-	    this.descRelatoRequerente = descRelatoRequerente;
-	}
-
-	public void setDescTestemunhas(String descTestemunhas) {
-	    this.descTestemunhas = descTestemunhas;
-	}
-
-	public void setDescLocaisPerseguicoes(String descLocaisPerseguicoes) {
-	    this.descLocaisPerseguicoes = descLocaisPerseguicoes;
-	}
-
-	public void setDescOutrasFontes(String descOutrasFontes) {
-	    this.descOutrasFontes = descOutrasFontes;
-	}
-
-	public void setDescLiteraturaAssunto(String descLiteraturaAssunto) {
-	    this.descLiteraturaAssunto = descLiteraturaAssunto;
-	}
-
-	public void setDescPessoasEnvolvidas(String descPessoasEnvolvidas) {
-	    this.descPessoasEnvolvidas = descPessoasEnvolvidas;
 	}
 
 }

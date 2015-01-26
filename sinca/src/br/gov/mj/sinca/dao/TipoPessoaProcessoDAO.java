@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
 
 public class TipoPessoaProcessoDAO extends SincaAbastractDAO<TipoPessoaProcesso> {

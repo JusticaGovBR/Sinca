@@ -23,7 +23,8 @@ public class SeiServiceLocator extends org.apache.axis.client.Service implements
 
     // Use to get a proxy class for SeiPortService
     //private java.lang.String SeiPortService_address = "http://sei.mj.gov.br/sei/ws/SeiWS.php";
-    private java.lang.String SeiPortService_address = "http://seipreprod.mj.gov.br/sei/ws/SeiWS.php";
+    //private java.lang.String SeiPortService_address = "http://seipreprod.mj.gov.br/sei/ws/SeiWS.php";
+    private java.lang.String SeiPortService_address = "http://seimpog.trf4.jus.br/seimpog//ws/SeiWS.php";
 
     public java.lang.String getSeiPortServiceAddress() {
         return SeiPortService_address;

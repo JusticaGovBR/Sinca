@@ -7,8 +7,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
-	
-	/**
+    
+  	/**
 	 * Objeto do tipo Singleton para criar a EntityManagerFactory como instância
 	 * única durante a inicialiação.
 	 */
@@ -74,6 +74,10 @@ public class JPAUtil {
 		}
 
 		return retorno;
+	}
+	
+	public static void main(String[] args) {
+	    JPAUtil util = new JPAUtil();
 	}
 
 }

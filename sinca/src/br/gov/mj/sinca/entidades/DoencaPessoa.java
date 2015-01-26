@@ -16,6 +16,7 @@ public class DoencaPessoa implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_DOENCA_PESSOA")
 	private Long idDoencaPessoa;
 
@@ -34,10 +35,12 @@ public class DoencaPessoa implements Serializable {
 	@Column(name="OBSERVACAO_COMPROVANTE")
 	private String observacaoComprovante;
 
+	//bi-directional many-to-one association to Doenca
 	@ManyToOne
 	@JoinColumn(name="ID_DOENCA")
 	private Doenca doenca;
 
+	//bi-directional many-to-one association to Pessoa
 	@ManyToOne
 	@JoinColumn(name="ID_PESSOA")
 	private Pessoa pessoa;

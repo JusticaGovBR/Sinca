@@ -1,45 +1,51 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 
 /**
- * The persistent class for the situacao_profissional database table.
+ * The persistent class for the situacao_cadastro database table.
  * 
  */
 @Entity
-@Table(name = "situacao_cadastro")
-@NamedQuery(name = "SituacaoCadastro.findAll", query = "SELECT s FROM SituacaoCadastro s")
+@Table(name="situacao_cadastro")
+@NamedQuery(name="SituacaoCadastro.findAll", query="SELECT s FROM SituacaoCadastro s")
 public class SituacaoCadastro implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "COD_SITUACAO_CADASTRO")
-    private Integer codSituacao;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="COD_SITUACAO_CADASTRO")
+	private Integer codSituacaoCadastro;
 
-    @Column(name = "DESCRICAO")
-    private String descSituacao;
+	private String descricao;
 
-    public SituacaoCadastro() {
-    }
+	public SituacaoCadastro() {
+	}
 
-    
-    public Integer getCodSituacao() {
-        return codSituacao;
-    }
+	public Integer getCodSituacaoCadastro() {
+		return this.codSituacaoCadastro;
+	}
 
-    public void setCodSituacao(Integer codSituacao) {
-        this.codSituacao = codSituacao;
-    }
+	public void setCodSituacaoCadastro(Integer codSituacaoCadastro) {
+		this.codSituacaoCadastro = codSituacaoCadastro;
+	}
 
+	public String getDescricao() {
+		return this.descricao;
+	}
 
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
-    public String getDescSituacao() {
-	return this.descSituacao;
-    }
-
-    public void setDescSituacao(String descSituacao) {
-	this.descSituacao = descSituacao;
-    }
 
 }

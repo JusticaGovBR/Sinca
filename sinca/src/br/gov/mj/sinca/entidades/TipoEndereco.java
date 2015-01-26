@@ -17,10 +17,9 @@ public class TipoEndereco implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_TIPO_ENDERECO", unique=true, nullable=false)
+	@Column(name="ID_TIPO_ENDERECO")
 	private Integer idTipoEndereco;
 
-	@Column(nullable=false, length=200)
 	private String descricao;
 
 	//bi-directional many-to-one association to Endereco

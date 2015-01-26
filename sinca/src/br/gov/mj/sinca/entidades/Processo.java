@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,26 +22,28 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
-@Table(name = "processo")
 @NamedQuery(name = "Processo.findAll", query = "SELECT p FROM Processo p")
 public class Processo implements Serializable {
-    
+
     /**
      * 
      */
-    private static final long serialVersionUID = -6371588063806171655L;
-
+    private static final long serialVersionUID = -2431687116096187362L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PROCESSO", unique = true, nullable = false)
+    @Column(name = "ID_PROCESSO")
     private Long idProcesso;
 
-    @Column(name = "NUM_PROTOCOLO_CA")
-    private int numProtocoloCa;
-    
-    @Column(name = "NUM_PROTOCOLO_MJ", length = 20)
-    private String numProtocoloMj;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_CADASTRO")
+    private Date dataCadastro;
+
+    @Column(name = "DATA_HORA_ATUALIZACAO")
+    private Timestamp dataHoraAtualizacao;
+
+    @Column(name = "DATA_HORA_INCLUSAO")
+    private Timestamp dataHoraInclusao;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_PROTOCOLO_CA")
@@ -52,88 +53,74 @@ public class Processo implements Serializable {
     @Column(name = "DATA_PROTOCOLO_MJ")
     private Date dataProtocoloMJ;
 
+    @Column(name = "DESC_COMPLEMENTO_STATUS")
+    private String descComplementoStatus;
 
     @Column(name = "ID_LOCALIZACAO")
-    private Integer idLocalizacao;
+    private Long idLocalizacao;
 
+    @Column(name = "NUM_PROTOCOLO_CA")
+    private Integer numProtocoloCa;
 
-    // bi-directional many-to-one association to DadosAdicionais
+    @Column(name = "NUM_PROTOCOLO_MJ")
+    private String numProtocoloMj;
+
+    @Column(name = "PRIORIDADE_BLOCO")
+    private String prioridadeBloco;
+
+    @Column(name = "PRIORIDADE_PLENARIO")
+    private String prioridadePlenario;
+
+    @Column(name = "PRIORIDADE_TURMA")
+    private String prioridadeTurma;
+
     @OneToMany(mappedBy = "processo")
-    private List<DadosAdicionais> dadosAdicionais;
+    private List<AnaliseProcesso> analiseProcessos;
 
-    // bi-directional many-to-one association to DadosAdicionais
     @OneToMany(mappedBy = "processo")
-    private List<PessoaProcesso> pessoaProcesso;
+    private List<PessoaProcesso> pessoaProcessos;
 
-    // bi-directional many-to-one association to CargoFuncao
     @ManyToOne
     @JoinColumn(name = "ID_CARGO_FUNCAO")
     private CargoFuncao cargoFuncao;
 
-    // bi-directional many-to-one association to GrupoProcessual
     @ManyToOne
     @JoinColumn(name = "ID_GRUPO_PROCESSUAL")
     private GrupoProcessual grupoProcessual;
 
-    // bi-directional many-to-one association to GrupoSocial
     @ManyToOne
     @JoinColumn(name = "ID_GRUPO_SOCIAL")
     private GrupoSocial grupoSocial;
 
-    // bi-directional many-to-one association to StatusProcesso
     @ManyToOne
     @JoinColumn(name = "ID_STATUS_PROCESSO")
     private StatusProcesso statusProcesso;
 
-    // bi-directional many-to-one association to StatusProcesso
-    @ManyToOne
-    @JoinColumn(name = "COD_SITUACAO_CADASTRO")
-    private SituacaoCadastro situacaoCadastro;
-
-    // bi-directional many-to-one association to SubGrupoProcessual
     @ManyToOne
     @JoinColumn(name = "ID_SUB_GRUPO_PROCESSUAL")
     private SubGrupoProcessual subGrupoProcessual;
 
-    // bi-directional many-to-one association to SubGrupoSocial
     @ManyToOne
     @JoinColumn(name = "ID_SUB_GRUPO_SOCIAL")
     private SubGrupoSocial subGrupoSocial;
 
-    // bi-directional many-to-one association to SubStatusProcesso
     @ManyToOne
     @JoinColumn(name = "ID_SUB_STATUS_PROCESSO")
     private SubStatusProcesso subStatusProcesso;
-    
-    @Column(name = "DESC_COMPLEMENTO_STATUS", length = 1000)
-    private String descComplementoStatus;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_CADASTRO")
-    private Date dataCadastro;
-
-    @Column(name = "DATA_HORA_INCLUSAO", nullable = false)
-    private Timestamp dataHoraInclusao;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DATA_HORA_ATUALIZACAO")
-    private Date dataHoraAtualizacao;
-
-    // bi-directional many-to-one association to Usuario
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO")
-    private Usuario usario;
+    private Usuario usuario;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "ID_LOTE")
+    private LoteProcesso loteProcesso;
+
+    @ManyToOne
+    @JoinColumn(name = "COD_SITUACAO_CADASTRO")
+    private SituacaoCadastro situacaoCadastro;
+
     public Processo() {
-    }
-
-    public List<PessoaProcesso> getPessoaProcesso() {
-	return pessoaProcesso;
-    }
-
-    public void setPessoaProcesso(List<PessoaProcesso> pessoaProcesso) {
-	this.pessoaProcesso = pessoaProcesso;
     }
 
     public Long getIdProcesso() {
@@ -152,6 +139,14 @@ public class Processo implements Serializable {
 	this.dataCadastro = dataCadastro;
     }
 
+    public Timestamp getDataHoraAtualizacao() {
+	return this.dataHoraAtualizacao;
+    }
+
+    public void setDataHoraAtualizacao(Timestamp dataHoraAtualizacao) {
+	this.dataHoraAtualizacao = dataHoraAtualizacao;
+    }
+
     public Timestamp getDataHoraInclusao() {
 	return this.dataHoraInclusao;
     }
@@ -168,8 +163,8 @@ public class Processo implements Serializable {
 	this.dataProtocoloCa = dataProtocoloCa;
     }
 
-    public Date getDataProtocoloMJ() {
-	return dataProtocoloMJ;
+    public Date getDataProtocoloMj() {
+	return this.dataProtocoloMJ;
     }
 
     public void setDataProtocoloMJ(Date dataProtocoloMJ) {
@@ -184,19 +179,19 @@ public class Processo implements Serializable {
 	this.descComplementoStatus = descComplementoStatus;
     }
 
-    public Integer getIdLocalizacao() {
+    public Long getIdLocalizacao() {
 	return this.idLocalizacao;
     }
 
-    public void setIdLocalizacao(Integer idLocalizacao) {
+    public void setIdLocalizacao(Long idLocalizacao) {
 	this.idLocalizacao = idLocalizacao;
     }
 
-    public int getNumProtocoloCa() {
+    public Integer getNumProtocoloCa() {
 	return this.numProtocoloCa;
     }
 
-    public void setNumProtocoloCa(int numProtocoloCa) {
+    public void setNumProtocoloCa(Integer numProtocoloCa) {
 	this.numProtocoloCa = numProtocoloCa;
     }
 
@@ -208,26 +203,72 @@ public class Processo implements Serializable {
 	this.numProtocoloMj = numProtocoloMj;
     }
 
-    public List<DadosAdicionais> getDadosAdicionais() {
-	return this.dadosAdicionais;
+    public String getPrioridadeBloco() {
+	return this.prioridadeBloco;
     }
 
-    public void setDadosAdicionais(List<DadosAdicionais> dadosAdicionais) {
-	this.dadosAdicionais = dadosAdicionais;
+    public void setPrioridadeBloco(String prioridadeBloco) {
+	this.prioridadeBloco = prioridadeBloco;
     }
 
-    public DadosAdicionais addDadosAdicionai(DadosAdicionais dadosAdicionai) {
-	getDadosAdicionais().add(dadosAdicionai);
-	dadosAdicionai.setProcesso(this);
-
-	return dadosAdicionai;
+    public String getPrioridadePlenario() {
+	return this.prioridadePlenario;
     }
 
-    public DadosAdicionais removeDadosAdicionai(DadosAdicionais dadosAdicionai) {
-	getDadosAdicionais().remove(dadosAdicionai);
-	dadosAdicionai.setProcesso(null);
+    public void setPrioridadePlenario(String prioridadePlenario) {
+	this.prioridadePlenario = prioridadePlenario;
+    }
 
-	return dadosAdicionai;
+    public String getPrioridadeTurma() {
+	return this.prioridadeTurma;
+    }
+
+    public void setPrioridadeTurma(String prioridadeTurma) {
+	this.prioridadeTurma = prioridadeTurma;
+    }
+
+    public List<AnaliseProcesso> getAnaliseProcessos() {
+	return this.analiseProcessos;
+    }
+
+    public void setAnaliseProcessos(List<AnaliseProcesso> analiseProcessos) {
+	this.analiseProcessos = analiseProcessos;
+    }
+
+    public AnaliseProcesso addAnaliseProcesso(AnaliseProcesso analiseProcesso) {
+	getAnaliseProcessos().add(analiseProcesso);
+	analiseProcesso.setProcesso(this);
+
+	return analiseProcesso;
+    }
+
+    public AnaliseProcesso removeAnaliseProcesso(AnaliseProcesso analiseProcesso) {
+	getAnaliseProcessos().remove(analiseProcesso);
+	analiseProcesso.setProcesso(null);
+
+	return analiseProcesso;
+    }
+
+    public List<PessoaProcesso> getPessoaProcessos() {
+	return this.pessoaProcessos;
+    }
+
+    public void setPessoaProcessos(List<PessoaProcesso> pessoaProcessos) {
+	this.pessoaProcessos = pessoaProcessos;
+    }
+
+    public PessoaProcesso addPessoaProcesso(PessoaProcesso pessoaProcesso) {
+	getPessoaProcessos().add(pessoaProcesso);
+	pessoaProcesso.setProcesso(this);
+
+	return pessoaProcesso;
+    }
+
+    public PessoaProcesso removePessoaProcesso(PessoaProcesso pessoaProcesso) {
+	getPessoaProcessos().remove(pessoaProcesso);
+	pessoaProcesso.setProcesso(null);
+
+	return pessoaProcesso;
     }
 
     public CargoFuncao getCargoFuncao() {
@@ -286,29 +327,28 @@ public class Processo implements Serializable {
 	this.subStatusProcesso = subStatusProcesso;
     }
 
-    public Usuario getUsario() {
-	return this.usario;
+    public Usuario getUsuario() {
+	return this.usuario;
     }
 
-    public void setUsario(Usuario usario) {
-	this.usario = usario;
+    public void setUsuario(Usuario usuario) {
+	this.usuario = usuario;
     }
 
-    public Date getDataHoraAtualizacao() {
-        return dataHoraAtualizacao;
+    public LoteProcesso getLoteProcesso() {
+	return this.loteProcesso;
     }
 
-    public void setDataHoraAtualizacao(Date dataHoraAtualizacao) {
-        this.dataHoraAtualizacao = dataHoraAtualizacao;
+    public void setLoteProcesso(LoteProcesso loteProcesso) {
+	this.loteProcesso = loteProcesso;
     }
 
     public SituacaoCadastro getSituacaoCadastro() {
-        return situacaoCadastro;
+	return this.situacaoCadastro;
     }
 
     public void setSituacaoCadastro(SituacaoCadastro situacaoCadastro) {
-        this.situacaoCadastro = situacaoCadastro;
+	this.situacaoCadastro = situacaoCadastro;
     }
-    
 
 }
