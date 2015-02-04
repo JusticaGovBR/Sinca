@@ -77,7 +77,7 @@ public class JPAUtil {
 	}
 	
 	public static void main(String[] args) {
-	    JPAUtil util = new JPAUtil();
+	     new JPAUtil();
 	}
 
 }

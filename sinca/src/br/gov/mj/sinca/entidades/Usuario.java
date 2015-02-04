@@ -1,8 +1,13 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -25,9 +30,8 @@ public class Usuario implements Serializable {
 	@Column(name="SGL_USUARIO")
 	private String sglUsuario;
 
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="usuario")
-	private List<Processo> processos;
+	@Column(name="SENHA")
+	private String senha;
 
 	public Usuario() {
 	}
@@ -56,26 +60,23 @@ public class Usuario implements Serializable {
 		this.sglUsuario = sglUsuario;
 	}
 
-	public List<Processo> getProcessos() {
-		return this.processos;
+	public boolean senhaCorreta(String senhaDigitada)
+	{
+		if (this.senha.equals(senhaDigitada)){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
-	public void setProcessos(List<Processo> processos) {
-		this.processos = processos;
+	public String getSenha() {
+	    return senha;
 	}
 
-	public Processo addProcesso(Processo processo) {
-		getProcessos().add(processo);
-		processo.setUsuario(this);
-
-		return processo;
+	public void setSenha(String senha) {
+	    this.senha = senha;
 	}
-
-	public Processo removeProcesso(Processo processo) {
-		getProcessos().remove(processo);
-		processo.setUsuario(null);
-
-		return processo;
-	}
+       
 
 }

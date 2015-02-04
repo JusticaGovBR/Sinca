@@ -25,67 +25,178 @@
 }
 </style>
 
-			<p:panel id="PnProcesso" header="Processo / Interessados"
-				style="margin-bottom:10px;width : 100%"  
-				toggleable="false" rendered="#{manterProcessoMB.processo.idProcesso>0}">
-
-				<h:panelGrid columns="2" cellpadding="10"
-					style="margin-bottom:10px;width :100%;">
-					<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-						<h:outputLabel value="Número Processo SEI:" />
-						<h:outputLabel value="#{manterProcessoMB.processo.numProtocoloMj}" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
-						<h:outputLabel value="Data Cadastro SEI:" />
-						<h:outputLabel
-							value="#{manterProcessoMB.processo.dataProtocoloMJ}">
-							<f:convertDateTime locale="pt_BR" dateStyle="long"
-								pattern="dd/MM/yyyy" />
-
-						</h:outputLabel>
-					</h:panelGrid>
+			<p:dialog showHeader="false" modal="true" widgetVar="carregarDadosInicioDG"
+				draggable="false" closable="false" resizable="false"
+				style="padding-top:5px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Carregando Requerimento..."
+						title="#{consultarProcessoMB.mensagem}"
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
 				</h:panelGrid>
-				<h:panelGrid columns="2" cellpadding="10" style="width :100%;">
-					<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-						<h:outputLabel value="Número Requerimento:" />
-						<h:outputLabel value="#{manterProcessoMB.processo.numProtocoloCa}" />
+			</p:dialog>
+
+				<p:panel id="PnProcesso" header="Requerimento / Interessados"
+					style="margin-bottom:10px;width : 100%" toggleable="false"
+					rendered="#{manterProcessoMB.processo.idProcesso>0}">
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:10px;width :100%;">
+						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
+							<h:outputLabel value="Número Processo SEI:" />
+							<h:outputLabel
+								value="#{manterProcessoMB.processo.numProtocoloMj}" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
+							<h:outputLabel value="Data Cadastro SEI:" />
+							<h:outputLabel
+								value="#{manterProcessoMB.processo.dataProtocoloMJ}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+
+							</h:outputLabel>
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="10" style="width :100%;">
+						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
+							<h:outputLabel value="Número Requerimento:" />
+							<h:outputLabel
+								value="#{manterProcessoMB.processo.numProtocoloCa}" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
+							<h:outputLabel value="Data Requerimento:" />
+							<h:outputLabel
+								value="#{manterProcessoMB.processo.dataProtocoloCa}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+
+							</h:outputLabel>
+						</h:panelGrid>
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
-						<h:outputLabel value="Data Requerimento:" />
-						<h:outputLabel
-							value="#{manterProcessoMB.processo.dataProtocoloCa}">
-							<f:convertDateTime locale="pt_BR" dateStyle="long"
-								pattern="dd/MM/yyyy" />
+				</p:panel>
 
-						</h:outputLabel>
+				<p:panel id="PnAndamentos" header="Andamentos"
+					style="margin-bottom:10px;width : 100%" toggleable="true"
+					rendered="#{manterProcessoMB.processo.idProcesso>0}">
+
+					<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
+						value="#" paginator="false" rows="5" style="margin-bottom:20px;"
+						emptyMessage="Não incluido dados de Reparação...">
+
+						<p:column headerText="Situação Requerimento">
+							<h:outputText id="tpStatuso" value="" />
+						</p:column>
+
+						<p:column headerText="Data Recebimento">
+							<h:outputText value="" />
+						</p:column>
+
+						<p:column headerText="Data Finalização">
+							<h:outputText value="" />
+						</p:column>
+
+						<p:column headerText="Análise">
+							<h:outputText value="" />
+						</p:column>
+
+						<p:column headerText="Recomendações">
+							<h:outputText value="" />
+						</p:column>
+
+						<p:column headerText="Decisão">
+							<h:outputText value="" />
+						</p:column>
+
+
+						<p:column headerText="Finalização">
+							<h:outputText value="" />
+						</p:column>
+
+						<p:column style="width:32px;text-align: center">
+							<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
+								title="Editar" ajax="true" update=":tabView:formAnalise:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;text-align: center">
+							<p:commandButton value="Remover" action="#"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update=":tabView:formAnalise:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 100%;">
+						<p:commandButton id="Novo" value="Novo" icon="ui-icon-disk"
+							title="Novo" />
 					</h:panelGrid>
-				</h:panelGrid>
 
-			</p:panel>
+				</p:panel>
+
+				<p:tabView id="tabView" rendered="true">
+
+					<p:tab id="tab_processo" title="Requerimento">
+						<!-- INTERESSADOS -->
+						<ui:insert name="processo">
+							<ui:include src="/pages/processo/formularioProcesso.xhtml" />
+						</ui:insert>
+
+					</p:tab>
+
+					<p:tab id="tab_interessados" title="Interessados">
+						<!-- INTERESSADOS -->
+						<ui:insert name="interessados">
+							<ui:include src="/pages/processo/formularioInteressados.xhtml" />
+						</ui:insert>
+
+					</p:tab>
+
+					<p:tab id="tab_analise_processo" title="Análise">
+						<!-- INTERESSADOS -->
+						<ui:insert name="analise">
+							<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
+						</ui:insert>
+
+					</p:tab>
+
+					<p:tab id="tab_recomendacoes" title="Recomendações">
+						<ui:insert name="recomendacoes">
+							<ui:include
+								src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
+						</ui:insert>
+					</p:tab>
+
+					<p:tab id="tab_julgamento_processo" title="Decisões/Julgamento">
+						<!-- INTERESSADOS -->
+						<ui:insert name="Decisões/Julgamento">
+							<ui:include src="/pages/julgamento/formularioJulgamento.xhtml" />
+						</ui:insert>
+
+					</p:tab>
+
+					<p:tab id="tab_finalizacoes" title="Finalização">
+						<ui:insert name="finalizacao">
+
+						</ui:insert>
+					</p:tab>
+
+					<p:tab id="tab_arquivo_fisico" title="Arquivo Físico">
+						<ui:insert name="Arquivo Físico">
+
+						</ui:insert>
+					</p:tab>
 
 
-
-			<p:tabView id="tabView">
-
-				<p:tab id="tab_processo" title="Processo">
-					<!-- INTERESSADOS -->
-					<ui:insert name="processo">
-						<ui:include src="/pages/processo/formularioProcesso.xhtml" />
-					</ui:insert>
-
-				</p:tab>
-
-				<p:tab id="tab_interessados" title="Interessados">
-					<!-- INTERESSADOS -->
-					<ui:insert name="interessados">
-						<ui:include src="/pages/processo/formularioInteressados.xhtml" />
-					</ui:insert>
-
-				</p:tab>
-
-				<!-- 
+					<!-- 
 
 				<p:tab id="tab_analise_processo" title="Análise">
 					<ui:insert name="analise">
@@ -103,8 +214,7 @@
 				</p:tab>
  				-->
 
-			</p:tabView>
-
+				</p:tabView>
 		</h:body>
 	</ui:define>
 </ui:composition>

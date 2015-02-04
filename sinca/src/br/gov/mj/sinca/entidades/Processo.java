@@ -163,7 +163,7 @@ public class Processo implements Serializable {
 	this.dataProtocoloCa = dataProtocoloCa;
     }
 
-    public Date getDataProtocoloMj() {
+    public Date getDataProtocoloMJ() {
 	return this.dataProtocoloMJ;
     }
 

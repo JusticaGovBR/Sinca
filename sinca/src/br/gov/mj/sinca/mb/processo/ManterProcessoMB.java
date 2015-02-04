@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
@@ -27,6 +28,7 @@ import br.gov.mj.sinca.dao.EstadoUfDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
+import br.gov.mj.sinca.dao.LoteProcessoDAO;
 import br.gov.mj.sinca.dao.PessoaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
@@ -51,6 +53,7 @@ import br.gov.mj.sinca.entidades.EstadoCivil;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
 import br.gov.mj.sinca.entidades.GrupoSocial;
 import br.gov.mj.sinca.entidades.Localizacao;
+import br.gov.mj.sinca.entidades.LoteProcesso;
 import br.gov.mj.sinca.entidades.Pessoa;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
@@ -64,6 +67,9 @@ import br.gov.mj.sinca.entidades.TipoDocumento;
 import br.gov.mj.sinca.entidades.TipoEndereco;
 import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
 import br.gov.mj.sinca.entidades.TipoTelefone;
+import br.gov.mj.sinca.entidades.Usuario;
+import br.gov.mj.sinca.mb.LoginMB;
+import br.gov.mj.sinca.mb.analise.ManterAnaliseMB;
 import br.gov.mj.sinca.util.CpfCnpjUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 import br.gov.mj.sinca.ws.sei.RetornoConsultaProcedimento;
@@ -101,6 +107,7 @@ public class ManterProcessoMB implements Serializable {
     private Integer idProcedencia;
     private Integer idAcompanhamentoExterno;
     private Integer idTipoProtocolo;
+    private Integer idLoteProcesso;
 
     private List<Localizacao> listarLocalizacao = new ArrayList<Localizacao>();
     private List<StatusProcesso> listarStatusProcesso = new ArrayList<StatusProcesso>();
@@ -147,12 +154,21 @@ public class ManterProcessoMB implements Serializable {
     private TipoDocumento tipoDocumento = new TipoDocumento();
     private TipoEndereco tipoEndereco = new TipoEndereco();
 
+    private LoteProcesso loteProcesso = new LoteProcesso();
+    private List<LoteProcesso> listaLoteProcesso = new ArrayList<LoteProcesso>();
+
     private Integer[] idTipoPessoaProcesso;
     private boolean habilitaEdicaoPessoa;
     private boolean habilitaTabePessoa;
     private boolean comunicadoObito = false;
+    
+    private boolean novo = true;
+    
+    
     private String linkDocSel;
-
+    
+    private Usuario usuario; 
+    
     private boolean proximo;
 
     public boolean isProximo() {
@@ -171,11 +187,20 @@ public class ManterProcessoMB implements Serializable {
 	    return event.getNewStep();
 	}
     }
-
+    
+    @ManagedProperty(value="#{loginMB}") 
+    private LoginMB loginMB;
+    
+    @ManagedProperty(value="#{manterAnaliseMB}") 
+    private ManterAnaliseMB manterAnaliseMB;
+    
     @PostConstruct
     public void Init() {
-	System.out.println("Chamada PessoaProcessoMB Init <>  PosConstruct");
+	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').show()");
+	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
 	instanciaAtributos();
+	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').hide()");
+	
     }
 
     public String salvarProcesso() {
@@ -218,6 +243,15 @@ public class ManterProcessoMB implements Serializable {
 	return null;
     }
 
+    public void habilitaNovo(){
+//	if(novo){
+//	  novo = false;   
+//	}else{
+//	  novo = true;  
+//	}
+	novo = false;
+    }
+    
     private boolean validarProcesso() {
 	return true;
     }
@@ -233,6 +267,13 @@ public class ManterProcessoMB implements Serializable {
 	listarTipoPessoaProc = new TipoPessoaProcessoDAO().lerTodos();
 	listarDoenca = new DoencaDAO().lerTodos();
 	doencaPessoa.setDoenca(new Doenca());
+	
+	usuario = loginMB.getUsuario();
+	
+	listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	
+	System.out.println("manterAnaliseMB::::"+manterAnaliseMB.getListarTipoAnaliseJulgamento().size());
+	
 	PessoaProcesso pessoaProcessoP = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
 	if (pessoaProcessoP != null) {
 	    // pessoa = pessoaProcessoP.getPessoa();
@@ -805,6 +846,56 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
+    public void addLoteProcesso(){
+	loteProcesso = new LoteProcesso();
+	JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').show()");
+    }
+
+    public void salvarLoteProcesso(){
+	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
+	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
+	    	  loteAtualizar.setIdUsuario(usuario.getIdUsuario());
+		  new LoteProcessoDAO().salvar(loteAtualizar);  
+		  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Atualizado....");
+		  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+		  return;
+	}
+	if(loteProcesso.getDescricao()!=null && loteProcesso.getDescricao().length()>0){
+	  if(loteProcesso.getIdLote()==null){
+	     loteProcesso.setDataCriacao(new Date());
+	  }else{
+	     loteProcesso.setDataAtualizacao(new Date()); 
+	  }
+	  
+	  loteProcesso.setIdUsuario(usuario.getIdUsuario());
+	  new LoteProcessoDAO().salvar(loteProcesso);  
+	  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Salvo....");
+	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	}
+
+    }
+    
+    public void excluirLoteProcesso(){
+	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
+	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0 && loteAtualizar.getDescricao().length()>0){
+	    loteAtualizar.setDataAtualizacao(new Date()); 
+	    loteAtualizar.setAtivo((byte) 0);
+	    loteAtualizar.setIdUsuario(usuario.getIdUsuario());
+	    new LoteProcessoDAO().salvar(loteAtualizar);  
+	    JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Exluido....");
+	    listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	}
+    }
+    
+    public void selecionarLoteProcesso(){
+	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
+	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
+	    loteProcesso = loteAtualizar;
+	}
+	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	  JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').hide()");
+    }
+    
     public String getNumCpf() {
 	return numCpf;
     }
@@ -1340,4 +1431,54 @@ public class ManterProcessoMB implements Serializable {
 	this.linkDocSel = linkDocSel;
     }
 
+    public Integer getIdLoteProcesso() {
+        return idLoteProcesso;
+    }
+
+    public void setIdLoteProcesso(Integer idLoteProcesso) {
+        this.idLoteProcesso = idLoteProcesso;
+    }
+
+    public LoteProcesso getLoteProcesso() {
+        return loteProcesso;
+    }
+
+    public List<LoteProcesso> getListaLoteProcesso() {
+        return listaLoteProcesso;
+    }
+
+    public void setLoteProcesso(LoteProcesso loteProcesso) {
+        this.loteProcesso = loteProcesso;
+    }
+
+    public void setListaLoteProcesso(List<LoteProcesso> listaLoteProcesso) {
+        this.listaLoteProcesso = listaLoteProcesso;
+    }
+
+    public LoginMB getLoginMB() {
+        return loginMB;
+    }
+
+    public void setLoginMB(LoginMB loginMB) {
+        this.loginMB = loginMB;
+    }
+
+    public boolean getNovo() {
+        return novo;
+    }
+
+    public void setNovo(boolean novo) {
+        this.novo = novo;
+    }
+
+    public ManterAnaliseMB getManterAnaliseMB() {
+        return manterAnaliseMB;
+    }
+
+    public void setManterAnaliseMB(ManterAnaliseMB manterAnaliseMB) {
+        this.manterAnaliseMB = manterAnaliseMB;
+    }
+
+    
+    
 }

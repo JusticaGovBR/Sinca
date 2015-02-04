@@ -48,7 +48,7 @@ public class Pessoa implements Serializable {
 	private String genero;
 
 	@Column(name="ID_USUARIO_CADASTRO")
-	private int idUsuarioCadastro;
+	private Integer idUsuarioCadastro;
 
 	private String nacionalidade;
 
@@ -92,10 +92,9 @@ public class Pessoa implements Serializable {
 	@Column(name="ID_ESTADO_CIVIL")
 	private Integer idEstadoCivil;
 
-	@ManyToOne
-	@JoinColumn(name="COD_TIPO")
-	private TipoPessoa tipoPessoa;
-
+	@Column(name="COD_TIPO")
+	private Integer codTipo;
+	
 	//bi-directional many-to-one association to PessoaEndereco
 	@OneToMany(mappedBy="pessoa")
 	private List<PessoaEndereco> pessoaEnderecos;
@@ -175,11 +174,11 @@ public class Pessoa implements Serializable {
 		this.genero = genero;
 	}
 
-	public int getIdUsuarioCadastro() {
+	public Integer getIdUsuarioCadastro() {
 		return this.idUsuarioCadastro;
 	}
 
-	public void setIdUsuarioCadastro(int idUsuarioCadastro) {
+	public void setIdUsuarioCadastro(Integer idUsuarioCadastro) {
 		this.idUsuarioCadastro = idUsuarioCadastro;
 	}
 
@@ -337,12 +336,12 @@ public class Pessoa implements Serializable {
 	    this.idEstadoCivil = idEstadoCivil;
 	}
 
-	public TipoPessoa getTipoPessoa() {
-		return this.tipoPessoa;
+	public Integer getCodTipo() {
+	    return codTipo;
 	}
 
-	public void setTipoPessoa(TipoPessoa tipoPessoa) {
-		this.tipoPessoa = tipoPessoa;
+	public void setCodTipo(Integer codTipo) {
+	    this.codTipo = codTipo;
 	}
 
 	public List<PessoaEndereco> getPessoaEnderecos() {

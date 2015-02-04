@@ -91,26 +91,29 @@
 			</h:panelGrid>
 
 
-			<p:panel id="pnDetalhament" header="Dados do Processo"
+			<p:panel id="pnDetalhament" header="Dados do Requerimento"
 				toggleSpeed="500" closeSpeed="500"
 				style="margin-bottom:20px;width : 100%" toggleable="true">
 
 				<h:panelGrid columns="3" cellpadding="10"
 					style=" margin-bottom:20px;width : 770px;">
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 100px;">
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 						<h:outputLabel value="Prioridate em Turma:" />
-						<p:inputText  size="25"		value=""
-							maxlength="25" />
+						<p:inputText size="15"
+							value="#{manterProcessoMB.processo.prioridadeTurma}"
+							maxlength="10" />
 					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 100px;">
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 						<h:outputLabel value="Prioridate em Plenário:" />
-						<p:inputText  size="25"		value=""
-							maxlength="25" />
+						<p:inputText size="15"
+							value="#{manterProcessoMB.processo.prioridadePlenario}"
+							maxlength="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 350px;">
 						<h:outputLabel value="Prioridate em Bloco Temático:" />
-						<p:inputText  size="25"		value=""
-							maxlength="25" />
+						<p:inputText size="15"
+							value="#{manterProcessoMB.processo.prioridadeBloco}"
+							maxlength="10" />
 					</h:panelGrid>
 				</h:panelGrid>
 
@@ -174,11 +177,27 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
+				<h:panelGrid columns="2" cellspacing="10"
+					style="margin-bottom:15px;width : 50%;">
+
+					<h:panelGrid columns="3" style="width :50%;">
+						<h:outputLabel value="Lote:"
+							style="text-align:justify;width:80px;" />
+						<h:outputText value="#{manterProcessoMB.loteProcesso.descricao}"
+							style="text-align:justify;width:80px;" />
+						<p:commandButton update=":tabView:formProcesso:"
+							action="#{manterProcessoMB.addLoteProcesso}" ajax="true"
+							icon="ui-icon-plusthick" />
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
 				<h:panelGrid columns="1" cellpadding="10" style=" width : 670px;">
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
 						<h:outputLabel value="Localização:*" />
 						<p:selectOneMenu value="#{manterProcessoMB.idLocalizacao}"
-							effect="fade">
+							style=" width: 737px;" effect="fade">
 							<f:selectItem itemLabel="Selecione uma Localizacao"
 								noSelectionOption="true" />
 							<f:selectItems value="#{manterProcessoMB.listarLocalizacao}"
@@ -279,6 +298,92 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 			</p:panel>
+
+			<p:dialog header="Lote Requerimento" resizable="false" showEffect="explod"
+				hideEffect="explod" style="margin-bottom:20px;"
+				widgetVar="dlg_loteProcesso" modal="false" height="100%" width="60%">
+				<p:outputPanel id="mtnddlg_loteProcesso">
+
+					<h:panelGrid columns="3" cellpadding="10" style="margin-bottom:20px; width : 100%;">
+						<h:outputLabel value="Descrição" style="width : 90px;"/>
+						<p:inputText id="input_desc_lote"
+							value="#{manterProcessoMB.loteProcesso.descricao}" size="80"
+							maxlength="100" />
+						<p:commandButton value="Salvar" id="btloteSalvar"							
+							icon="ui-icon-closethick" ajax="true"							
+							update=":tabView:formProcesso:tbLoteRq_dg"
+							action="#{manterProcessoMB.salvarLoteProcesso}" />
+					</h:panelGrid>
+
+
+					<p:dataTable var="loteEdicao" id="tbLoteRq_dg" style="margin-bottom:20px;"
+						value="#{manterProcessoMB.listaLoteProcesso}" paginator="true"
+						editable="true" editMode="cell" widgetVar="cellLote" rows="5">
+
+						<p:column headerText="Lote Requerimento">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{loteEdicao.descricao}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInput" value="#{loteEdicao.descricao}"
+										style="width:96%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Data Criação">
+							<h:outputText value="#{loteEdicao.dataCriacao}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+
+							</h:outputText>
+						</p:column>
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Atualizar"
+								actionListener="#{manterProcessoMB.salvarLoteProcesso}"
+								update=":tabView:formProcesso:tbLoteRq_dg"
+								icon="ui-icon-search" title="Atualizar" ajax="true">
+								<f:setPropertyActionListener value="#{loteEdicao}"
+									target="#{manterProcessoMB.loteProcesso}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Selecionar"
+								icon="ui-icon-search ui-icon-trash" title="Selecionar" ajax="true"
+								update=":tabView:formProcesso:" 
+								actionListener="#{manterProcessoMB.selecionarLoteProcesso}">
+								<f:setPropertyActionListener value="#{loteEdicao}"
+									target="#{manterProcessoMB.loteProcesso}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Excluir"
+								icon="ui-icon-trash" title="Excluir" ajax="true"
+								actionListener="#{manterProcessoMB.excluirLoteProcesso}"
+								update=":tabView:formProcesso:tbLoteRq_dg" >
+								<f:setPropertyActionListener value="#{loteEdicao}"
+									target="#{manterProcessoMB.loteProcesso}" />
+							</p:commandButton>
+						</p:column>
+						
+					</p:dataTable>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 100%;">
+
+						<p:commandButton value="Fechar" id="FecharLoteReq"
+							style="horizontal-align:center" type="button"
+							icon="ui-icon-closethick"
+							onclick="PF('dlg_loteProcesso').hide();" />
+					</h:panelGrid>
+
+				</p:outputPanel>
+			</p:dialog>
+
+
 
 		</h:form>
 	</h:body>

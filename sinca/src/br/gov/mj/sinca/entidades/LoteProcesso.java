@@ -1,8 +1,15 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -19,52 +26,87 @@ public class LoteProcesso implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_LOTE")
 	private Integer idLote;
-
+	
+	@Column(name="DESCRICAO")
 	private String descricao;
+	
+	@Column(name="DATA_CRIACAO")
+	private Date dataCriacao;
+	
+	@Column(name="DATA_ATUALIZACAO")
+	private Date dataAtualizacao;
 
-	//bi-directional many-to-one association to Processo
-	@OneToMany(mappedBy="loteProcesso")
-	private List<Processo> processos;
+	@Column(name="ID_USUARIO")
+	private Integer idUsuario;
+
+	@Column(name="ATIVO")
+	private Byte ativo;
+
+
+	public Byte getAtivo() {
+	    return ativo;
+	}
+
+
+	public void setAtivo(Byte ativo) {
+	    this.ativo = ativo;
+	}
+
 
 	public LoteProcesso() {
 	}
 
+
 	public Integer getIdLote() {
-		return this.idLote;
+	    return idLote;
 	}
 
-	public void setIdLote(Integer idLote) {
-		this.idLote = idLote;
-	}
 
 	public String getDescricao() {
-		return this.descricao;
+	    return descricao;
 	}
+
+
+	public Date getDataCriacao() {
+	    return dataCriacao;
+	}
+
+
+	public Date getDataAtualizacao() {
+	    return dataAtualizacao;
+	}
+
+
+	public Integer getIdUsuario() {
+	    return idUsuario;
+	}
+
+
+	public void setIdLote(Integer idLote) {
+	    this.idLote = idLote;
+	}
+
 
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	    this.descricao = descricao;
 	}
 
-	public List<Processo> getProcessos() {
-		return this.processos;
+
+	public void setDataCriacao(Date dataCriacao) {
+	    this.dataCriacao = dataCriacao;
 	}
 
-	public void setProcessos(List<Processo> processos) {
-		this.processos = processos;
+
+	public void setDataAtualizacao(Date dataAtualizacao) {
+	    this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public Processo addProcesso(Processo processo) {
-		getProcessos().add(processo);
-		processo.setLoteProcesso(this);
 
-		return processo;
+	public void setIdUsuario(Integer idUsuario) {
+	    this.idUsuario = idUsuario;
 	}
 
-	public Processo removeProcesso(Processo processo) {
-		getProcessos().remove(processo);
-		processo.setLoteProcesso(null);
+	
 
-		return processo;
-	}
 
 }

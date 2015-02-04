@@ -84,7 +84,7 @@ public class PessoaProcessoDAO extends SincaAbastractDAO<PessoaProcesso> {
 
     public static void main(String[] args) throws ParseException {
 	PessoaProcessoDAO dao = new PessoaProcessoDAO();
-	Date data = new SimpleDateFormat("yyyy-MM-dd").parse("2001-09-28");
+	Date data = new SimpleDateFormat("dd/MM/yyyy").parse("28/09/2001");
 	List<PessoaProcesso> lista = dao.listarProcessoPorDataProtocolo(data, null);
 	for (PessoaProcesso pessoaProcesso : lista) {
 	    System.out.println("" + pessoaProcesso.getProcesso().getIdProcesso() + " Nome Pessoa "

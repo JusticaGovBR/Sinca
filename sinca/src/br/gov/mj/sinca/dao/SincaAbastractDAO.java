@@ -45,15 +45,17 @@ public abstract class SincaAbastractDAO<T> {
 
     @SuppressWarnings("unchecked")
     public List<T> lerTodos() {
-//	CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
-//	CriteriaQuery<T> c = cb.createQuery(this.persistentClass);
-//	c.select(c.from(this.persistentClass));
-//
-//	List<T> resultado = this.getEntityManager().createQuery(c).getResultList();
-//	return resultado;
 	List<T> resultado =  getEntityManager().createQuery("select o from " + this.persistentClass.getSimpleName() + " o")
 		.getResultList();
 	
+	return resultado;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> lerTodosAtivos() {
+	List<T> resultado =  getEntityManager().createQuery("select o from " 
+           + this.persistentClass.getSimpleName() + " o where o.ativo = 1")
+		.getResultList();
 	return resultado;
     }
 

@@ -69,10 +69,14 @@
 						<h:outputLabel for="dataProtocoloCA" value="Data Protocolo CA:"
 							style=" width : 100%" />
 
-						<p:calendar id="dataProtocoloCA" navigator="true"
-							value="#{consultarProcessoMB.dataProtocoloCA}"
-							mindate="01/01/1990" showOn="button" locale="pt"
-							pattern="dd/MM/yyyy" size="10" />
+						<p:autoComplete id="dataProtocoloCA" style="width : 100%" 
+							title="Data Protocolo CA" value="#{consultarProcessoMB.dataProtocoloCA}"
+							var="data" size="10" maxlength="15"  dropdown="true"
+							scrollHeight="300"
+							itemLabel="#{data}" itemValue="#{data}"
+							completeMethod="#{consultarProcessoMB.listaDataProtocoCA}"
+							 effect="clip" />
+
 
 					</h:panelGrid>
 
@@ -136,8 +140,8 @@
 								<h:outputText value="Situação do Cadastro" />
 							</f:facet>
 							<h:outputText
-								style="color : #{processoLista.processo.situacaoCadastro.codSituacao == 1 ? 'red' : 'black'}; font-weight:bold;"
-								value="#{processoLista.processo.situacaoCadastro.descSituacao}"
+								style="color : #{processoLista.processo.situacaoCadastro.codSituacaoCadastro == 1 ? 'red' : 'black'}; font-weight:bold;"
+								value="#{processoLista.processo.situacaoCadastro.descricao}"
 								id="DescSituacaoCadastro">
 							</h:outputText>
 						</p:column>
@@ -202,6 +206,18 @@
 									target="#{consultarProcessoMB.pessoaProcesso}" />
 							</p:commandButton>
 						</p:column>
+
+						<p:column style="width:32px;text-align:center;"
+							headerText="Dirigência" exportable="false">
+							<p:commandButton value="Dirigência"
+								action="#{consultarProcessoMB.detalharProcesso}"
+								update=":formProcesso:" icon="ui-icon-search" title="Detalhar"
+								ajax="true">
+								<f:setPropertyActionListener value="#{processoLista}"
+									target="#{consultarProcessoMB.pessoaProcesso}" />
+							</p:commandButton>
+						</p:column>
+
 					</p:dataTable>
 				</p:panel>
 

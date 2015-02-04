@@ -18,7 +18,7 @@ public class TipoAnaliseJulgamento implements Serializable {
 	@Column(name="COD_TIPO")
 	private Integer codTipo;
 
-	private String decscricao;
+	private String descricao;
 
 	public TipoAnaliseJulgamento() {
 	}
@@ -31,12 +31,13 @@ public class TipoAnaliseJulgamento implements Serializable {
 		this.codTipo = codTipo;
 	}
 
-	public String getDecscricao() {
-		return this.decscricao;
+	public String getDescricao() {
+	    return descricao;
 	}
 
-	public void setDecscricao(String decscricao) {
-		this.decscricao = decscricao;
+	public void setDescricao(String descricao) {
+	    this.descricao = descricao;
 	}
+
 
 }

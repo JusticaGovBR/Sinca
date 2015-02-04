@@ -79,6 +79,23 @@
 
 			<p:tabView id="tabView">
 
+				<p:tab id="tab_processo" title="Requerimento">
+					<!-- INTERESSADOS -->
+					<ui:insert name="processo">
+						<ui:include src="/pages/processo/formularioProcesso.xhtml" />
+					</ui:insert>
+
+				</p:tab>
+
+				<p:tab id="tab_interessados" title="Interessados">
+					<!-- INTERESSADOS -->
+					<ui:insert name="interessados">
+						<ui:include src="/pages/processo/formularioInteressados.xhtml" />
+					</ui:insert>
+
+				</p:tab>
+
+
 				<p:tab id="tab_analise_processo" title="Análise">
 					<!-- INTERESSADOS -->
 					<ui:insert name="analise">
@@ -94,9 +111,9 @@
 					</ui:insert>
 				</p:tab>
 
-				<p:tab id="tab_julgamento_processo" title="Julgamento">
+				<p:tab id="tab_julgamento_processo" title="Decisões/Julgamento">
 					<!-- INTERESSADOS -->
-					<ui:insert name="analise">
+					<ui:insert name="Decisões/Julgamento">
 						<ui:include src="/pages/julgamento/formularioJulgamento.xhtml" />
 					</ui:insert>
 
@@ -104,6 +121,12 @@
 
 				<p:tab id="tab_finalizacoes" title="Finalização">
 					<ui:insert name="finalizacao">
+
+					</ui:insert>
+				</p:tab>
+
+				<p:tab id="tab_arquivo_fisico" title="Arquivo Físico">
+					<ui:insert name="Arquivo Físico">
 
 					</ui:insert>
 				</p:tab>

@@ -5,6 +5,10 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import br.gov.mj.sinca.dao.UsuarioDAO;
+import br.gov.mj.sinca.entidades.Usuario;
+import br.gov.mj.sinca.util.JSFUtil;
+
 @ManagedBean(name = "loginMB")
 @SessionScoped
 public class LoginMB implements Serializable {
@@ -14,42 +18,33 @@ public class LoginMB implements Serializable {
      */
     private static final long serialVersionUID = 7487051267288610892L;
 
-    private String nome;
+    private String nome = "sebastiao.costa";
     private String senha;
-
+    private Usuario usuario;
+    
     public String acaoAutenticar() {
-	//Usuario usuarioDoBanco = dao.lerPorLogin(this.getLogin());
+	senha = "123456";
+	Usuario usuario = new UsuarioDAO().buscarUsuario(nome);
 
-//	if (usuarioDoBanco == null) {
-//	    JSFUtil.retornarMensagem(null, "Usuário não existe.");
-//	    return "login";
-//	} else if (usuarioDoBanco.senhaCorreta(this.getSenha())) {
-//	    // guardar o obteto usuário
-//	    this.setUsuario(usuarioDoBanco);
-//	    this.autenticado = true;
-//
-//	    return "home";
-//	} else {
-//	    JSFUtil.retornarMensagem(null, "Senha inválida.");
-//	    return "login";
-//	}
-	return "index";
+	if (usuario == null) {
+	    JSFUtil.retornarMensagem(null, "Usuário não existe.");
+	    return "login";
+	} else if (usuario.senhaCorreta(this.getSenha())) {
+	    this.setUsuario(usuario);
+	    return "index";
+	} else {
+	    JSFUtil.retornarMensagem(null, "Senha inválida.");
+	    return "login";
+	}
     }
 
-    /**
-	 * 
-	 */
-//    public String acaoLogout() {
-//	this.usuario = null;
-//	this.autenticado = false;
-//	this.login = null;
-//	this.senha = null;
-//
-//	// encerrar a sessão atual
-//	JSFUtil.getHttpSession().invalidate();
-//
-//	return "login";
-//    }
+    public String acaoLogout() {
+	this.usuario = null;
+	this.nome = null;
+	this.senha = null;
+	JSFUtil.getHttpSession().invalidate();
+	return "login";
+    }
 
     public String getNome() {
 	return nome;
@@ -65,6 +60,14 @@ public class LoginMB implements Serializable {
 
     public void setSenha(String senha) {
 	this.senha = senha;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }
