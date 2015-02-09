@@ -28,13 +28,13 @@ public class LoginMB implements Serializable {
 
 	if (usuario == null) {
 	    JSFUtil.retornarMensagem(null, "Usuário não existe.");
-	    return "login";
+	    return "login?faces-redirect=true";
 	} else if (usuario.senhaCorreta(this.getSenha())) {
 	    this.setUsuario(usuario);
-	    return "index";
+	    return "index?faces-redirect=true";
 	} else {
 	    JSFUtil.retornarMensagem(null, "Senha inválida.");
-	    return "login";
+	    return "login?faces-redirect=true";
 	}
     }
 

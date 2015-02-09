@@ -43,34 +43,81 @@
 				</h:panelGrid>
 			</p:dialog>
 
-			<p:panel id="pnlDadosTabelPessoa"
-				header="Analistas(Responsável Técnico)" rendered="true"
-				style="margin-bottom:10px;width : 100%" toggleable="true">
 
-				<h:panelGrid columns="3" cellpadding="10"
-					style="margin-bottom:20px;width : 100%">
+						<p:panel id="PnAndamentos" header="Andamentos"
+							style="margin-bottom:10px;width : 100%" toggleable="true">
 
-					<h:panelGrid columns="2" cellpadding="10" style=" width : 80px;">
-						<h:outputLabel value="CPF:" />
-						<p:inputMask mask="?999.999.999-99" id="inpt_numCPF" size="15"
-							maxlength="15" value="#{manterAnaliseMB.numCpf}" />
-					</h:panelGrid>
+							<p:dataTable var="reparacaoLista" value="#" paginator="false"
+								rows="5" style="margin-bottom:20px;"
+								emptyMessage="Não incluido dados de Reparação...">
 
-					<h:panelGrid columns="3" cellpadding="10" style="width : 100%">
-						<h:outputLabel value="Nome:*" />
-						<p:autoComplete id="pessoaAutoCmpl" title="Nome Pessoa"
-							style="width : 100%" value="#{manterAnaliseMB.pessoaAnalista}"
-							var="pessoaAnist" minQueryLength="4" size="100"
-							completeMethod="#{manterAnaliseMB.listarPessoaPorNomeLike}"
-							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
-							converter="pessoaConverter" itemValue="#{pessoaAnist}"
-							effect="explode" />
-						<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
-							update=":tabView:formAnalise:"
-							actionListener="#{manterAnaliseMB.consultarPessoas}"
-							icon="ui-icon-newwin" title="Consultaraf" />
+								<p:column headerText="Situação Requerimento">
+									<h:outputText id="tpStatuso" value="" />
+								</p:column>
 
-					</h:panelGrid>
+								<p:column headerText="Data Recebimento">
+									<h:outputText value="" />
+								</p:column>
+
+								<p:column headerText="Data Finalização">
+									<h:outputText value="" />
+								</p:column>
+
+								<p:column headerText="Análise">
+									<h:outputText value="" />
+								</p:column>
+
+								<p:column headerText="Recomendações">
+									<h:outputText value="" />
+								</p:column>
+
+								<p:column headerText="Decisão">
+									<h:outputText value="" />
+								</p:column>
+
+
+								<p:column headerText="Finalização">
+									<h:outputText value="" />
+								</p:column>
+
+								<p:column style="width:32px;text-align: center">
+									<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
+										title="Editar" ajax="true">
+										<f:setPropertyActionListener value="#{reparacaoLista}"
+											target="#" />
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+							<h:panelGrid columns="1" cellpadding="10"
+								style="margin-bottom:20px;text-align:center; width : 100%;">
+								<p:commandButton id="Novo" value="Novo" ajax="false"
+									update="@all" action="#{manterProcessoMB.habilitaNovo}"
+									icon="ui-icon-disk" title="Novo" />
+							</h:panelGrid>
+						</p:panel>
+
+			<p:panel id="pnlDadosTabelPessoa" header="Histórico da Análise"
+				rendered="true" style="margin-bottom:10px;width : 100%"
+				toggleable="true">
+
+
+				<h:panelGrid columns="4" style="margin-bottom:20px;width : 80%">
+
+					<h:outputLabel value="Data Recebimento:"
+						style="text-align:left;font-weight:bold;" />
+
+					<h:outputLabel value="#{manterAnaliseMB.dataRecebimento}"
+						style="text-align:left;font-weight:bold;" />
+
+					<h:outputLabel value="Analistas(Responsável Técnico):"
+						style="text-align:left;font-weight:bold;" />
+
+					<p:outputLabel id="idAnalistaTecnico"
+						title="Analistas(Responsável Técnico)"
+						value="#{manterAnaliseMB.usuario.descUsuario}"
+						style="text-align:left;font-size:22px;font-weight:bold;" />
+
 				</h:panelGrid>
 
 				<p:dataTable var="pessoaLista"
@@ -86,7 +133,7 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Nome">
+					<p:column headerText="Analista">
 						<h:outputText value="#{pessoaLista.pessoa.nomePessoa}" />
 					</p:column>
 
@@ -105,178 +152,27 @@
 						<h:outputText value="#{pessoaLista.complemento}" />
 					</p:column>
 
-					<p:column headerText="Ações">
+					<p:column headerText="Total Analise">
 						<h:outputText value="#{pessoaLista.acoes}" />
 					</p:column>
 
 
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar"
-							action="#{manterAnaliseMB.editarPessoaAnalise}"
-							icon="ui-icon-aply" title="Editar" ajax="true"
-							update=":tabView:formAnalise:">
-							<f:setPropertyActionListener value="#{pessoaLista}"
-								target="#{manterAnaliseMB.analistaProcesso}" />
-						</p:commandButton>
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover"
-							action="#{manterAnaliseMB.removerPessoaAnalise}"
-							icon="ui-icon ui-icon-trash" title="Remover do Processo"
-							ajax="true" update=":tabView:formAnalise:">
-							<f:setPropertyActionListener value="#{pessoaLista}"
-								target="#{manterAnaliseMB.analistaProcesso}" />
-						</p:commandButton>
-					</p:column>
-
 				</p:dataTable>
 			</p:panel>
 
-			<p:panel id="pnDetalhament" header="Análise do Processo"
-				toggleSpeed="500" closeSpeed="500"
-				style="margin-bottom:20px;width : 100%" toggleable="true">
-				<h:panelGrid columns="1" cellpadding="10"
-					style="width : 100px; height : 80px;">
-					<h:outputLabel value="Tipo da Análise" />
-					<p:selectOneMenu required="false"
-						requiredMessage="Tipo da Análise Obrigatório!"
-						value="#{manterAnaliseMB.codTipoAnaliseJug}"
-						style=" width : 357px;" effect="fade">
-						<f:selectItem itemLabel="Selecione o Tipo da Análise"
-							noSelectionOption="true" />
-						<f:selectItems
-							value="#{manterAnaliseMB.listarTipoAnaliseJulgamento}" var="item"
-							itemLabel="#{item.descricao}" itemValue="#{item.codTipo}" />
-					</p:selectOneMenu>
-				</h:panelGrid>
-			</p:panel>
 
-
-
-			<p:panel id="pnlQualificacaoAnistiando"
-				header="Qualificações do Anistiando"
+			<p:panel id="pnlAtosDeExcecao" header="Atos de Exceção"
 				style="margin-bottom:10px;width : 100%" toggleable="true">
 
-				<h:panelGrid columns="2" style="margin-bottom:10px;width : 100%">
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Data Processo:" />
-						<p:calendar id="dataProcesso" navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.processo.dataCadastro}"
-							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Complemento:" />
-						<p:inputText id="complementooAnalise" navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.complemento}"
-							maxlength="100" size="100" />
-					</h:panelGrid>
-				</h:panelGrid>
-				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
-					cellpadding="5">
-					<p:outputLabel for="reqAnistiado"
-						value="Requerente já foi anistiado?" style=" width : 700px;" />
-					<h:selectOneRadio id="reqAnistiado"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
-						<f:selectItem itemLabel="Não.." itemValue="0" />
-						<f:selectItem itemLabel="Sim" itemValue="1" />
-					</h:selectOneRadio>
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:30px; width : 200px;">
-					<h:outputLabel value="Observações:" />
-					<p:inputTextarea id="txtAreaObserAnaliseProcesso" maxlength="400"
-						rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.observacoes}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:30px; width : 200px;">
-					<h:outputLabel value="Tipo de Benefício Anterior:" />
-					<p:inputTextarea id="txtAreaDescTipoBenefAnt" maxlength="400"
-						rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="4" style="margin-bottom:30px;width :60%"
-					cellpadding="5">
-					<p:outputLabel for="tipoAnistiando" value="Tipo Anistiando?"
-						style=" width : 200px;" />
-					<h:selectOneRadio id="tipoAnistiando"
-						value="#{manterAnaliseMB.analiseProcesso.tipoAnistiando}">
-						<f:selectItem itemLabel="Civil.." itemValue="0" />
-						<f:selectItem itemLabel="Militar" itemValue="1" />
-					</h:selectOneRadio>
-
-					<p:outputLabel for="tipoAnistia" value="Tipo de Anistia:"
-						style=" width : 200px;" />
-					<h:selectOneRadio id="tipoAnistia"
-						value="#{manterAnaliseMB.analiseProcesso.tipoAnistia}">
-						<f:selectItem itemLabel="Individual.." itemValue="0" />
-						<f:selectItem itemLabel="Coletivo" itemValue="1" />
-					</h:selectOneRadio>
-				</h:panelGrid>
-
-
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
 					cellpadding="5">
-					<p:outputLabel value="Tipo de Reparação:"
+					<p:outputLabel value="Atos de Exceção:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formAnalise:" action="#"
-						ajax="true" icon="ui-icon-plusthick">
-					</p:commandButton>
-				</h:panelGrid>
-
-				<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
-					value="#" paginator="false" rows="5" style="margin-bottom:20px;"
-					emptyMessage="Não incluido dados de Reparação...">
-
-					<p:column headerText="Tipo Reparação">
-						<h:outputText id="tpTBreparacao" value="" />
-					</p:column>
-
-					<p:column headerText="Ações">
-						<h:outputText id="tpAcoes" value="" />
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-							title="Editar" ajax="true" update=":tabView:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover" action="#"
-							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-				</p:dataTable>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:30px; width : 200px;">
-					<h:outputLabel value="Complemento:" />
-					<p:inputTextarea id="txtAreaComplemento" maxlength="400" rows="4"
-						cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
-					cellpadding="5">
-					<p:outputLabel value="Perseguição Política Narrada:"
-						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formAnalise:"
+					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
 						action="#{manterAnaliseMB.addPerseguica}" ajax="true"
 						icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
-
-
 				<p:dataTable var="perseguicaoLista" id="dataTbPerseguicaoLista"
 					value="#{manterAnaliseMB.listarPerseguicaoAnalise}"
 					paginator="false" rows="5"
@@ -307,7 +203,8 @@
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Editar"
 							action="#{manterAnaliseMB.editarPerseguicao}" icon="ui-icon-aply"
-							title="Editar" ajax="true" update=":tabView:formAnalise:">
+							title="Editar" ajax="true"
+							update=":tabView:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{perseguicaoLista}"
 								target="#{manterAnaliseMB.perseguicaoAnalise}" />
 						</p:commandButton>
@@ -317,7 +214,7 @@
 						<p:commandButton value="Remover"
 							action="#{manterAnaliseMB.removerPerseguicao}"
 							icon="ui-icon ui-icon-trash" title="Remover do Processo"
-							ajax="true" update=":tabView:formAnalise:">
+							ajax="true" update=":tabView:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{perseguicaoLista}"
 								target="#{manterAnaliseMB.perseguicaoAnalise}" />
 						</p:commandButton>
@@ -325,17 +222,211 @@
 
 				</p:dataTable>
 
+
 			</p:panel>
+
+
+			<p:panel id="pnlAnistiasAnteriores" header="Anistias Anteriores"
+				style="margin-bottom:10px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width : 100%">
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+						<h:outputLabel value="Data 1º Protocolo:" />
+						<p:calendar id="dataProcesso" navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.processo.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+						<h:outputLabel value="Complemento:" />
+						<p:inputText id="complementooAnalise" navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.complemento}"
+							maxlength="100" size="100" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="4" style="margin-bottom:10px;width :70%"
+					cellpadding="5">
+					<p:outputLabel for="reqAnistiado"
+						value="Requerente já foi anistiado?" style=" width : 700px;" />
+					<h:selectOneRadio id="reqAnistiado"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+
+					<h:outputLabel value="Data da Anistia:" />
+					<p:calendar id="dataAnistiaAnteriores" navigator="true"
+						value="#{manterAnaliseMB.analiseProcesso.processo.dataCadastro}"
+						showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 200px;">
+					<h:outputLabel value="Orgão da Anistia:" />
+					<p:inputTextarea id="txtAreaObserAnaliseProcesso" maxlength="200"
+						rows="2" cols="100" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.observacoes}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 200px;">
+					<h:outputLabel value="Ato Reparatório:" />
+					<p:inputTextarea id="txtAreaDescTipoBenefAnt" maxlength="400"
+						rows="4" cols="100" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
+					cellpadding="5">
+					<p:outputLabel for="bolDecisaoAnterio"
+						value="Houve Decisão Anterior da Comissão de Anistia?"
+						style=" width : 700px;" />
+					<h:selectOneRadio id="bolDecisaoAnterio"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 200px;">
+					<h:outputLabel value="Descreva a Decisão:" />
+					<p:inputTextarea id="txtAreaDescDecisaoAnterio" maxlength="1000"
+						rows="4" cols="100" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
+					cellpadding="5">
+					<p:outputLabel for="bolPublicacaoPortaria"
+						value="Houve Publicação de Portaria?" style=" width : 700px;" />
+					<h:selectOneRadio id="bolPublicacaoPortaria"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 200px;">
+					<h:outputLabel value="Descreva o Conteúdo da Portaria:" />
+					<p:inputTextarea id="txtAreaDescConteudoPortaria" maxlength="1000"
+						rows="4" cols="100" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+				</h:panelGrid>
+
+
+			</p:panel>
+
+
+			<p:panel id="pnlPedidoInteressado" header="Pedido do interessado"
+				style="margin-bottom:10px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
+					cellpadding="5">
+					<p:outputLabel for="bolHoveAlteracaoPedido"
+						value="Houve Alterações?" style=" width : 700px;" />
+					<h:selectOneRadio id="bolHoveAlteracaoPedido"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
+					cellpadding="5">
+					<p:outputLabel value="Tipo de Reparação:"
+						style="text-align:left;color:Red;font-weight:bold;" />
+					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
+						action="#" ajax="true" icon="ui-icon-plusthick">
+					</p:commandButton>
+				</h:panelGrid>
+
+				<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
+					value="#" paginator="false" rows="5" style="margin-bottom:20px;"
+					emptyMessage="Não incluido dados de Reparação...">
+
+					<p:column headerText="Tipo Reparação">
+						<h:outputText id="tpTBreparacao" value="" />
+					</p:column>
+
+					<p:column headerText="Ações">
+						<h:outputText id="tpAcoes" value="" />
+					</p:column>
+
+					<p:column style="width:32px;text-align: center">
+						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
+							title="Editar" ajax="true"
+							update=":tabView:tabView_analise:formAnalise:">
+							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:32px;text-align: center">
+						<p:commandButton value="Remover" action="#"
+							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+							ajax="true" update=":tabView:tabView_analise:formAnalise:">
+							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
+					cellpadding="5">
+					<p:outputLabel for="bolOutrosPedido" value="Outros?"
+						style=" width : 700px;" />
+					<h:selectOneRadio id="bolOutrosPedido"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:30px; width : 200px;">
+					<h:outputLabel value="Complemento:" />
+					<p:inputTextarea id="txtAreaComplemento" maxlength="400" rows="4"
+						cols="100" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:panel id="pnlResumoPedido" header="Resumo do Pedido"
+				style="margin-bottom:10px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" style="margin-bottom:20px;width :45%"
+					cellpadding="5">
+					<p:outputLabel value="Resumo do Pedido:"
+						style="text-align:left;color:Red;font-weight:bold;" />
+					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
+						action="#" label="Carrega Informações" value="Carrega Informações"
+						ajax="true" icon="ui-icon-plusthick">
+					</p:commandButton>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:30px; width : 200px;">
+					<h:outputLabel value="Resumo:" />
+					<p:inputTextarea id="txtResulmoPedido" maxlength="10000" rows="20"
+						cols="140" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
+
+				</h:panelGrid>
+			</p:panel>
+
 
 			<p:panel id="pnlInstrucaoProbatoria" header="Instrução Probatória"
 				style="margin-bottom:20px;width : 100%" toggleable="true">
 
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
 					cellpadding="5">
-					<p:outputLabel value="Provas Internas ao processo:"
+					<p:outputLabel value="Provas Juntadas Pelo Requerente:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formAnalise:" action="#"
-						ajax="true" icon="ui-icon-plusthick">
+					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
+						action="#" ajax="true" icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
 
@@ -347,7 +438,11 @@
 						<h:outputText value="" />
 					</p:column>
 
-					<p:column headerText="Folhas do Processo">
+					<p:column headerText="Data Início">
+						<h:outputText value="" />
+					</p:column>
+´
+					<p:column headerText="Data Fim">
 						<h:outputText value="" />
 					</p:column>
 
@@ -358,7 +453,8 @@
 
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-							title="Editar" ajax="true" update=":tabView:formAnalise:">
+							title="Editar" ajax="true"
+							update=":tabView:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
 						</p:commandButton>
 					</p:column>
@@ -366,58 +462,22 @@
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Remover" action="#"
 							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:formAnalise:">
+							ajax="true" update=":tabView:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{reparacaoLista}" target="" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Relato Pessoal do Requerente:" />
-					<p:inputTextarea id="txtAreaDescRelatoRequerente" maxlength="500"
-						rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descRelatoRequerente}" />
-				</h:panelGrid>
+			</p:panel>
 
+			<p:panel id="pnlConclusões" header="Conclusões"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Relato de Testemunhas:" />
-					<p:inputTextarea id="txtAreaDescRelatoDescTestemunhas"
-						maxlength="500" rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descTestemunhas}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Locais em que ocorram as Perseguições:" />
-					<p:inputTextarea id="txtAreadescLocaisPerseguicoes" maxlength="500"
-						rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descLocaisPerseguicoes}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Nome de Pessoas Envolvidas nas perseguições:" />
-					<p:inputTextarea id="txtAreaDescPessoasEnvolvidas" maxlength="500"
-						rows="4" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descPessoasEnvolvidas}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Outras Fontes:" />
-					<p:inputTextarea id="txtAreaDescOutrasFontes" maxlength="300"
-						rows="3" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descOutrasFontes}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="30"
-					style="margin-bottom:10px; width : 100%">
-					<h:outputLabel value="Literatura sobre o assunto:" />
-					<p:inputTextarea id="txtAreaDescLiteraturaAssunto" maxlength="300"
-						rows="3" cols="100"
-						value="#{manterAnaliseMB.analiseProcesso.descLiteraturaAssunto}" />
+					<h:outputLabel value="Conclusões:" />
+					<p:inputTextarea id="txtConclusaoAnalise" maxlength="1000"
+						rows="10" cols="140" autoResize="false"
+						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
 				</h:panelGrid>
 
 			</p:panel>
@@ -512,7 +572,7 @@
 							<p:commandButton value="Incluir"
 								action="#{manterAnaliseMB.incluirNaAnalise}"
 								icon="ui-icon-search" title="Incluir no Processo" ajax="true"
-								update=":tabView:formAnalise:">
+								update=":tabView:tabView_analise:formAnalise:">
 								<f:setPropertyActionListener value="#{pessoaLista}"
 									target="#{manterAnaliseMB.pessoaAnalista}" />
 							</p:commandButton>
@@ -579,7 +639,7 @@
 						style="margin-bottom:30px; width : 100%">
 						<h:outputLabel value="Complemento:" />
 						<p:inputTextarea id="txtAreaPersegComplemento" maxlength="400"
-							rows="4" cols="100"
+							rows="4" cols="100" autoResize="false"
 							value="#{manterAnaliseMB.perseguicaoAnalise.complemento}" />
 					</h:panelGrid>
 
@@ -587,7 +647,7 @@
 						style="margin-bottom:20px;text-align:center; width : 70%;">
 						<p:commandButton value="Incluir" id="bt_incluir_pereg"
 							style="horizontal-align:center" icon="ui-icon-disk"
-							update=":tabView:formAnalise:dataTbPerseguicaoLista"
+							update=":tabView:tabView_analise:formAnalise:dataTbPerseguicaoLista"
 							action="#{manterAnaliseMB.incluirPerseguicaoLista}">
 						</p:commandButton>
 

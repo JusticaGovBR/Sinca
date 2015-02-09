@@ -43,7 +43,7 @@
 				</h:panelGrid>
 			</p:dialog>
 
-
+			<!--  
 			<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
 				hideEffect="clip" style="margin-bottom:20px;"
 				widgetVar="dlg_comfirmacao" modal="true" height="100%" width="45%">
@@ -89,300 +89,305 @@
 					onclick="PF('dlg_comfirmacao').show();" icon="ui-icon-disk"
 					title="Salvar Processo" />
 			</h:panelGrid>
+			
+			-->
+			
 
 
-			<p:panel id="pnDetalhament" header="Dados do Requerimento"
-				toggleSpeed="500" closeSpeed="500"
-				style="margin-bottom:20px;width : 100%" toggleable="true">
+				<p:panel id="pnDetalhament" header="Dados do Requerimento"
+					toggleSpeed="500" closeSpeed="500"
+					style="margin-bottom:20px;width : 100%" toggleable="true">
 
-				<h:panelGrid columns="3" cellpadding="10"
-					style=" margin-bottom:20px;width : 770px;">
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Prioridate em Turma:" />
-						<p:inputText size="15"
-							value="#{manterProcessoMB.processo.prioridadeTurma}"
-							maxlength="10" />
-					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Prioridate em Plenário:" />
-						<p:inputText size="15"
-							value="#{manterProcessoMB.processo.prioridadePlenario}"
-							maxlength="10" />
-					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 350px;">
-						<h:outputLabel value="Prioridate em Bloco Temático:" />
-						<p:inputText size="15"
-							value="#{manterProcessoMB.processo.prioridadeBloco}"
-							maxlength="10" />
-					</h:panelGrid>
-				</h:panelGrid>
-
-
-				<h:panelGrid columns="5" cellpadding="10"
-					style=" margin-bottom:20px;width : 770px;">
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Nº Protocolo MJ-SEI:" />
-						<p:inputMask mask="?99999.999999/9999-99"
-							id="inpt_numProtocoloMJ_SEI" size="25"
-							value="#{manterProcessoMB.processo.numProtocoloMj}"
-							maxlength="25" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Data Protocolo MJ-SEI" />
-						<p:inputText id="input_dataProtocoMJ_SEI" disabled="true"
-							value="#{manterProcessoMB.processo.dataProtocoloMJ}" size="10"
-							maxlength="10">
-							<f:convertDateTime pattern="dd/MM/yyyy"
-								for="input_dataProtocoMJ_SEI" />
-						</p:inputText>
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Nº Protocolo CA:" />
-						<p:inputText id="inpt_numProtocoloCa"
-							value="#{manterProcessoMB.processo.numProtocoloCa}"
-							disabled="true" size="20" maxlength="20" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
-						<h:outputLabel value="Data Protocolo CA:" />
-						<p:calendar id="dataProtocoCA"
-							value="#{manterProcessoMB.processo.dataProtocoloCa}"
-							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10">
-						<h:outputLabel value="Consultar/Obter no SEI" />
-						<p:commandButton id="btnConsultarSei" value="Consultar Sei"
-							ajax="false" icon="aplicar" onclick="PF('dlg_mensagem').hide();"
-							actionListener="#{manterProcessoMB.consultarProcesso}">
-							<f:ajax execute="inpt_numProtocoloMJ_SEI"
-								render="input_dataProtocoMJ_SEI" />
-						</p:commandButton>
-					</h:panelGrid>
-
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="10"
-					style=" margin-bottom:30px; width : 100%;">
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
-						<p:lightBox iframe="true" id="lighboxDocSei" width="960px"
-							height="580px" iframeTitle="Andamento Processo SEI">
-							<h:outputLink value="#{manterProcessoMB.linkDocSel}"
-								title="Andamento Processo SEI">
-								<h:outputText value="Andamento do Processo no SEI" />
-							</h:outputLink>
-						</p:lightBox>
-					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="2" cellspacing="10"
-					style="margin-bottom:15px;width : 50%;">
-
-					<h:panelGrid columns="3" style="width :50%;">
-						<h:outputLabel value="Lote:"
-							style="text-align:justify;width:80px;" />
-						<h:outputText value="#{manterProcessoMB.loteProcesso.descricao}"
-							style="text-align:justify;width:80px;" />
-						<p:commandButton update=":tabView:formProcesso:"
-							action="#{manterProcessoMB.addLoteProcesso}" ajax="true"
-							icon="ui-icon-plusthick" />
+					<h:panelGrid columns="3" cellpadding="10"
+						style=" margin-bottom:20px;width : 770px;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Prioridate em Turma:" />
+							<p:inputText size="15"
+								value="#{manterProcessoMB.processo.prioridadeTurma}"
+								maxlength="10" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Prioridate em Plenário:" />
+							<p:inputText size="15"
+								value="#{manterProcessoMB.processo.prioridadePlenario}"
+								maxlength="10" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 350px;">
+							<h:outputLabel value="Prioridate em Bloco Temático:" />
+							<p:inputText size="15"
+								value="#{manterProcessoMB.processo.prioridadeBloco}"
+								maxlength="10" />
+						</h:panelGrid>
 					</h:panelGrid>
 
 
-				</h:panelGrid>
+					<h:panelGrid columns="5" cellpadding="10"
+						style=" margin-bottom:20px;width : 770px;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Nº Protocolo MJ-SEI:" />
+							<p:inputMask mask="?99999.999999/9999-99"
+								id="inpt_numProtocoloMJ_SEI" size="25"
+								value="#{manterProcessoMB.processo.numProtocoloMj}"
+								maxlength="25" />
+						</h:panelGrid>
 
-				<h:panelGrid columns="1" cellpadding="10" style=" width : 670px;">
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Localização:*" />
-						<p:selectOneMenu value="#{manterProcessoMB.idLocalizacao}"
-							style=" width: 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione uma Localizacao"
-								noSelectionOption="true" />
-							<f:selectItems value="#{manterProcessoMB.listarLocalizacao}"
-								var="item" itemLabel="#{item.descLocalizacao}"
-								itemValue="#{item.idLocalizacao}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Status do Processo:*" />
-						<p:selectOneMenu value="#{manterProcessoMB.idStatusProcesso}"
-							style=" width: 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione um Status do Processo"
-								noSelectionOption="true" />
-							<f:selectItems value="#{manterProcessoMB.listarStatusProcesso}"
-								var="item" itemLabel="#{item.descStatusProcesso}"
-								itemValue="#{item.idStatusProcesso}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Substatus do Processo:*" />
-						<p:selectOneMenu value="#{manterProcessoMB.idSubStatusProcesso}"
-							style=" width : 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione Sub Status do Processo"
-								noSelectionOption="true" />
-							<f:selectItems
-								value="#{manterProcessoMB.listarSubStatusProcesso}" var="item"
-								itemLabel="#{item.descSubStatusProcesso}"
-								itemValue="#{item.idSubStatusProcesso}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Data Protocolo MJ-SEI" />
+							<p:inputText id="input_dataProtocoMJ_SEI" disabled="true"
+								value="#{manterProcessoMB.processo.dataProtocoloMJ}" size="10"
+								maxlength="10">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									for="input_dataProtocoMJ_SEI" />
+							</p:inputText>
+						</h:panelGrid>
 
-					<h:panelGrid columns="1" cellpadding="30" style=" width : 200px;">
-						<h:outputLabel value="Complemento do Status:" />
-						<p:inputTextarea id="txtAreaComplementoStatus" maxlength="400"
-							rows="4" cols="100"
-							value="#{manterProcessoMB.processo.descComplementoStatus}" />
-					</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Nº Protocolo CA:" />
+							<p:inputText id="inpt_numProtocoloCa"
+								value="#{manterProcessoMB.processo.numProtocoloCa}"
+								disabled="true" size="20" maxlength="20" />
+						</h:panelGrid>
 
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Grupo Processual:*" />
-						<p:selectOneMenu value="#{manterProcessoMB.idGrupoProcessual}"
-							style=" width : 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione Grupo Processual"
-								noSelectionOption="true" />
-							<f:selectItems value="#{manterProcessoMB.listarGrupoProcessual}"
-								var="item" itemLabel="#{item.descGrupoProcessual}"
-								itemValue="#{item.idGrupoProcessual}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
+							<h:outputLabel value="Data Protocolo CA:" />
+							<p:calendar id="dataProtocoCA"
+								value="#{manterProcessoMB.processo.dataProtocoloCa}"
+								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
 
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Subgrupo Processual:*" />
-						<p:selectOneMenu value="#{manterProcessoMB.idSubGrupoProcessual}"
-							style=" width : 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione Sub Grupo Processual"
-								noSelectionOption="true" />
-							<f:selectItems
-								value="#{manterProcessoMB.listarSubGrupoProcessual}" var="item"
-								itemLabel="#{item.descSubGrupoProcessual}"
-								itemValue="#{item.idSubGrupoProcessual}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Cargo / Função:" />
-						<p:selectOneMenu value="#{manterProcessoMB.idCargoFuncao}"
-							style=" width : 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione Cargo / Função"
-								noSelectionOption="true" />
-							<f:selectItems value="#{manterProcessoMB.listarCargoFuncao}"
-								var="item" itemLabel="#{item.descCargoFuncao}"
-								itemValue="#{item.idCargoFuncao}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-					<h:outputLabel value="Grupo Social" />
-					<p:selectOneMenu value="#{manterProcessoMB.idGrupoSocial}"
-						style=" width : 737px;" effect="fade">
-						<f:selectItem itemLabel="Selecione Grupo Social"
-							noSelectionOption="true" />
-						<f:selectItems value="#{manterProcessoMB.listarGrupoSocial}"
-							var="item" itemLabel="#{item.descGrupoSocial}"
-							itemValue="#{item.idGrupoSocial}" />
-					</p:selectOneMenu>
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-					<h:outputLabel value="Subgrupo Social" />
-					<p:selectOneMenu value="#{manterProcessoMB.idSubGrupoSocial}"
-						style=" width : 737px;" effect="fade">
-						<f:selectItem itemLabel="Selecione Sub Grupo Social"
-							noSelectionOption="true" />
-						<f:selectItems value="#{manterProcessoMB.listarSubGrupoSocial}"
-							var="item" itemLabel="#{item.descSubGrupoSocial}"
-							itemValue="#{item.idSubGrupoSocial}" />
-					</p:selectOneMenu>
-				</h:panelGrid>
-			</p:panel>
-
-			<p:dialog header="Lote Requerimento" resizable="false" showEffect="explod"
-				hideEffect="explod" style="margin-bottom:20px;"
-				widgetVar="dlg_loteProcesso" modal="false" height="100%" width="60%">
-				<p:outputPanel id="mtnddlg_loteProcesso">
-
-					<h:panelGrid columns="3" cellpadding="10" style="margin-bottom:20px; width : 100%;">
-						<h:outputLabel value="Descrição" style="width : 90px;"/>
-						<p:inputText id="input_desc_lote"
-							value="#{manterProcessoMB.loteProcesso.descricao}" size="80"
-							maxlength="100" />
-						<p:commandButton value="Salvar" id="btloteSalvar"							
-							icon="ui-icon-closethick" ajax="true"							
-							update=":tabView:formProcesso:tbLoteRq_dg"
-							action="#{manterProcessoMB.salvarLoteProcesso}" />
-					</h:panelGrid>
-
-
-					<p:dataTable var="loteEdicao" id="tbLoteRq_dg" style="margin-bottom:20px;"
-						value="#{manterProcessoMB.listaLoteProcesso}" paginator="true"
-						editable="true" editMode="cell" widgetVar="cellLote" rows="5">
-
-						<p:column headerText="Lote Requerimento">
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:outputText value="#{loteEdicao.descricao}" />
-								</f:facet>
-								<f:facet name="input">
-									<p:inputText id="modelInput" value="#{loteEdicao.descricao}"
-										style="width:96%" />
-								</f:facet>
-							</p:cellEditor>
-						</p:column>
-
-						<p:column headerText="Data Criação">
-							<h:outputText value="#{loteEdicao.dataCriacao}">
-								<f:convertDateTime locale="pt_BR" dateStyle="long"
-									pattern="dd/MM/yyyy" />
-
-							</h:outputText>
-						</p:column>
-						<p:column style="width:32px;align: center">
-							<p:commandButton value="Atualizar"
-								actionListener="#{manterProcessoMB.salvarLoteProcesso}"
-								update=":tabView:formProcesso:tbLoteRq_dg"
-								icon="ui-icon-search" title="Atualizar" ajax="true">
-								<f:setPropertyActionListener value="#{loteEdicao}"
-									target="#{manterProcessoMB.loteProcesso}" />
+						<h:panelGrid columns="1" cellpadding="10">
+							<h:outputLabel value="Consultar/Obter no SEI" />
+							<p:commandButton id="btnConsultarSei" value="Consultar Sei"
+								ajax="false" icon="aplicar" onclick="PF('dlg_mensagem').hide();"
+								actionListener="#{manterProcessoMB.consultarProcesso}">
+								<f:ajax execute="inpt_numProtocoloMJ_SEI"
+									render="input_dataProtocoMJ_SEI" />
 							</p:commandButton>
-						</p:column>
+						</h:panelGrid>
 
-						<p:column style="width:32px;align: center">
-							<p:commandButton value="Selecionar"
-								icon="ui-icon-search ui-icon-trash" title="Selecionar" ajax="true"
-								update=":tabView:formProcesso:" 
-								actionListener="#{manterProcessoMB.selecionarLoteProcesso}">
-								<f:setPropertyActionListener value="#{loteEdicao}"
-									target="#{manterProcessoMB.loteProcesso}" />
-							</p:commandButton>
-						</p:column>
-
-						<p:column style="width:32px;align: center">
-							<p:commandButton value="Excluir"
-								icon="ui-icon-trash" title="Excluir" ajax="true"
-								actionListener="#{manterProcessoMB.excluirLoteProcesso}"
-								update=":tabView:formProcesso:tbLoteRq_dg" >
-								<f:setPropertyActionListener value="#{loteEdicao}"
-									target="#{manterProcessoMB.loteProcesso}" />
-							</p:commandButton>
-						</p:column>
-						
-					</p:dataTable>
+					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10"
-						style="margin-bottom:20px;text-align:center; width : 100%;">
-
-						<p:commandButton value="Fechar" id="FecharLoteReq"
-							style="horizontal-align:center" type="button"
-							icon="ui-icon-closethick"
-							onclick="PF('dlg_loteProcesso').hide();" />
+						style=" margin-bottom:30px; width : 100%;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+							<p:lightBox iframe="true" id="lighboxDocSei" width="960px"
+								height="580px" iframeTitle="Andamento Processo SEI">
+								<h:outputLink value="#{manterProcessoMB.linkDocSel}"
+									title="Andamento Processo SEI">
+									<h:outputText value="Andamento do Processo no SEI" />
+								</h:outputLink>
+							</p:lightBox>
+						</h:panelGrid>
 					</h:panelGrid>
 
-				</p:outputPanel>
-			</p:dialog>
+					<h:panelGrid columns="2" cellspacing="10"
+						style="margin-bottom:15px;width : 50%;">
 
+						<h:panelGrid columns="3" style="width :50%;">
+							<h:outputLabel value="Lote:"
+								style="text-align:justify;width:80px;" />
+							<h:outputText value="#{manterProcessoMB.loteProcesso.descricao}"
+								style="text-align:justify;width:80px;" />
+							<p:commandButton update=":tabView:formProcesso:"
+								action="#{manterProcessoMB.addLoteProcesso}" ajax="true"
+								icon="ui-icon-plusthick" />
+						</h:panelGrid>
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 670px;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Localização:*" />
+							<p:selectOneMenu value="#{manterProcessoMB.idLocalizacao}"
+								style=" width: 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione uma Localizacao"
+									noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarLocalizacao}"
+									var="item" itemLabel="#{item.descLocalizacao}"
+									itemValue="#{item.idLocalizacao}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Status do Processo:*" />
+							<p:selectOneMenu value="#{manterProcessoMB.idStatusProcesso}"
+								style=" width: 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione um Status do Processo"
+									noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarStatusProcesso}"
+									var="item" itemLabel="#{item.descStatusProcesso}"
+									itemValue="#{item.idStatusProcesso}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Substatus do Processo:*" />
+							<p:selectOneMenu value="#{manterProcessoMB.idSubStatusProcesso}"
+								style=" width : 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione Sub Status do Processo"
+									noSelectionOption="true" />
+								<f:selectItems
+									value="#{manterProcessoMB.listarSubStatusProcesso}" var="item"
+									itemLabel="#{item.descSubStatusProcesso}"
+									itemValue="#{item.idSubStatusProcesso}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="30" style=" width : 200px;">
+							<h:outputLabel value="Complemento do Status:" />
+							<p:inputTextarea id="txtAreaComplementoStatus" maxlength="400"
+								rows="4" cols="100"
+								value="#{manterProcessoMB.processo.descComplementoStatus}" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Grupo Processual:*" />
+							<p:selectOneMenu value="#{manterProcessoMB.idGrupoProcessual}"
+								style=" width : 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione Grupo Processual"
+									noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarGrupoProcessual}"
+									var="item" itemLabel="#{item.descGrupoProcessual}"
+									itemValue="#{item.idGrupoProcessual}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Subgrupo Processual:*" />
+							<p:selectOneMenu value="#{manterProcessoMB.idSubGrupoProcessual}"
+								style=" width : 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione Sub Grupo Processual"
+									noSelectionOption="true" />
+								<f:selectItems
+									value="#{manterProcessoMB.listarSubGrupoProcessual}" var="item"
+									itemLabel="#{item.descSubGrupoProcessual}"
+									itemValue="#{item.idSubGrupoProcessual}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<h:outputLabel value="Cargo / Função:" />
+							<p:selectOneMenu value="#{manterProcessoMB.idCargoFuncao}"
+								style=" width : 737px;" effect="fade">
+								<f:selectItem itemLabel="Selecione Cargo / Função"
+									noSelectionOption="true" />
+								<f:selectItems value="#{manterProcessoMB.listarCargoFuncao}"
+									var="item" itemLabel="#{item.descCargoFuncao}"
+									itemValue="#{item.idCargoFuncao}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+						<h:outputLabel value="Grupo Social" />
+						<p:selectOneMenu value="#{manterProcessoMB.idGrupoSocial}"
+							style=" width : 737px;" effect="fade">
+							<f:selectItem itemLabel="Selecione Grupo Social"
+								noSelectionOption="true" />
+							<f:selectItems value="#{manterProcessoMB.listarGrupoSocial}"
+								var="item" itemLabel="#{item.descGrupoSocial}"
+								itemValue="#{item.idGrupoSocial}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+						<h:outputLabel value="Subgrupo Social" />
+						<p:selectOneMenu value="#{manterProcessoMB.idSubGrupoSocial}"
+							style=" width : 737px;" effect="fade">
+							<f:selectItem itemLabel="Selecione Sub Grupo Social"
+								noSelectionOption="true" />
+							<f:selectItems value="#{manterProcessoMB.listarSubGrupoSocial}"
+								var="item" itemLabel="#{item.descSubGrupoSocial}"
+								itemValue="#{item.idSubGrupoSocial}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:dialog header="Lote Requerimento" resizable="false"
+					showEffect="explod" hideEffect="explod" style="margin-bottom:20px;"
+					widgetVar="dlg_loteProcesso" modal="false" height="100%"
+					width="60%">
+					<p:outputPanel id="mtnddlg_loteProcesso">
+
+						<h:panelGrid columns="3" cellpadding="10"
+							style="margin-bottom:20px; width : 100%;">
+							<h:outputLabel value="Descrição" style="width : 90px;" />
+							<p:inputText id="input_desc_lote"
+								value="#{manterProcessoMB.loteProcesso.descricao}" size="80"
+								maxlength="100" />
+							<p:commandButton value="Salvar" id="btloteSalvar"
+								icon="ui-icon-closethick" ajax="true"
+								update=":tabView:formProcesso:tbLoteRq_dg"
+								action="#{manterProcessoMB.salvarLoteProcesso}" />
+						</h:panelGrid>
+
+
+						<p:dataTable var="loteEdicao" id="tbLoteRq_dg"
+							style="margin-bottom:20px;"
+							value="#{manterProcessoMB.listaLoteProcesso}" paginator="true"
+							editable="true" editMode="cell" widgetVar="cellLote" rows="5">
+
+							<p:column headerText="Lote Requerimento">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{loteEdicao.descricao}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{loteEdicao.descricao}"
+											style="width:96%" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Data Criação">
+								<h:outputText value="#{loteEdicao.dataCriacao}">
+									<f:convertDateTime locale="pt_BR" dateStyle="long"
+										pattern="dd/MM/yyyy" />
+
+								</h:outputText>
+							</p:column>
+							<p:column style="width:32px;align: center">
+								<p:commandButton value="Atualizar"
+									actionListener="#{manterProcessoMB.salvarLoteProcesso}"
+									update=":tabView:formProcesso:tbLoteRq_dg"
+									icon="ui-icon-search" title="Atualizar" ajax="true">
+									<f:setPropertyActionListener value="#{loteEdicao}"
+										target="#{manterProcessoMB.loteProcesso}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column style="width:32px;align: center">
+								<p:commandButton value="Selecionar"
+									icon="ui-icon-search ui-icon-trash" title="Selecionar"
+									ajax="true" update=":tabView:formProcesso:"
+									actionListener="#{manterProcessoMB.selecionarLoteProcesso}">
+									<f:setPropertyActionListener value="#{loteEdicao}"
+										target="#{manterProcessoMB.loteProcesso}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column style="width:32px;align: center">
+								<p:commandButton value="Excluir" icon="ui-icon-trash"
+									title="Excluir" ajax="true"
+									actionListener="#{manterProcessoMB.excluirLoteProcesso}"
+									update=":tabView:formProcesso:tbLoteRq_dg">
+									<f:setPropertyActionListener value="#{loteEdicao}"
+										target="#{manterProcessoMB.loteProcesso}" />
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+
+						<h:panelGrid columns="1" cellpadding="10"
+							style="margin-bottom:20px;text-align:center; width : 100%;">
+
+							<p:commandButton value="Fechar" id="FecharLoteReq"
+								style="horizontal-align:center" type="button"
+								icon="ui-icon-closethick"
+								onclick="PF('dlg_loteProcesso').hide();" />
+						</h:panelGrid>
+
+					</p:outputPanel>
+				</p:dialog>
 
 
 		</h:form>

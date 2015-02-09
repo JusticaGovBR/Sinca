@@ -25,9 +25,9 @@
 }
 </style>
 
-			<p:dialog showHeader="false" modal="true" widgetVar="carregarDadosInicioDG"
-				draggable="false" closable="false" resizable="false"
-				style="padding-top:5px">
+			<p:dialog showHeader="false" modal="true"
+				widgetVar="carregarDadosInicioDG" draggable="false" closable="false"
+				resizable="false" style="padding-top:5px">
 				<h:panelGrid columns="1" cellpadding="10"
 					style="margin-bottom:20px;text-align:center;">
 					<h:outputLabel value="Carregando Requerimento..."
@@ -36,6 +36,8 @@
 					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
 				</h:panelGrid>
 			</p:dialog>
+
+			<h:form id="formP">
 
 				<p:panel id="PnProcesso" header="Requerimento / Interessados"
 					style="margin-bottom:10px;width : 100%" toggleable="false"
@@ -79,142 +81,86 @@
 
 				</p:panel>
 
-				<p:panel id="PnAndamentos" header="Andamentos"
-					style="margin-bottom:10px;width : 100%" toggleable="true"
-					rendered="#{manterProcessoMB.processo.idProcesso>0}">
+				<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
+					hideEffect="clip" style="margin-bottom:20px;"
+					widgetVar="dlg_comfirmacao" modal="true" height="100%" width="45%">
+					<p:outputPanel id="mtndgperseg">
+						<p:outputPanel deferred="true">
+							<h3
+								style="color: Brown; font-style: normal; font-size: x-large; text-decoration: none; font-weight: bold;">
+								Comfirma que os dados inseridos no processo estão corretos?</h3>
+						</p:outputPanel>
 
-					<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
-						value="#" paginator="false" rows="5" style="margin-bottom:20px;"
-						emptyMessage="Não incluido dados de Reparação...">
-
-						<p:column headerText="Situação Requerimento">
-							<h:outputText id="tpStatuso" value="" />
-						</p:column>
-
-						<p:column headerText="Data Recebimento">
-							<h:outputText value="" />
-						</p:column>
-
-						<p:column headerText="Data Finalização">
-							<h:outputText value="" />
-						</p:column>
-
-						<p:column headerText="Análise">
-							<h:outputText value="" />
-						</p:column>
-
-						<p:column headerText="Recomendações">
-							<h:outputText value="" />
-						</p:column>
-
-						<p:column headerText="Decisão">
-							<h:outputText value="" />
-						</p:column>
-
-
-						<p:column headerText="Finalização">
-							<h:outputText value="" />
-						</p:column>
-
-						<p:column style="width:32px;text-align: center">
-							<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-								title="Editar" ajax="true" update=":tabView:formAnalise:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
+						<h:panelGrid columns="2" cellpadding="10"
+							style="margin-bottom:20px;text-align:center; width : 100%;">
+							<p:commandButton value="Salvar" id="bt_incluir_processo"
+								style="horizontal-align:center" icon="ui-icon-disk"
+								update=":tabView:formProcesso:"
+								action="#{manterProcessoMB.salvarProcesso}">
 							</p:commandButton>
-						</p:column>
 
-						<p:column style="width:32px;text-align: center">
-							<p:commandButton value="Remover" action="#"
-								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
-								update=":tabView:formAnalise:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-
-					<h:panelGrid columns="1" cellpadding="10"
-						style="margin-bottom:20px;text-align:center; width : 100%;">
-						<p:commandButton id="Novo" value="Novo" icon="ui-icon-disk"
-							title="Novo" />
-					</h:panelGrid>
-
-				</p:panel>
-
-				<p:tabView id="tabView" rendered="true">
-
-					<p:tab id="tab_processo" title="Requerimento">
-						<!-- INTERESSADOS -->
-						<ui:insert name="processo">
-							<ui:include src="/pages/processo/formularioProcesso.xhtml" />
-						</ui:insert>
-
-					</p:tab>
-
-					<p:tab id="tab_interessados" title="Interessados">
-						<!-- INTERESSADOS -->
-						<ui:insert name="interessados">
-							<ui:include src="/pages/processo/formularioInteressados.xhtml" />
-						</ui:insert>
-
-					</p:tab>
-
-					<p:tab id="tab_analise_processo" title="Análise">
-						<!-- INTERESSADOS -->
-						<ui:insert name="analise">
-							<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
-						</ui:insert>
-
-					</p:tab>
-
-					<p:tab id="tab_recomendacoes" title="Recomendações">
-						<ui:insert name="recomendacoes">
-							<ui:include
-								src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
-						</ui:insert>
-					</p:tab>
-
-					<p:tab id="tab_julgamento_processo" title="Decisões/Julgamento">
-						<!-- INTERESSADOS -->
-						<ui:insert name="Decisões/Julgamento">
-							<ui:include src="/pages/julgamento/formularioJulgamento.xhtml" />
-						</ui:insert>
-
-					</p:tab>
-
-					<p:tab id="tab_finalizacoes" title="Finalização">
-						<ui:insert name="finalizacao">
-
-						</ui:insert>
-					</p:tab>
-
-					<p:tab id="tab_arquivo_fisico" title="Arquivo Físico">
-						<ui:insert name="Arquivo Físico">
-
-						</ui:insert>
-					</p:tab>
+							<p:commandButton value="Cancelar" id="FecharSalvarDados"
+								style="horizontal-align:center" type="button"
+								icon="ui-icon-closethick"
+								onclick="PF('dlg_comfirmacao').hide();" />
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
 
 
-					<!-- 
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px;text-align:center; width : 100%;">
+					<p:commandButton id="btnSalvarProcesso" value="Salvar Dados"
+						onclick="PF('dlg_comfirmacao').show();" icon="ui-icon-disk"
+						title="Salvar Processo" />
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+			<p:tabView id="tabView" style="width: 100%" effect="scale" >
+
+				<p:tab id="tab_processo" title="Requerimento">
+					<ui:insert name="processo">
+						<ui:include src="/pages/processo/formularioProcesso.xhtml" />
+					</ui:insert>
+				</p:tab>
+
+				<p:tab id="tab_interessados" title="Interessados">
+					<!-- INTERESSADOS -->
+					<ui:insert name="interessados">
+						<ui:include src="/pages/processo/formularioInteressados.xhtml" />
+					</ui:insert>
+				</p:tab>
 
 				<p:tab id="tab_analise_processo" title="Análise">
 					<ui:insert name="analise">
-						<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
+						<ui:include src="/pages/analise_processo/manterAnalise.xhtml" />
 					</ui:insert>
-
 				</p:tab>
 
-				<p:tab id="tab_recomendacoes" title="Recomendações">
-
+				<p:tab id="tab_julgamento_processo" title="Decisões/Julgamento">
+					<ui:insert name="Decisões/Julgamento">
+						<ui:include src="/pages/julgamento/formularioJulgamento.xhtml" />
+					</ui:insert>
 				</p:tab>
 
-				<p:tab id="tab_julgamento" title="Julgamento">
-
+				<p:tab id="tab_finalizacoes" title="Finalização">
+					<ui:insert name="finalizacao">
+						<ui:include src="/pages/finalizacao/formularioFinalizacao.xhtml" />
+					</ui:insert>
 				</p:tab>
- 				-->
 
-				</p:tabView>
+				<p:tab id="tab_arquivo_fisico" title="Arquivo Físico">
+					<ui:insert name="Arquivo Físico">
+
+					</ui:insert>
+				</p:tab>
+			</p:tabView>
+
+
+
 		</h:body>
 	</ui:define>
 </ui:composition>

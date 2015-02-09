@@ -43,19 +43,22 @@
 				</h:panelGrid>
 			</p:dialog>
 
-
-			<p:panel id="pnJugamento" header="Julgamento do Processo"
+			<p:panel id="pnDetalhament" header="Julgamento do Processo"
 				toggleSpeed="500" closeSpeed="500"
 				style="margin-bottom:20px;width : 100%" toggleable="true">
-
 				<h:panelGrid columns="1" cellpadding="10"
 					style="width : 100px; height : 80px;">
-					<h:outputLabel value="Tipo de Julgamento:" />
-					<p:selectOneMenu value="#" effect="fade">
-						<f:selectItem itemValue="1" itemLabel="Em Análise" />
-						<f:selectItem itemValue="2" itemLabel="Pronto para Distribuição" />
-						<f:selectItem itemValue="3" itemLabel="Distribuído" />
-						<f:selectItem itemValue="4" itemLabel="Aguardando" />
+					<h:outputLabel value="Tipo do Julgamento" />
+					<p:selectOneMenu required="false"
+						requiredMessage="Tipo Julgamento!"
+						value="#{manterJulgamentoMB.codTipoAnaliseJug}"
+						style=" width : 357px;" effect="fade">
+						<f:selectItem itemLabel="Selecione o Tipo doJulgamento"
+							noSelectionOption="true" />
+						<f:selectItems
+							value="#{manterJulgamentoMB.listarTipoAnaliseJulgamento}"
+							var="item" itemLabel="#{item.descricao}"
+							itemValue="#{item.codTipo}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 
@@ -228,9 +231,6 @@
 						<h:outputText id="tpTBreparacao" value="" />
 					</p:column>
 
-					<p:column headerText="Ações">
-						<h:outputText id="tpAcoes" value="" />
-					</p:column>
 
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
@@ -251,11 +251,15 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:30px;margin-bottom:20px; width : 200px;">
 					<h:outputLabel value="Observações:" />
-					<p:inputTextarea maxlength="400" rows="4" cols="100" value="" />
+					<p:inputTextarea maxlength="400" rows="4" cols="100" />
 				</h:panelGrid>
+			</p:panel>
 
+			<p:panel id="pnlPedidoInteressado" header="Presentes"
+				style="margin-bottom:10px;width : 100%" toggleable="true">
 
-				<h:panelGrid columns="3" cellpadding="10" style="margin-bottom:20px;width : 100%">
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:20px;width : 100%">
 					<h:outputLabel value="Conselheiro:"
 						style="text-align:left;color:Red;font-weight:bold;" />
 					<p:autoComplete id="pessoaConse" title="Nome Pessoa"
@@ -265,7 +269,7 @@
 						scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
 						converter="pessoaConverter" itemValue="#{pessoaAnist}"
 						effect="explode" />
-					<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
+					<p:commandButton id="btnConsultar" value="Adicionar" ajax="true"
 						update=":tabView:formJulgamentoe:"
 						actionListener="#{manterAnaliseMB.consultarPessoas}"
 						icon="ui-icon-newwin" title="Consultaraf" />
@@ -280,17 +284,6 @@
 						<h:outputText id="tpTBreparacao" value="" />
 					</p:column>
 
-					<p:column headerText="Ações">
-						<h:outputText id="tpAcoes" value="" />
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-							title="Editar" ajax="true" update=":tabView:formJulgamentoe:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Remover" action="#"
 							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
@@ -299,8 +292,6 @@
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
-
-
 			</p:panel>
 
 

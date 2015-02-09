@@ -244,12 +244,12 @@ public class ManterProcessoMB implements Serializable {
     }
 
     public void habilitaNovo(){
-//	if(novo){
-//	  novo = false;   
-//	}else{
-//	  novo = true;  
-//	}
-	novo = false;
+	System.out.println("Habilita NOVO: "+novo);
+	if(novo){
+	  novo = false;   
+	}else{
+	  novo = true;  
+	}
     }
     
     private boolean validarProcesso() {

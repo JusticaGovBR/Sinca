@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import br.gov.mj.sinca.dao.PessoaDAO;
@@ -21,6 +22,9 @@ import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.SubStatusProcesso;
 import br.gov.mj.sinca.entidades.TipoAnaliseJulgamento;
 import br.gov.mj.sinca.entidades.TipoPerseguicao;
+import br.gov.mj.sinca.entidades.Usuario;
+import br.gov.mj.sinca.mb.LoginMB;
+import br.gov.mj.sinca.util.DateUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 
 
@@ -53,7 +57,6 @@ public class ManterAnaliseMB implements Serializable {
     private List<Pessoa> listarPessoa = new ArrayList<Pessoa>();
 
     private Integer idSubStatusProcesso;
-    private Integer codTipoAnaliseJug;
     private AnaliseProcesso analiseProcesso;
     private AnalistaProcesso analistaProcesso;
     private Pessoa pessoaAnalista;
@@ -61,7 +64,15 @@ public class ManterAnaliseMB implements Serializable {
     private PerseguicaoAnalise perseguicaoAnalise;
 
     private boolean habilitaTabePessoa;
+    
+    private Usuario usuario;
 
+    private String dataRecebimento;
+    
+    @ManagedProperty(value="#{loginMB}") 
+    private LoginMB loginMB;
+
+    
     @PostConstruct
     public void Init() {
 	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
@@ -76,6 +87,8 @@ public class ManterAnaliseMB implements Serializable {
 	perseguicaoAnalise = new PerseguicaoAnalise();
 	perseguicaoAnalise.setTipoPerseguicao(new TipoPerseguicao());
 	tipoPerseguicao = new TipoPerseguicao();
+	usuario = loginMB.getUsuario();
+	dataRecebimento = DateUtil.dataHoraAtual();
 	if (true) {
 	    Processo processo = new ProcessoDAO().lerPorId(25271l);
 	    analiseProcesso.setProcesso(processo);
@@ -240,14 +253,6 @@ public class ManterAnaliseMB implements Serializable {
 	this.analiseProcesso = analiseProcesso;
     }
 
-    public Integer getCodTipoAnaliseJug() {
-	return codTipoAnaliseJug;
-    }
-
-    public void setCodTipoAnaliseJug(Integer codTipoAnaliseJug) {
-	this.codTipoAnaliseJug = codTipoAnaliseJug;
-    }
-
     public List<TipoAnaliseJulgamento> getListarTipoAnaliseJulgamento() {
 	return listarTipoAnaliseJulgamento;
     }
@@ -364,6 +369,30 @@ public class ManterAnaliseMB implements Serializable {
 
     public void setPerseguicaoAnalise(PerseguicaoAnalise perseguicaoAnalise) {
         this.perseguicaoAnalise = perseguicaoAnalise;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public LoginMB getLoginMB() {
+        return loginMB;
+    }
+
+    public void setLoginMB(LoginMB loginMB) {
+        this.loginMB = loginMB;
+    }
+
+    public String getDataRecebimento() {
+        return dataRecebimento;
+    }
+
+    public void setDataRecebimento(String dataRecebimento) {
+        this.dataRecebimento = dataRecebimento;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }

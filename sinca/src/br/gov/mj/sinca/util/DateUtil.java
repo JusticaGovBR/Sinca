@@ -14,5 +14,14 @@ public class DateUtil {
 	    return null;
 	}	
     }
+
+    public static String dataHoraAtual(){
+	try {
+	    return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+	} catch (Exception e) {
+	    return null;
+	}	
+    }
+
     
 }
