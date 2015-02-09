@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:body>
+
+		<h:outputScript name="locale-primefaces.js" library="js" />
+
+		<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+		<h:form id="formFinalizacao">
+
+			<div id="divMess" align="center" style="width: 100%; height: 10%">
+
+				<p:messages id="messages_processo" showSummary="true"
+					showDetail="true" autoUpdate="true" closable="true" />
+
+			</div>
+
+			<p:panel id="pnDadocComunicacao" header="Dados da Comunicação"
+				toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:10px;width : 100%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da Ciência:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Numero do AR / Edital DOU:" />
+						<p:inputText size="50" maxlength="50" value="" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:10px; width : 100%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Recurso:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da Autuação do Recurso:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:10px; width : 86%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da Certidão de Fim de Prazo:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da Nota Técnica de Intempestividade:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:10px;width : 100%">
+
+					<h:outputLabel value="Notificação"
+						style="text-align:left;color:Red;font-weight:bold;" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="4" cellpadding="10"
+					style="margin-bottom:10px;width : 100%">
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px;width : 100%">
+						<h:outputLabel value="Tipo Envio:" />
+						<p:inputText size="15" maxlength="15" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px;">
+						<h:outputLabel value="Para quem foi enviado a Notificação:" />
+						<p:autoComplete id="pessoaVistas" title="Nome Pessoa"
+							style="width : 100%" value="#{manterAnaliseMB.pessoaAnalista}"
+							var="pessoaAnist" minQueryLength="4" size="100"
+							completeMethod="#{manterAnaliseMB.listarPessoaPorNomeLike}"
+							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
+							converter="pessoaConverter" itemValue="#{pessoaAnist}"
+							effect="explode" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio Notificação:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10" style=" height : 67px;">
+						<p:commandButton id="btnIncluirPessEnvio" value="Incluir"
+							ajax="true" update=":tabView:formFinalizacao:"
+							icon="ui-icon-newwin" title="Incluir!">
+						</p:commandButton>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="1" cellpadding="10">
+					<p:dataTable var="reparacaoLista" id="dataTbListaEnvio" value="#"
+						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
+						emptyMessage="Não incluido dados de Reparação...">
+
+						<p:column headerText="Tipo Envio">
+							<h:outputText id="tpEnvio" value="" />
+						</p:column>
+
+						<p:column headerText="Enviado para">
+							<h:outputText id="tpEnvioPara" value="" />
+						</p:column>
+
+						<p:column headerText="Data Envio">
+							<h:outputText id="dataEnvio" value="" />
+						</p:column>
+
+						<p:column style="width:32px;text-align: center">
+							<p:commandButton value="Remover" action="#"
+								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+								ajax="true" update=":tabView:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+
+
+
+			</p:panel>
+
+
+		</h:form>
+	</h:body>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
