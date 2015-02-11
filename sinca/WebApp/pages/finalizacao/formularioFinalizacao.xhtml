@@ -88,48 +88,14 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="1" cellpadding="10"
-					style="margin-bottom:10px;width : 100%">
-
-					<h:outputLabel value="Notificação"
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:5px;width : 20%">
+					<h:outputLabel value="Notificações:"
 						style="text-align:left;color:Red;font-weight:bold;" />
+					<p:commandButton onclick="PF('dlg_notificacao').show();"
+						icon="ui-icon-plusthick" />
 				</h:panelGrid>
 
-				<h:panelGrid columns="4" cellpadding="10"
-					style="margin-bottom:10px;width : 100%">
-
-					<h:panelGrid columns="1" cellpadding="10"
-						style="margin-bottom:10px;width : 100%">
-						<h:outputLabel value="Tipo Envio:" />
-						<p:inputText size="15" maxlength="15" value="" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10"
-						style="margin-bottom:10px;">
-						<h:outputLabel value="Para quem foi enviado a Notificação:" />
-						<p:autoComplete id="pessoaVistas" title="Nome Pessoa"
-							style="width : 100%" value="#{manterAnaliseMB.pessoaAnalista}"
-							var="pessoaAnist" minQueryLength="4" size="100"
-							completeMethod="#{manterAnaliseMB.listarPessoaPorNomeLike}"
-							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
-							converter="pessoaConverter" itemValue="#{pessoaAnist}"
-							effect="explode" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10">
-						<h:outputLabel value="Data Envio Notificação:" />
-						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
-							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1" cellpadding="10" style=" height : 67px;">
-						<p:commandButton id="btnIncluirPessEnvio" value="Incluir"
-							ajax="true" update=":tabView:formFinalizacao:"
-							icon="ui-icon-newwin" title="Incluir!">
-						</p:commandButton>
-					</h:panelGrid>
-				</h:panelGrid>
 				<h:panelGrid columns="1" cellpadding="10">
 					<p:dataTable var="reparacaoLista" id="dataTbListaEnvio" value="#"
 						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
@@ -147,7 +113,142 @@
 							<h:outputText id="dataEnvio" value="" />
 						</p:column>
 
-						<p:column style="width:32px;text-align: center">
+						<p:column headerText="Ações" style="width:32px;text-align: center" value="Ações">
+							<p:commandButton value="Remover" action="#"
+								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+								ajax="true" update=":tabView:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:panel>
+
+			<p:panel id="pnPortariaProvidencias"
+				header="Portarias e Providencias" toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="3" cellpadding="10"
+					style="margin-bottom:10px; width : 52%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Elaboração Portaria:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio Minuta Portaria:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Recebimento Portaria:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="4" cellpadding="10"
+					style="margin-bottom:10px; width : 86%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio Publicação:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Publicação no DOU:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px;width : 100%">
+						<h:outputLabel value="Nº Portaria DOU:" />
+						<p:inputText size="30" maxlength="30" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data de Retorno da Portaria Publicada" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px; width : 86%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio para o Arquivo:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="30"
+						style="margin-bottom:30px; width : 200px;">
+						<h:outputLabel value="Complemento:" />
+						<p:inputTextarea maxlength="400" rows="4" cols="100" value="" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+
+
+			<p:panel id="pnComunicacoesExternas" header="Comunicações Externas:"
+				toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px; width : 52%">
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px;width : 100%">
+						<h:outputLabel value="Nº do Aviso:" />
+						<p:inputText size="30" maxlength="30" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio Aviso:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="3" style=" margin-bottom:10px; width : 50%;">
+					<h:panelGrid columns="1" cellpadding="10">
+						<p:outputLabel value="Orgão:" />
+						<p:selectOneMenu value="#" effect="fade" style=" width: 300px;">
+							<f:selectItem itemValue="1" itemLabel="Selecione" />
+							<f:selectItem itemValue="2" itemLabel="Correios" />
+							<f:selectItem itemValue="3" itemLabel="Arquivo Nascional" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Incluir:" />
+						<p:commandButton onclick="PF('dlg_notificacao').show();"
+							icon="ui-icon-plusthick" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10">
+					<p:dataTable var="reparacaoLista" id="dataTbOrgaoEnvio" value="#"
+						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
+						emptyMessage="Não incluido dados de Reparação...">
+
+						<p:column headerText="Orgão">
+							<h:outputText id="tpEnvio" value="" />
+						</p:column>
+
+						<p:column headerText="Data Envio">
+							<h:outputText id="dataEnvio" value="" />
+						</p:column>
+
+						<p:column headerText="Ações" style="width:32px;text-align: center" value="Ações">
 							<p:commandButton value="Remover" action="#"
 								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
 								ajax="true" update=":tabView:">
@@ -159,10 +260,57 @@
 				</h:panelGrid>
 
 
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Observações:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
 
 			</p:panel>
 
 
+			<!-- DIALOG's -->
+
+			<p:dialog header="Notificação" resizable="false" showEffect="clip"
+				hideEffect="clip" style="margin-bottom:20px;"
+				widgetVar="dlg_notificacao" modal="true" height="100%" width="60%">
+				<p:outputPanel id="mtntNotificao">
+
+					<h:panelGrid columns="3" cellpadding="10"
+						style="margin-bottom:10px;width : 100%">
+
+						<h:panelGrid columns="1" cellpadding="10"
+							style="margin-bottom:10px;width : 100%">
+							<h:outputLabel value="Tipo Envio:" />
+							<p:inputText size="15" maxlength="15" value="" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10"
+							style="margin-bottom:10px;">
+							<h:outputLabel value="Para quem foi enviado a Notificação:" />
+							<p:inputText size="100" maxlength="100" value="" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10">
+							<h:outputLabel value="Data Envio Notificação:" />
+							<p:calendar navigator="true"
+								value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 70%;">
+						<p:commandButton value="Incluir" id="bt_incluir_notificacao"
+							style="horizontal-align:center" icon="ui-icon-disk">
+						</p:commandButton>
+						<p:commandButton value="Fechar" id="FecharNotificacao"
+							style="horizontal-align:center" type="button"
+							icon="ui-icon-closethick" onclick="PF('dlg_notificacao').hide();" />
+					</h:panelGrid>
+
+				</p:outputPanel>
+			</p:dialog>
 		</h:form>
 	</h:body>
 </ui:composition>

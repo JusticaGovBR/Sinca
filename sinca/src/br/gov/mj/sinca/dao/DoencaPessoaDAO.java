@@ -16,9 +16,11 @@ public class DoencaPessoaDAO extends SincaAbastractDAO<DoencaPessoa> {
 	}
 	
 	public static void main(String[] args) {
-	    List<DoencaPessoa> d = new DoencaPessoaDAO().lerTodos();
+	    DoencaPessoaDAO dao =  new DoencaPessoaDAO();
+	    List<DoencaPessoa> d = dao.lerTodos();
+	    dao.logger.info("Lendo Doença");
 	    for (DoencaPessoa doencaPessoa : d) {
-		 System.out.println(doencaPessoa.getDoenca());
+		dao.logger.info(doencaPessoa.getDoenca());
 	    }
 	}	
 }

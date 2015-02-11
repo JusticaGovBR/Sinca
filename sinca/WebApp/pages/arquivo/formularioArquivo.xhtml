@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:body>
+
+		<h:outputScript name="locale-primefaces.js" library="js" />
+
+		<style type="text/css">
+.aplicar {
+	background-image: url("../sinca/resources/imagens/apply.png") !important;
+}
+
+.editar {
+	background-image: url("../sinca/resources/imagens/icoEnquete.png")
+		!important;
+}
+</style>
+		<h:form id="formArquivo">
+
+			<div id="divMess" align="center" style="width: 100%; height: 10%">
+
+				<p:messages id="messages_processo" showSummary="true"
+					showDetail="true" autoUpdate="true" closable="true" />
+
+			</div>
+
+			<p:panel id="pnDadocLocalizacao" header="Localização"
+				toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="5" cellpadding="10"
+					style="margin-bottom:10px;width : 100%">
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Localização Física:" />
+						<p:inputText size="50" maxlength="50" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Sala:" />
+						<p:inputText size="10" maxlength="10" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Armário:" />
+						<p:inputText size="10" maxlength="10" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Prateleira:" />
+						<p:inputText size="10" maxlength="10" value="" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:10px; width : 50%;">
+						<h:outputLabel value="Pilha / Caixa:" />
+						<p:inputText size="10" maxlength="10" value="" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Observações:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+
+			</p:panel>
+
+			<p:panel id="pnConfferencia" header="Conferência Físico / Digital"
+				toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
+					cellpadding="5">
+					<p:outputLabel for="prossuiErro" value="Possui Erro(s)?"
+						style=" width : 300px;" />
+					<h:selectOneRadio id="prossuiErro"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Característica(s) do Erro(s):" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
+					cellpadding="5">
+					<p:outputLabel for="existependencia"
+						value="Existe Pendência no Processo:" style=" width : 300px;" />
+					<h:selectOneRadio id="existependencia"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10">
+					<p:outputLabel value="Descrição Arquivistica do Processo:" />
+					<p:selectOneMenu value="#" effect="fade" style=" width: 400px;">
+						<f:selectItem itemValue="1" itemLabel="Selecione" />
+						<f:selectItem itemValue="2" itemLabel="CD/DVD" />
+						<f:selectItem itemValue="3" itemLabel="Malote" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Material Especial:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+				
+			</p:panel>
+
+		</h:form>
+	</h:body>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

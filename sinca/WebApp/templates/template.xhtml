@@ -30,19 +30,23 @@
 		<div class="outer-container">
 			<div class="inner-container">
 				<div>
-					<h:graphicImage library="themes/imagem" name="cabecalho_1.png"
-						style="height : 100px; width : 977px;" />
-				</div>
-				<div class="main">
-					<div id="menu" style="height: 100%; width: 99%" align="justify">
-
+				    <!-- 
+					<p:panel header="SINCA-Sistema de Informações da Comissão de Anistia" id="pnlCabecaclo" toggleable="true"
+						style="height :100%; width : 980px;">
+						 -->
+						 <h:graphicImage library="themes/imagem" name="cabecalho_1.png" 	style="height : 100px; width : 978px;" />
 						<ui:insert name="menu">
 							<ui:include src="/templates/menu.xhtml" />
 						</ui:insert>
-
+					<!-- 
+					</p:panel>
+					 -->
+				</div>
+				<div class="main">
+					<div id="menu" style="height: 100%; width: 100%" align="justify">
 					</div>
 					<div class="content" style="width: 100%">
-							<ui:insert name="body" />
+						<ui:insert name="body" />
 					</div>
 					<div class="clearer"></div>
 				</div>

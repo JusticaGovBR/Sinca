@@ -52,9 +52,6 @@ public class Pessoa implements Serializable {
 
 	private String nacionalidade;
 
-	@Column(name="NOME_FANTASIA")
-	private String nomeFantasia;
-
 	@Column(name="NOME_MAE")
 	private String nomeMae;
 
@@ -64,11 +61,8 @@ public class Pessoa implements Serializable {
 	@Column(name="NOME_PESSOA")
 	private String nomePessoa;
 
-	@Column(name="NUM_CPF_CNPJ")
-	private String numCpfCnpj;
-
-	@Column(name="NUM_INSC_ESTADUAL")
-	private String numInscEstadual;
+	@Column(name="NUM_CPF")
+	private String numCpf;
 
 	private byte obito;
 
@@ -92,8 +86,6 @@ public class Pessoa implements Serializable {
 	@Column(name="ID_ESTADO_CIVIL")
 	private Integer idEstadoCivil;
 
-	@Column(name="COD_TIPO")
-	private Integer codTipo;
 	
 	//bi-directional many-to-one association to PessoaEndereco
 	@OneToMany(mappedBy="pessoa")
@@ -111,303 +103,196 @@ public class Pessoa implements Serializable {
 	}
 
 	public Long getIdPessoa() {
-		return this.idPessoa;
-	}
-
-	public void setIdPessoa(Long idPessoa) {
-		this.idPessoa = idPessoa;
+	    return idPessoa;
 	}
 
 	public Date getDataComunicadoObito() {
-		return this.dataComunicadoObito;
-	}
-
-	public void setDataComunicadoObito(Date dataComunicadoObito) {
-		this.dataComunicadoObito = dataComunicadoObito;
+	    return dataComunicadoObito;
 	}
 
 	public Timestamp getDataHoraAtualizacao() {
-		return this.dataHoraAtualizacao;
-	}
-
-	public void setDataHoraAtualizacao(Timestamp dataHoraAtualizacao) {
-		this.dataHoraAtualizacao = dataHoraAtualizacao;
+	    return dataHoraAtualizacao;
 	}
 
 	public Date getDataHoraCadastro() {
-		return this.dataHoraCadastro;
-	}
-
-	public void setDataHoraCadastro(Date dataHoraCadastro) {
-		this.dataHoraCadastro = dataHoraCadastro;
+	    return dataHoraCadastro;
 	}
 
 	public Date getDataNascimento() {
-		return this.dataNascimento;
-	}
-
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
+	    return dataNascimento;
 	}
 
 	public Date getDataObito() {
-		return this.dataObito;
-	}
-
-	public void setDataObito(Date dataObito) {
-		this.dataObito = dataObito;
+	    return dataObito;
 	}
 
 	public String getEmailPessoa() {
-		return this.emailPessoa;
-	}
-
-	public void setEmailPessoa(String emailPessoa) {
-		this.emailPessoa = emailPessoa;
+	    return emailPessoa;
 	}
 
 	public String getGenero() {
-		return this.genero;
-	}
-
-	public void setGenero(String genero) {
-		this.genero = genero;
+	    return genero;
 	}
 
 	public Integer getIdUsuarioCadastro() {
-		return this.idUsuarioCadastro;
-	}
-
-	public void setIdUsuarioCadastro(Integer idUsuarioCadastro) {
-		this.idUsuarioCadastro = idUsuarioCadastro;
+	    return idUsuarioCadastro;
 	}
 
 	public String getNacionalidade() {
-		return this.nacionalidade;
-	}
-
-	public void setNacionalidade(String nacionalidade) {
-		this.nacionalidade = nacionalidade;
-	}
-
-	public String getNomeFantasia() {
-		return this.nomeFantasia;
-	}
-
-	public void setNomeFantasia(String nomeFantasia) {
-		this.nomeFantasia = nomeFantasia;
+	    return nacionalidade;
 	}
 
 	public String getNomeMae() {
-		return this.nomeMae;
-	}
-
-	public void setNomeMae(String nomeMae) {
-		this.nomeMae = nomeMae;
+	    return nomeMae;
 	}
 
 	public String getNomePai() {
-		return this.nomePai;
-	}
-
-	public void setNomePai(String nomePai) {
-		this.nomePai = nomePai;
+	    return nomePai;
 	}
 
 	public String getNomePessoa() {
-		return this.nomePessoa;
+	    return nomePessoa;
 	}
 
-	public void setNomePessoa(String nomePessoa) {
-		this.nomePessoa = nomePessoa;
-	}
-
-	public String getNumCpfCnpj() {
-		return this.numCpfCnpj;
-	}
-
-	public void setNumCpfCnpj(String numCpfCnpj) {
-		this.numCpfCnpj = numCpfCnpj;
-	}
-
-	public String getNumInscEstadual() {
-		return this.numInscEstadual;
-	}
-
-	public void setNumInscEstadual(String numInscEstadual) {
-		this.numInscEstadual = numInscEstadual;
+	public String getNumCpf() {
+	    return numCpf;
 	}
 
 	public byte getObito() {
-		return this.obito;
-	}
-
-	public void setObito(byte obito) {
-		this.obito = obito;
+	    return obito;
 	}
 
 	public String getObservacao() {
-		return this.observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
+	    return observacao;
 	}
 
 	public String getObservacaoObito() {
-		return this.observacaoObito;
-	}
-
-	public void setObservacaoObito(String observacaoObito) {
-		this.observacaoObito = observacaoObito;
+	    return observacaoObito;
 	}
 
 	public List<AnalistaProcesso> getAnalistaProcessos() {
-		return this.analistaProcessos;
-	}
-
-	public void setAnalistaProcessos(List<AnalistaProcesso> analistaProcessos) {
-		this.analistaProcessos = analistaProcessos;
-	}
-
-	public AnalistaProcesso addAnalistaProcesso(AnalistaProcesso analistaProcesso) {
-		getAnalistaProcessos().add(analistaProcesso);
-		analistaProcesso.setPessoa(this);
-
-		return analistaProcesso;
-	}
-
-	public AnalistaProcesso removeAnalistaProcesso(AnalistaProcesso analistaProcesso) {
-		getAnalistaProcessos().remove(analistaProcesso);
-		analistaProcesso.setPessoa(null);
-
-		return analistaProcesso;
+	    return analistaProcessos;
 	}
 
 	public List<DocumentoPessoa> getDocumentoPessoas() {
-		return this.documentoPessoas;
-	}
-
-	public void setDocumentoPessoas(List<DocumentoPessoa> documentoPessoas) {
-		this.documentoPessoas = documentoPessoas;
-	}
-
-	public DocumentoPessoa addDocumentoPessoa(DocumentoPessoa documentoPessoa) {
-		getDocumentoPessoas().add(documentoPessoa);
-		documentoPessoa.setPessoa(this);
-
-		return documentoPessoa;
-	}
-
-	public DocumentoPessoa removeDocumentoPessoa(DocumentoPessoa documentoPessoa) {
-		getDocumentoPessoas().remove(documentoPessoa);
-		documentoPessoa.setPessoa(null);
-
-		return documentoPessoa;
+	    return documentoPessoas;
 	}
 
 	public List<DoencaPessoa> getDoencaPessoas() {
-		return this.doencaPessoas;
+	    return doencaPessoas;
+	}
+
+	public Integer getIdEstadoCivil() {
+	    return idEstadoCivil;
+	}
+
+	public List<PessoaEndereco> getPessoaEnderecos() {
+	    return pessoaEnderecos;
+	}
+
+	public List<PessoaProcesso> getPessoaProcessos() {
+	    return pessoaProcessos;
+	}
+
+	public List<TelefonePessoa> getTelefonePessoas() {
+	    return telefonePessoas;
+	}
+
+	public void setIdPessoa(Long idPessoa) {
+	    this.idPessoa = idPessoa;
+	}
+
+	public void setDataComunicadoObito(Date dataComunicadoObito) {
+	    this.dataComunicadoObito = dataComunicadoObito;
+	}
+
+	public void setDataHoraAtualizacao(Timestamp dataHoraAtualizacao) {
+	    this.dataHoraAtualizacao = dataHoraAtualizacao;
+	}
+
+	public void setDataHoraCadastro(Date dataHoraCadastro) {
+	    this.dataHoraCadastro = dataHoraCadastro;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+	    this.dataNascimento = dataNascimento;
+	}
+
+	public void setDataObito(Date dataObito) {
+	    this.dataObito = dataObito;
+	}
+
+	public void setEmailPessoa(String emailPessoa) {
+	    this.emailPessoa = emailPessoa;
+	}
+
+	public void setGenero(String genero) {
+	    this.genero = genero;
+	}
+
+	public void setIdUsuarioCadastro(Integer idUsuarioCadastro) {
+	    this.idUsuarioCadastro = idUsuarioCadastro;
+	}
+
+	public void setNacionalidade(String nacionalidade) {
+	    this.nacionalidade = nacionalidade;
+	}
+
+	public void setNomeMae(String nomeMae) {
+	    this.nomeMae = nomeMae;
+	}
+
+	public void setNomePai(String nomePai) {
+	    this.nomePai = nomePai;
+	}
+
+	public void setNomePessoa(String nomePessoa) {
+	    this.nomePessoa = nomePessoa;
+	}
+
+	public void setNumCpf(String numCpf) {
+	    this.numCpf = numCpf;
+	}
+
+	public void setObito(byte obito) {
+	    this.obito = obito;
+	}
+
+	public void setObservacao(String observacao) {
+	    this.observacao = observacao;
+	}
+
+	public void setObservacaoObito(String observacaoObito) {
+	    this.observacaoObito = observacaoObito;
+	}
+
+	public void setAnalistaProcessos(List<AnalistaProcesso> analistaProcessos) {
+	    this.analistaProcessos = analistaProcessos;
+	}
+
+	public void setDocumentoPessoas(List<DocumentoPessoa> documentoPessoas) {
+	    this.documentoPessoas = documentoPessoas;
 	}
 
 	public void setDoencaPessoas(List<DoencaPessoa> doencaPessoas) {
-		this.doencaPessoas = doencaPessoas;
-	}
-
-	public DoencaPessoa addDoencaPessoa(DoencaPessoa doencaPessoa) {
-		getDoencaPessoas().add(doencaPessoa);
-		doencaPessoa.setPessoa(this);
-
-		return doencaPessoa;
-	}
-
-	public DoencaPessoa removeDoencaPessoa(DoencaPessoa doencaPessoa) {
-		getDoencaPessoas().remove(doencaPessoa);
-		doencaPessoa.setPessoa(null);
-
-		return doencaPessoa;
-	}
-
-		public Integer getIdEstadoCivil() {
-	    return idEstadoCivil;
+	    this.doencaPessoas = doencaPessoas;
 	}
 
 	public void setIdEstadoCivil(Integer idEstadoCivil) {
 	    this.idEstadoCivil = idEstadoCivil;
 	}
 
-	public Integer getCodTipo() {
-	    return codTipo;
-	}
-
-	public void setCodTipo(Integer codTipo) {
-	    this.codTipo = codTipo;
-	}
-
-	public List<PessoaEndereco> getPessoaEnderecos() {
-		return this.pessoaEnderecos;
-	}
-
 	public void setPessoaEnderecos(List<PessoaEndereco> pessoaEnderecos) {
-		this.pessoaEnderecos = pessoaEnderecos;
-	}
-
-	public PessoaEndereco addPessoaEndereco(PessoaEndereco pessoaEndereco) {
-		getPessoaEnderecos().add(pessoaEndereco);
-		pessoaEndereco.setPessoa(this);
-
-		return pessoaEndereco;
-	}
-
-	public PessoaEndereco removePessoaEndereco(PessoaEndereco pessoaEndereco) {
-		getPessoaEnderecos().remove(pessoaEndereco);
-		pessoaEndereco.setPessoa(null);
-
-		return pessoaEndereco;
-	}
-
-	public List<PessoaProcesso> getPessoaProcessos() {
-		return this.pessoaProcessos;
+	    this.pessoaEnderecos = pessoaEnderecos;
 	}
 
 	public void setPessoaProcessos(List<PessoaProcesso> pessoaProcessos) {
-		this.pessoaProcessos = pessoaProcessos;
-	}
-
-	public PessoaProcesso addPessoaProcesso(PessoaProcesso pessoaProcesso) {
-		getPessoaProcessos().add(pessoaProcesso);
-		pessoaProcesso.setPessoa(this);
-
-		return pessoaProcesso;
-	}
-
-	public PessoaProcesso removePessoaProcesso(PessoaProcesso pessoaProcesso) {
-		getPessoaProcessos().remove(pessoaProcesso);
-		pessoaProcesso.setPessoa(null);
-
-		return pessoaProcesso;
-	}
-
-	public List<TelefonePessoa> getTelefonePessoas() {
-		return this.telefonePessoas;
+	    this.pessoaProcessos = pessoaProcessos;
 	}
 
 	public void setTelefonePessoas(List<TelefonePessoa> telefonePessoas) {
-		this.telefonePessoas = telefonePessoas;
+	    this.telefonePessoas = telefonePessoas;
 	}
 
-	public TelefonePessoa addTelefonePessoa(TelefonePessoa telefonePessoa) {
-		getTelefonePessoas().add(telefonePessoa);
-		telefonePessoa.setPessoa(this);
-
-		return telefonePessoa;
-	}
-
-	public TelefonePessoa removeTelefonePessoa(TelefonePessoa telefonePessoa) {
-		getTelefonePessoas().remove(telefonePessoa);
-		telefonePessoa.setPessoa(null);
-
-		return telefonePessoa;
-	}
-
+	
 }

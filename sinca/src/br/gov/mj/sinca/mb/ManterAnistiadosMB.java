@@ -93,7 +93,7 @@ public class ManterAnistiadosMB implements Serializable {
     public List<Pessoa> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -233,11 +233,10 @@ public class ManterAnistiadosMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 3 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(2,nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    } else {
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(2,
-			numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    }
 	    setListarPessoaAnistiado(pessoas);
@@ -284,10 +283,10 @@ public class ManterAnistiadosMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 3 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    } else {
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(1,
+		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(
 			numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    }

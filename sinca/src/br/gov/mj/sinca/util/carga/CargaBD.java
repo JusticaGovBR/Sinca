@@ -76,9 +76,9 @@ public class CargaBD {
 		    pessoaReq.setDataHoraCadastro(new Date());
 		    pessoaReq.setDataNascimento(setaDataPessoa(pcpa.getData_Nascimento_requer_PCPA()));
 		    if (pcpa.getCPF_requer_PCPA() != null && pcpa.getCPF_requer_PCPA().length() >= 10) {
-			pessoaReq.setNumCpfCnpj(CpfCnpjUtil.FormatCPF(pcpa.getCPF_requer_PCPA()));
+			pessoaReq.setNumCpf(CpfCnpjUtil.FormatCPF(pcpa.getCPF_requer_PCPA()));
 		    } else {
-			pessoaReq.setNumCpfCnpj(pcpa.getCPF_requer_PCPA());
+			pessoaReq.setNumCpf(pcpa.getCPF_requer_PCPA());
 		    }
 
 		    pessoaReq.setNomePessoa(pcpa.getNome_requer_PCPA());
@@ -122,9 +122,9 @@ public class CargaBD {
 			pessoaAnist.setDataNascimento(setaDataPessoa(pcpa.getData_nascimento_anistiando()));
 
 			if (pcpa.getCPF_anistiando() != null && pcpa.getCPF_anistiando().length() >= 10) {
-			    pessoaAnist.setNumCpfCnpj(CpfCnpjUtil.FormatCPF(pcpa.getCPF_anistiando()));
+			    pessoaAnist.setNumCpf(CpfCnpjUtil.FormatCPF(pcpa.getCPF_anistiando()));
 			} else {
-			    pessoaAnist.setNumCpfCnpj((pcpa.getCPF_anistiando()));
+			    pessoaAnist.setNumCpf((pcpa.getCPF_anistiando()));
 			}
 
 			pessoaAnist.setNomePessoa(pcpa.getNome_anistiando());
@@ -145,9 +145,9 @@ public class CargaBD {
 			pessoaReqS.setDataNascimento(setaDataPessoa(pcpa.getDataNascimento_PCPA_S()));
 
 			if (pcpa.getNumeroCPF_PCPA_S() != null && pcpa.getNumeroCPF_PCPA_S().length() >= 10) {
-			    pessoaReqS.setNumCpfCnpj(CpfCnpjUtil.FormatCPF(pcpa.getNumeroCPF_PCPA_S()));
+			    pessoaReqS.setNumCpf(CpfCnpjUtil.FormatCPF(pcpa.getNumeroCPF_PCPA_S()));
 			} else {
-			    pessoaReqS.setNumCpfCnpj(pcpa.getNumeroCPF_PCPA_S());
+			    pessoaReqS.setNumCpf(pcpa.getNumeroCPF_PCPA_S());
 			}
 			pessoaReqS.setNomePessoa(pcpa.getNome_PCPA_S());
 			pessoaReqS.setNomeMae(pcpa.getNomeMae_PCPA_S());

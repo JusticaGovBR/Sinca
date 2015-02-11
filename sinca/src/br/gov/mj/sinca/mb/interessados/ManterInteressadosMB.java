@@ -1,8 +1,7 @@
-package br.gov.mj.sinca.mb.processo;
+package br.gov.mj.sinca.mb.interessados;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,33 +15,21 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.axis.AxisFault;
-import org.primefaces.event.FlowEvent;
+import org.apache.log4j.Logger;
 
 import br.gov.mj.sinca.ConstantSinca;
-import br.gov.mj.sinca.dao.CargoFuncaoDAO;
 import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.DoencaDAO;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
-import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
-import br.gov.mj.sinca.dao.GrupoSocialDAO;
-import br.gov.mj.sinca.dao.LocalizacaoDAO;
-import br.gov.mj.sinca.dao.LoteProcessoDAO;
 import br.gov.mj.sinca.dao.PessoaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
-import br.gov.mj.sinca.dao.ProcessoDAO;
-import br.gov.mj.sinca.dao.StatusProcessoDAO;
-import br.gov.mj.sinca.dao.SubGrupoProcesssualDAO;
-import br.gov.mj.sinca.dao.SubGrupoSocialDAO;
-import br.gov.mj.sinca.dao.SubStatusProcessoDAO;
 import br.gov.mj.sinca.dao.TelefonePessoaDAO;
 import br.gov.mj.sinca.dao.TipoDocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.TipoEnderecoDAO;
 import br.gov.mj.sinca.dao.TipoPessoaProcessoDAO;
 import br.gov.mj.sinca.dao.TipoTelefoneDAO;
-import br.gov.mj.sinca.entidades.CargoFuncao;
 import br.gov.mj.sinca.entidades.Cidade;
 import br.gov.mj.sinca.entidades.DocumentoPessoa;
 import br.gov.mj.sinca.entidades.Doenca;
@@ -50,18 +37,10 @@ import br.gov.mj.sinca.entidades.DoencaPessoa;
 import br.gov.mj.sinca.entidades.Endereco;
 import br.gov.mj.sinca.entidades.Estado;
 import br.gov.mj.sinca.entidades.EstadoCivil;
-import br.gov.mj.sinca.entidades.GrupoProcessual;
-import br.gov.mj.sinca.entidades.GrupoSocial;
-import br.gov.mj.sinca.entidades.Localizacao;
-import br.gov.mj.sinca.entidades.LoteProcesso;
 import br.gov.mj.sinca.entidades.Pessoa;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
-import br.gov.mj.sinca.entidades.StatusProcesso;
-import br.gov.mj.sinca.entidades.SubGrupoProcessual;
-import br.gov.mj.sinca.entidades.SubGrupoSocial;
-import br.gov.mj.sinca.entidades.SubStatusProcesso;
 import br.gov.mj.sinca.entidades.TelefonePessoa;
 import br.gov.mj.sinca.entidades.TipoDocumento;
 import br.gov.mj.sinca.entidades.TipoEndereco;
@@ -69,15 +48,13 @@ import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
 import br.gov.mj.sinca.entidades.TipoTelefone;
 import br.gov.mj.sinca.entidades.Usuario;
 import br.gov.mj.sinca.mb.LoginMB;
-import br.gov.mj.sinca.mb.analise.ManterAnaliseMB;
+import br.gov.mj.sinca.mb.processo.ManterProcessoMB;
 import br.gov.mj.sinca.util.CpfCnpjUtil;
 import br.gov.mj.sinca.util.JSFUtil;
-import br.gov.mj.sinca.ws.sei.RetornoConsultaProcedimento;
-import br.gov.mj.sinca.ws.sei.SeiServiceLocator;
 
-@ManagedBean(name = "manterProcessoMB")
+@ManagedBean(name = "manterInteressadosMB")
 @ViewScoped
-public class ManterProcessoMB implements Serializable {
+public class ManterInteressadosMB implements Serializable {
 
     /**
      * 
@@ -91,32 +68,8 @@ public class ManterProcessoMB implements Serializable {
 
     private String mensagem;
 
-    private Long idLocalizacao;
-    private Integer idStatusProcesso;
-    private Integer idSubStatusProcesso;
-    private Integer idGrupoProcessual;
-    private Integer idSubGrupoProcessual;
-    private Integer idCargoFuncao;
-    private Integer idGrupoSocial;
-    private Integer idSubGrupoSocial;
     private Integer idTipo;
-    private Integer idProtocoloExterno;
-    private Integer idAssunto;
-    private Integer idEspecie;
-    private Integer idNatureza;
-    private Integer idProcedencia;
-    private Integer idAcompanhamentoExterno;
-    private Integer idTipoProtocolo;
-    private Integer idLoteProcesso;
 
-    private List<Localizacao> listarLocalizacao = new ArrayList<Localizacao>();
-    private List<StatusProcesso> listarStatusProcesso = new ArrayList<StatusProcesso>();
-    private List<SubStatusProcesso> listarSubStatusProcesso = new ArrayList<SubStatusProcesso>();
-    private List<GrupoProcessual> listarGrupoProcessual = new ArrayList<GrupoProcessual>();
-    private List<SubGrupoProcessual> listarSubGrupoProcessual = new ArrayList<SubGrupoProcessual>();
-    private List<CargoFuncao> listarCargoFuncao = new ArrayList<CargoFuncao>();
-    private List<GrupoSocial> listarGrupoSocial = new ArrayList<GrupoSocial>();
-    private List<SubGrupoSocial> listarSubGrupoSocial = new ArrayList<SubGrupoSocial>();
 
     private List<Pessoa> listarPessoa;
     private List<Processo> listarProcessos;
@@ -154,97 +107,38 @@ public class ManterProcessoMB implements Serializable {
     private TipoDocumento tipoDocumento = new TipoDocumento();
     private TipoEndereco tipoEndereco = new TipoEndereco();
 
-    private LoteProcesso loteProcesso = new LoteProcesso();
-    private List<LoteProcesso> listaLoteProcesso = new ArrayList<LoteProcesso>();
 
     private Integer[] idTipoPessoaProcesso;
     private boolean habilitaEdicaoPessoa;
     private boolean habilitaTabePessoa;
     private boolean comunicadoObito = false;
     
+    private Logger logger = null; 
+    
     private boolean novo = true;
-    
-    
-    private String linkDocSel;
     
     private Usuario usuario; 
     
-    private boolean proximo;
-
-    public boolean isProximo() {
-	return proximo;
-    }
-
-    public void setProximo(boolean proximo) {
-	this.proximo = proximo;
-    }
-
-    public String onFlowProcess(FlowEvent event) {
-	if (proximo) {
-	    proximo = false;
-	    return "confirm";
-	} else {
-	    return event.getNewStep();
-	}
-    }
     
     @ManagedProperty(value="#{loginMB}") 
     private LoginMB loginMB;
     
-    @ManagedProperty(value="#{manterAnaliseMB}") 
-    private ManterAnaliseMB manterAnaliseMB;
+    @ManagedProperty(value="#{manterProcessoMB}") 
+    private ManterProcessoMB manterProcessoMB;
     
     @PostConstruct
     public void Init() {
+	logger = Logger.getLogger(this.getClass());
 	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').show()");
-	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
+	logger.info("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
 	instanciaAtributos();
 	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').hide()");
 	
     }
 
-    public String salvarProcesso() {
-	try {
-	    if (validarProcesso()) {
-		JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_ERROR, "Validando...");
-		JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
-		return null;
-	    }
-
-	    if (idCargoFuncao > 0) {
-		processo.setCargoFuncao(new CargoFuncao(idCargoFuncao));
-	    }
-	   
-
-	    if (processo.getIdProcesso() == null || processo.getIdProcesso() == 0) {
-		processo.setDataCadastro(new Date());
-		processo.setDataHoraInclusao(new Timestamp(new Date().getTime()));
-		processo.setNumProtocoloCa(new ProcessoDAO().bustaUltimoNumeroProcessoCA() + 1);
-		processo.setIdProcesso(null);
-	    } else {
-		processo.setDataHoraAtualizacao(new Timestamp(new Date().getTime()));
-	    }
-
-	    Processo processoSalvo = new ProcessoDAO().salvar(processo);
-
-	    List<PessoaProcesso> listaPessoaProc = getListarPessoaProcesso();
-	    for (PessoaProcesso pessoaProc : listaPessoaProc) {
-		pessoaProc.setProcesso(processoSalvo);
-		new PessoaProcessoDAO().salvar(pessoaProc);
-	    }
-	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
-	    JSFUtil.retornarMensagemModal("Processo", "Processo Salvo....");
-	    // limpDados();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
-	    return null;
-	}
-	return null;
-    }
-
+   
     public void habilitaNovo(){
-	System.out.println("Habilita NOVO: "+novo);
+	logger.info("Habilita NOVO: "+novo);
 	if(novo){
 	  novo = false;   
 	}else{
@@ -258,8 +152,6 @@ public class ManterProcessoMB implements Serializable {
 
     private void instanciaAtributos() {
 
-	linkDocSel = "http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=12&infra_hash=ca477862c7589a4dab02c7bb0d936f92";
-	// linkDocSel ="http://www.globo.com";
 
 	listarPessoa = new ArrayList<Pessoa>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
@@ -270,31 +162,15 @@ public class ManterProcessoMB implements Serializable {
 	
 	usuario = loginMB.getUsuario();
 	
-	listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
 	
-	System.out.println("manterAnaliseMB::::"+manterAnaliseMB.getListarTipoAnaliseJulgamento().size());
 	
 	PessoaProcesso pessoaProcessoP = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
 	if (pessoaProcessoP != null) {
 	    // pessoa = pessoaProcessoP.getPessoa();
 	    processo = pessoaProcessoP.getProcesso();
-	    this.idLocalizacao = processo.getIdLocalizacao();
-	    this.idStatusProcesso = (processo.getStatusProcesso() != null ? processo.getStatusProcesso()
-		    .getIdStatusProcesso() : null);
-	    this.idSubStatusProcesso = (processo.getSubStatusProcesso() != null ? processo.getSubStatusProcesso()
-		    .getIdSubStatusProcesso() : null);
-	    this.idGrupoProcessual = (processo.getGrupoProcessual() != null ? processo.getGrupoProcessual()
-		    .getIdGrupoProcessual() : null);
-	    this.idGrupoSocial = (processo.getGrupoSocial() != null ? processo.getGrupoSocial().getIdGrupoSocial()
-		    : null);
-	    this.idSubGrupoProcessual = (processo.getSubGrupoProcessual() != null ? processo.getSubGrupoProcessual()
-		    .getIdSubGrupoProcessual() : null);
-
 	    pessoaProcesso = pessoaProcessoP;
 	    numProcessoMJ = pessoaProcessoP.getProcesso().getNumProtocoloMj();
 	    listarPessoaProcesso = new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso());
-
-	    JSFUtil.getSessionMap().put("processoLista", null);
 	} else {
 	    pessoa = new Pessoa();
 	    pessoaCadastro = new Pessoa();
@@ -307,39 +183,11 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
-    public String consultarProcesso() {
-	try {
-	    // 08000.000002/2014-14
-	    // JSFUtil.retornarMensagem(null,
-	    // "Consultando WebServices do SEI, processo:" +
-	    // processo.getNumProtocoloMj());
-	    this.mensagem = "Consultando Serviço do SEI...";
-	    SeiServiceLocator locator = new SeiServiceLocator();
-	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
-		    "110000834", processo.getNumProtocoloMj(), null, null, null, null, null, null, null, null, null);
-	    if (retorno != null) {
-		System.out.println("retorno " + retorno.getLinkAcesso() + " " + retorno.getDataAutuacao());
-		processo.setDataProtocoloMJ(new SimpleDateFormat("dd/MM/yyyy").parse(retorno.getDataAutuacao()));
-		this.linkDocSel = retorno.getLinkAcesso();
-	    }
-	    
-	} catch (AxisFault eAxis) {
-	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
-		    "Error na Consultando WebServices do SEI: " + eAxis.getFaultString());
-	    eAxis.printStackTrace();
-	} catch (Exception e) {
-	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
-		    "Error na Consultando WebServices do SEI: " + e.getMessage());
-	    e.printStackTrace();
-	}
-	JSFUtil.getRequestContext().execute("PF('dlg_mensagem').hide()");
-	return null;
-    }
-
+  
     public List<Pessoa> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
-	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk( nome);
+	    logger.info("Nome Pessoa PESQUISA " + nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -370,7 +218,7 @@ public class ManterProcessoMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk( nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -395,7 +243,7 @@ public class ManterProcessoMB implements Serializable {
 	    if (idTipoPessoaProcesso == null || idTipoPessoaProcesso.length == 0) {
 		JSFUtil.retornarMensagemModal("", "Tipo da Pessoa no Processo não Selecionado!");
 	    } else {
-		System.out.println("Detalhar pessoa ::: " + pessoa.getNomePessoa());
+		logger.info("Detalhar pessoa ::: " + pessoa.getNomePessoa());
 		for (Integer idTipo : idTipoPessoaProcesso) {
 		    PessoaProcesso pessoaProcesso = new PessoaProcesso();
 		    pessoaProcesso.setProcesso(processo);
@@ -654,7 +502,7 @@ public class ManterProcessoMB implements Serializable {
     public void detalharDocumento() {
 	DocumentoPessoa documentoPessoaPar = (DocumentoPessoa) JSFUtil.getRequestMap().get("documentosAnisti");
 	if (documentoPessoaPar != null && documentoPessoaPar.getNumeroDocumento() != null) {
-	    System.out.println("Detalhar documento ::: " + documentoPessoaPar.getNumeroDocumento());
+	    logger.info("Detalhar documento ::: " + documentoPessoaPar.getNumeroDocumento());
 	    this.documentoPessoa = documentoPessoaPar;
 	    this.tipoDocumento = documentoPessoaPar.getTipoDocumento();
 	    JSFUtil.getRequestContext().execute("PF('dlg_documentos_anistiado').show()");
@@ -664,7 +512,7 @@ public class ManterProcessoMB implements Serializable {
     public void removerDocumento() {
 	DocumentoPessoa documentoPessoaPar = (DocumentoPessoa) JSFUtil.getRequestMap().get("documentosAnisti");
 	if (documentoPessoaPar != null && documentoPessoaPar.getNumeroDocumento() != null) {
-	    System.out.println("Remover documento ::: " + documentoPessoaPar.getNumeroDocumento());
+	    logger.info("Remover documento ::: " + documentoPessoaPar.getNumeroDocumento());
 	    this.documentoPessoa = documentoPessoaPar;
 	    this.tipoDocumento = documentoPessoaPar.getTipoDocumento();
 	    getListarDocumentoPessoa().remove(documentoPessoa);
@@ -715,12 +563,12 @@ public class ManterProcessoMB implements Serializable {
     public void removerEndereco() {
 	Endereco endPar = (Endereco) JSFUtil.getRequestMap().get("enderecosAnistia");
 	if (endPar != null) {
-	    System.out.println("Detalhar Lougadoro ::: " + endPar.getLogradouro());
+	    logger.info("Detalhar Lougadoro ::: " + endPar.getLogradouro());
 	    endereco = endPar;
 	    tipoEndereco = endereco.getTipoEndereco();
 	}
 	if (endereco != null && endereco.getTipoEndereco() != null) {
-	    System.out.println("Remover endereco ::: " + endereco.getLogradouro());
+	    logger.info("Remover endereco ::: " + endereco.getLogradouro());
 	    this.tipoEndereco = endereco.getTipoEndereco();
 	    getListarEnderecos().remove(endereco);
 
@@ -730,7 +578,7 @@ public class ManterProcessoMB implements Serializable {
     public void detalharEndereco() {
 	Endereco endPar = (Endereco) JSFUtil.getRequestMap().get("enderecosAnistia");
 	if (endPar != null) {
-	    System.out.println("Detalhar Lougadoro ::: " + endPar.getLogradouro());
+	    logger.info("Detalhar Lougadoro ::: " + endPar.getLogradouro());
 	    endereco = endPar;
 	    tipoEndereco = endereco.getTipoEndereco();
 	    JSFUtil.getRequestContext().execute("PF('dlg_endereco').show()");
@@ -759,7 +607,7 @@ public class ManterProcessoMB implements Serializable {
 	    tipoTelefone = telefonePessoaPar.getTipoTelefone();
 	}
 	if (telefonePessoa != null && telefonePessoa.getNumTelefone() != null) {
-	    System.out.println("Remover Telefone ::: " + telefonePessoa.getNumTelefone());
+	    logger.info("Remover Telefone ::: " + telefonePessoa.getNumTelefone());
 	    getListarTelefones().remove(telefonePessoa);
 	}
 
@@ -772,7 +620,7 @@ public class ManterProcessoMB implements Serializable {
 	    tipoTelefone = telefonePessoaPar.getTipoTelefone();
 	}
 	if (telefonePessoa != null) {
-	    System.out.println("Detalhar Telefone ::: " + telefonePessoa.getNumTelefone());
+	    logger.info("Detalhar Telefone ::: " + telefonePessoa.getNumTelefone());
 	    JSFUtil.getRequestContext().execute("PF('dlg_telefone').show()");
 	}
     }
@@ -846,55 +694,6 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
-    public void addLoteProcesso(){
-	loteProcesso = new LoteProcesso();
-	JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').show()");
-    }
-
-    public void salvarLoteProcesso(){
-	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
-	    	  loteAtualizar.setIdUsuario(usuario.getIdUsuario());
-		  new LoteProcessoDAO().salvar(loteAtualizar);  
-		  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Atualizado....");
-		  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-		  return;
-	}
-	if(loteProcesso.getDescricao()!=null && loteProcesso.getDescricao().length()>0){
-	  if(loteProcesso.getIdLote()==null){
-	     loteProcesso.setDataCriacao(new Date());
-	  }else{
-	     loteProcesso.setDataAtualizacao(new Date()); 
-	  }
-	  
-	  loteProcesso.setIdUsuario(usuario.getIdUsuario());
-	  new LoteProcessoDAO().salvar(loteProcesso);  
-	  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Salvo....");
-	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-	}
-
-    }
-    
-    public void excluirLoteProcesso(){
-	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0 && loteAtualizar.getDescricao().length()>0){
-	    loteAtualizar.setDataAtualizacao(new Date()); 
-	    loteAtualizar.setAtivo((byte) 0);
-	    loteAtualizar.setIdUsuario(usuario.getIdUsuario());
-	    new LoteProcessoDAO().salvar(loteAtualizar);  
-	    JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Exluido....");
-	    listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-	}
-    }
-    
-    public void selecionarLoteProcesso(){
-	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
-	    loteProcesso = loteAtualizar;
-	}
-	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-	  JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').hide()");
-    }
     
     public String getNumCpf() {
 	return numCpf;
@@ -1159,222 +958,7 @@ public class ManterProcessoMB implements Serializable {
 	this.telefonePessoa = telefonePessoa;
     }
 
-    public Long getIdLocalizacao() {
-	return idLocalizacao;
-    }
-
-    public void setIdLocalizacao(Long idLocalizacao) {
-	this.idLocalizacao = idLocalizacao;
-    }
-
-    public Integer getIdStatusProcesso() {
-	return idStatusProcesso;
-    }
-
-    public void setIdStatusProcesso(Integer idStatusProcesso) {
-	this.idStatusProcesso = idStatusProcesso;
-    }
-
-    public Integer getIdSubStatusProcesso() {
-	return idSubStatusProcesso;
-    }
-
-    public void setIdSubStatusProcesso(Integer idSubStatusProcesso) {
-	this.idSubStatusProcesso = idSubStatusProcesso;
-    }
-
-    public Integer getIdGrupoProcessual() {
-	return idGrupoProcessual;
-    }
-
-    public void setIdGrupoProcessual(Integer idGrupoProcessual) {
-	this.idGrupoProcessual = idGrupoProcessual;
-    }
-
-    public Integer getIdSubGrupoProcessual() {
-	return idSubGrupoProcessual;
-    }
-
-    public void setIdSubGrupoProcessual(Integer idSubGrupoProcessual) {
-	this.idSubGrupoProcessual = idSubGrupoProcessual;
-    }
-
-    public Integer getIdCargoFuncao() {
-	return idCargoFuncao;
-    }
-
-    public void setIdCargoFuncao(Integer idCargoFuncao) {
-	this.idCargoFuncao = idCargoFuncao;
-    }
-
-    public Integer getIdGrupoSocial() {
-	return idGrupoSocial;
-    }
-
-    public void setIdGrupoSocial(Integer idGrupoSocial) {
-	this.idGrupoSocial = idGrupoSocial;
-    }
-
-    public Integer getIdSubGrupoSocial() {
-	return idSubGrupoSocial;
-    }
-
-    public void setIdSubGrupoSocial(Integer idSubGrupoSocial) {
-	this.idSubGrupoSocial = idSubGrupoSocial;
-    }
-
-    public Integer getIdTipo() {
-	return idTipo;
-    }
-
-    public void setIdTipo(Integer idTipo) {
-	this.idTipo = idTipo;
-    }
-
-    public Integer getIdProtocoloExterno() {
-	return idProtocoloExterno;
-    }
-
-    public void setIdProtocoloExterno(Integer idProtocoloExterno) {
-	this.idProtocoloExterno = idProtocoloExterno;
-    }
-
-    public Integer getIdAssunto() {
-	return idAssunto;
-    }
-
-    public void setIdAssunto(Integer idAssunto) {
-	this.idAssunto = idAssunto;
-    }
-
-    public Integer getIdEspecie() {
-	return idEspecie;
-    }
-
-    public void setIdEspecie(Integer idEspecie) {
-	this.idEspecie = idEspecie;
-    }
-
-    public Integer getIdNatureza() {
-	return idNatureza;
-    }
-
-    public void setIdNatureza(Integer idNatureza) {
-	this.idNatureza = idNatureza;
-    }
-
-    public Integer getIdProcedencia() {
-	return idProcedencia;
-    }
-
-    public void setIdProcedencia(Integer idProcedencia) {
-	this.idProcedencia = idProcedencia;
-    }
-
-    public Integer getIdAcompanhamentoExterno() {
-	return idAcompanhamentoExterno;
-    }
-
-    public void setIdAcompanhamentoExterno(Integer idAcompanhamentoExterno) {
-	this.idAcompanhamentoExterno = idAcompanhamentoExterno;
-    }
-
-    public Integer getIdTipoProtocolo() {
-	return idTipoProtocolo;
-    }
-
-    public void setIdTipoProtocolo(Integer idTipoProtocolo) {
-	this.idTipoProtocolo = idTipoProtocolo;
-    }
-
-    public List<Localizacao> getListarLocalizacao() {
-	if (listarLocalizacao.isEmpty()) {
-	    listarLocalizacao = new LocalizacaoDAO().lerTodos();
-	}
-	return listarLocalizacao;
-    }
-
-    public void setListarLocalizacao(List<Localizacao> listarLocalizacao) {
-	this.listarLocalizacao = listarLocalizacao;
-    }
-
-    public List<StatusProcesso> getListarStatusProcesso() {
-	if (listarStatusProcesso.isEmpty()) {
-	    listarStatusProcesso = new StatusProcessoDAO().lerTodos();
-	}
-	return listarStatusProcesso;
-    }
-
-    public void setListarStatusProcesso(List<StatusProcesso> listarStatusProcesso) {
-	this.listarStatusProcesso = listarStatusProcesso;
-    }
-
-    public List<SubStatusProcesso> getListarSubStatusProcesso() {
-	if (listarSubStatusProcesso.isEmpty()) {
-	    listarSubStatusProcesso = new SubStatusProcessoDAO().lerTodos();
-	}
-	return listarSubStatusProcesso;
-    }
-
-    public void setListarSubStatusProcesso(List<SubStatusProcesso> listarSubStatusProcesso) {
-	this.listarSubStatusProcesso = listarSubStatusProcesso;
-    }
-
-    public List<GrupoProcessual> getListarGrupoProcessual() {
-	if (listarGrupoProcessual.isEmpty()) {
-	    listarGrupoProcessual = new GrupoProcesssualDAO().lerTodos();
-	}
-	return listarGrupoProcessual;
-    }
-
-    public void setListarGrupoProcessual(List<GrupoProcessual> listarGrupoProcessual) {
-	this.listarGrupoProcessual = listarGrupoProcessual;
-    }
-
-    public List<SubGrupoProcessual> getListarSubGrupoProcessual() {
-	if (listarSubGrupoProcessual.isEmpty()) {
-	    listarSubGrupoProcessual = new SubGrupoProcesssualDAO().lerTodos();
-	}
-	return listarSubGrupoProcessual;
-    }
-
-    public void setListarSubGrupoProcessual(List<SubGrupoProcessual> listarSubGrupoProcessual) {
-	this.listarSubGrupoProcessual = listarSubGrupoProcessual;
-    }
-
-    public List<CargoFuncao> getListarCargoFuncao() {
-	if (listarCargoFuncao.isEmpty()) {
-	    listarCargoFuncao = new CargoFuncaoDAO().lerTodos();
-	}
-	return listarCargoFuncao;
-    }
-
-    public void setListarCargoFuncao(List<CargoFuncao> listarCargoFuncao) {
-	this.listarCargoFuncao = listarCargoFuncao;
-    }
-
-    public List<GrupoSocial> getListarGrupoSocial() {
-	if (listarGrupoSocial.isEmpty()) {
-	    listarGrupoSocial = new GrupoSocialDAO().lerTodos();
-	}
-	return listarGrupoSocial;
-    }
-
-    public void setListarGrupoSocial(List<GrupoSocial> listarGrupoSocial) {
-	this.listarGrupoSocial = listarGrupoSocial;
-    }
-
-    public List<SubGrupoSocial> getListarSubGrupoSocial() {
-	if (listarSubGrupoSocial.isEmpty()) {
-	    listarSubGrupoSocial = new SubGrupoSocialDAO().lerTodos();
-	}
-	return listarSubGrupoSocial;
-    }
-
-    public void setListarSubGrupoSocial(List<SubGrupoSocial> listarSubGrupoSocial) {
-	this.listarSubGrupoSocial = listarSubGrupoSocial;
-    }
-
+ 
     public String getMensagem() {
 	return mensagem;
     }
@@ -1423,38 +1007,7 @@ public class ManterProcessoMB implements Serializable {
 	this.doencaPessoaCadastro = doencaPessoaCadastro;
     }
 
-    public String getLinkDocSel() {
-	return linkDocSel;
-    }
-
-    public void setLinkDocSel(String linkDocSel) {
-	this.linkDocSel = linkDocSel;
-    }
-
-    public Integer getIdLoteProcesso() {
-        return idLoteProcesso;
-    }
-
-    public void setIdLoteProcesso(Integer idLoteProcesso) {
-        this.idLoteProcesso = idLoteProcesso;
-    }
-
-    public LoteProcesso getLoteProcesso() {
-        return loteProcesso;
-    }
-
-    public List<LoteProcesso> getListaLoteProcesso() {
-        return listaLoteProcesso;
-    }
-
-    public void setLoteProcesso(LoteProcesso loteProcesso) {
-        this.loteProcesso = loteProcesso;
-    }
-
-    public void setListaLoteProcesso(List<LoteProcesso> listaLoteProcesso) {
-        this.listaLoteProcesso = listaLoteProcesso;
-    }
-
+  
     public LoginMB getLoginMB() {
         return loginMB;
     }
@@ -1471,14 +1024,37 @@ public class ManterProcessoMB implements Serializable {
         this.novo = novo;
     }
 
-    public ManterAnaliseMB getManterAnaliseMB() {
-        return manterAnaliseMB;
+
+    public Integer getIdTipo() {
+        return idTipo;
     }
 
-    public void setManterAnaliseMB(ManterAnaliseMB manterAnaliseMB) {
-        this.manterAnaliseMB = manterAnaliseMB;
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
+
+    public ManterProcessoMB getManterProcessoMB() {
+        return manterProcessoMB;
+    }
+
+
+    public void setIdTipo(Integer idTipo) {
+        this.idTipo = idTipo;
+    }
+
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+
+    public void setManterProcessoMB(ManterProcessoMB manterProcessoMB) {
+        this.manterProcessoMB = manterProcessoMB;
+    }
+
+   
     
     
 }

@@ -120,7 +120,7 @@
 						value="#{manterProcessoMB.listarPessoa}" paginator="true" rows="5">
 
 						<p:column headerText="CPF">
-							<h:outputText value="#{pessoaLista.numCpfCnpj}" />
+							<h:outputText value="#{pessoaLista.numCpf}" />
 						</p:column>
 
 						<p:column headerText="Nome">
@@ -180,7 +180,7 @@
 					</p:column>
 
 					<p:column headerText="Número CPF">
-						<h:outputText value="#{processoLista.pessoa.numCpfCnpj}">
+						<h:outputText value="#{processoLista.pessoa.numCpf}">
 
 						</h:outputText>
 					</p:column>
@@ -245,7 +245,7 @@
 						<p:outputLabel value="CPF:*" />
 						<p:inputMask mask="?999.999.999-99" id="inpt_cpf_pessoa_cadastro"
 							size="15" maxlength="15"
-							value="#{manterProcessoMB.pessoaCadastro.numCpfCnpj}" />
+							value="#{manterProcessoMB.pessoaCadastro.numCpf}" />
 					</h:panelGrid>
 					<h:panelGrid columns="3" cellpadding="10" style=" width : 150px;">
 						<p:outputLabel value="Nome:*" />

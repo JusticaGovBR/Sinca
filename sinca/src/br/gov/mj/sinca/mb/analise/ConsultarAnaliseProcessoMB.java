@@ -149,7 +149,7 @@ public class ConsultarAnaliseProcessoMB implements Serializable {
     public List<Pessoa> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 

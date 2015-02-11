@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template_sm_menu.xhtml">
+
+	<ui:define name="body">
+
+		<div align="center" style="font-size-adjust: inherit;color:black;font-size: xx-large;">
+			<h3>Autenticação Necessária</h3>
+			<p>Prezado Usuario,</p>
+			<p>As informações da sua identidade como usuário em uma sessão
+				autenticada não foram encontrados no servidor, possivelmente devido
+				a longo tempo de inatividade.</p>
+			<p>Por favor identifique-se novamente para ter acesso as
+				funcionalidades do sistema.</p>
+			<h:form id="flogin">
+				<h:commandLink action="#{loginMB.acaoAbrirLogin}">Clique aqui para se autenticar novamente.</h:commandLink>
+			</h:form>
+		</div>
+	</ui:define>
+
+</ui:composition>

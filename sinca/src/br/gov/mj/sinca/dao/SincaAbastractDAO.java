@@ -6,11 +6,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 public abstract class SincaAbastractDAO<T> {
 
     protected Class<T> persistentClass;
     private EntityManager manager;
-
+    
+    protected Logger logger;
+    
     /**
      * Método construtor que
      */
@@ -21,7 +25,9 @@ public abstract class SincaAbastractDAO<T> {
 	// pegar a classe persistente por reflexão
 	Type tipo = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	this.persistentClass = (Class<T>) tipo;
-
+	
+	logger =  Logger.getLogger(this.persistentClass);
+	
 	// pega o EntityManager padrão da ThreadAtual
 	this.manager = JPAUtil.getEntityManager();
     }
@@ -101,5 +107,14 @@ public abstract class SincaAbastractDAO<T> {
     public void desfazerTransacao() {
 	this.getEntityManager().getTransaction().rollback();
     }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+    
 
 }

@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -64,10 +65,13 @@ public class ConsultarProcessoMB implements Serializable {
     
     private String dataProtocoloCA;
     
+    private Logger logger = null; 
+    
     
     @PostConstruct
     public void Init() {
-	System.out.println("Chamada Init <>  PosConstruct");
+	logger = Logger.getLogger(this.getClass());
+	logger.info("Chamada Init <>  PosConstruct");
 	instanciaAtributos();
     }
 
@@ -176,8 +180,8 @@ public class ConsultarProcessoMB implements Serializable {
 
     public List<Pessoa> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
-	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1, nome);
+	    logger.info("Nome Pessoa PESQUISA " + nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 

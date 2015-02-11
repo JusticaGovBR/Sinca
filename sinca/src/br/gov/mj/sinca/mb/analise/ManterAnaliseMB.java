@@ -128,7 +128,7 @@ public class ManterAnaliseMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nomePessoa);
+		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -137,10 +137,10 @@ public class ManterAnaliseMB implements Serializable {
 		    return pessoas;
 		}
 
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(1,numCpf.replace(".", "").replace("-", "").trim(),
+		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
 			nomePessoa);
 		if (pessoas.isEmpty()) {
-		    pessoas = new PessoaDAO().listaPessoaPorNomeCpfCnpj(1,numCpf.trim(), nomePessoa);
+		    pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.trim(), nomePessoa);
 		}
 	    }
 	    setListarPessoa(pessoas);
@@ -241,7 +241,7 @@ public class ManterAnaliseMB implements Serializable {
     public List<Pessoa> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(1,nome);
+	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 

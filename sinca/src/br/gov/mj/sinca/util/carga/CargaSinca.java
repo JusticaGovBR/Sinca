@@ -120,7 +120,7 @@ public class CargaSinca {
 						pesReq.setNomePessoa(linha.split(";")[3]);
 
 						if (linha.split(";")[4].length() <= 20) {
-							pesReq.setNumCpfCnpj(linha.split(";")[4]);
+							pesReq.setNumCpf(linha.split(";")[4]);
 						}
 
 						if (linha.split(";")[5].length() == 1) {
@@ -212,7 +212,7 @@ public class CargaSinca {
 						pessAnistiado.setGenero(truncaCampo(linha.split(";"),
 								35, 1));
 
-						pessAnistiado.setNumCpfCnpj(truncaCampo(
+						pessAnistiado.setNumCpf(truncaCampo(
 								linha.split(";"), 36, 20));
 						pessAnistiado.setNomeMae(linha.split(";")[37]);
 

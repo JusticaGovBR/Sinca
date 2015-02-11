@@ -154,9 +154,16 @@
 
 				<p:tab id="tab_arquivo_fisico" title="Arquivo Físico">
 					<ui:insert name="Arquivo Físico">
-
+						<ui:include src="/pages/arquivo/formularioArquivo.xhtml" />
 					</ui:insert>
 				</p:tab>
+
+				<p:tab id="tab_andmentos_sei" title="Andamentos no Sei!">
+					<ui:insert name="Andamentos Sei!">
+						<iframe id="ifFrameAdamentoSei" src='#{manterProcessoMB.linkDocSel}' height="600" width="970"></iframe> 
+					</ui:insert>
+				</p:tab>
+
 			</p:tabView>
 
 

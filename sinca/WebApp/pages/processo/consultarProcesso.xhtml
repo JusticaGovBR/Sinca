@@ -43,11 +43,34 @@
 					</h:panelGrid>
 				</p:dialog>
 
-				<p:panel id="pnDetalhament" header="Consultar Processo"
-					style="margin-bottom:20px;width : 100%" toggleable="true">
+				<p:panel id="pnDetalhament" header="Consultar Requerimentos"
+					style="margin-bottom:10px;width : 100%" toggleable="true">
 
-					<h:panelGrid columns="8" cellpadding="10"
-						style=" margin-bottom:20px ;width : 100%; height : 40px; ">
+					<h:panelGrid columns="4" cellpadding="10"
+						style=" margin-bottom:10px ;width : 70%; height : 40px; ">
+						
+
+						<h:outputLabel for="inpt_numProtocoloCa"
+							value="Nº Requerimento CA:" style=" width : 100%" />
+							
+						<p:inputMask mask="?9999999999" id="inpt_numProtocoloCa" size="20"
+							maxlength="20" value="#{consultarProcessoMB.numProcessoCA}" />
+
+
+						<h:outputLabel for="dataProtocoloCA" value="Data Requerimento CA:"
+							style=" width : 100%" />
+
+						<p:autoComplete id="dataProtocoloCA" style="width : 100%" 
+							title="Data Protocolo CA" value="#{consultarProcessoMB.dataProtocoloCA}"
+							var="data" size="15" maxlength="10"  dropdown="true"
+							scrollHeight="200" 
+							itemLabel="#{data}" itemValue="#{data}"
+							completeMethod="#{consultarProcessoMB.listaDataProtocoCA}"
+							 effect="clip" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="4" cellpadding="10"
+						style=" margin-bottom:10px ;width : 70%; height : 40px; ">
 						<h:outputLabel value="Nº Protocolo MJ-SEI:" style="width:100%;" />
 						<p:inputText id="inpt_numProtocoloMJ_SEI" size="20" maxlength="20"
 							disabled="false" value="#{consultarProcessoMB.numProcessoMJ}" />
@@ -59,38 +82,22 @@
 							value="#{consultarProcessoMB.dataProtocoloMJ}" showOn="button"
 							locale="pt" pattern="dd/MM/yyyy" size="10" />
 
-
-						<h:outputLabel for="inpt_numProtocoloCa"
-							value="Nº Requerimento CA:" style=" width : 100%" />
-						<p:inputMask mask="?9999999999" id="inpt_numProtocoloCa" size="20"
-							maxlength="20" value="#{consultarProcessoMB.numProcessoCA}" />
-
-
-						<h:outputLabel for="dataProtocoloCA" value="Data Protocolo CA:"
-							style=" width : 100%" />
-
-						<p:autoComplete id="dataProtocoloCA" style="width : 100%" 
-							title="Data Protocolo CA" value="#{consultarProcessoMB.dataProtocoloCA}"
-							var="data" size="10" maxlength="15"  dropdown="true"
-							scrollHeight="300"
-							itemLabel="#{data}" itemValue="#{data}"
-							completeMethod="#{consultarProcessoMB.listaDataProtocoCA}"
-							 effect="clip" />
-
-
-					</h:panelGrid>
-
+                    </h:panelGrid>
 
 					<h:panelGrid columns="4" cellpadding="10"
 						style="margin-bottom:20px ;width : 880px; height : 40px;">
 						<h:outputLabel value="Nome Pessoa  :" style="width:100%;" />
+
 						<p:autoComplete id="pessoaList" style="width : 100%"
 							title="Nome da Pessoa" value="#{consultarProcessoMB.pessoa}"
 							var="pessoa" size="100" maxlength="120" minQueryLength="3"
 							completeMethod="#{consultarProcessoMB.listaPessoaPorNomeLk}"
 							scrollHeight="500" itemLabel="#{pessoa.nomePessoa}"
 							converter="pessoaConverter" itemValue="#{pessoa}"
-							effect="explode" />
+							effect="clip">
+						  
+						 	
+						</p:autoComplete>	
 
 					</h:panelGrid>
 
@@ -105,7 +112,7 @@
 					</h:panelGrid>
 				</p:panel>
 
-				<p:panel id="pnlDadosTabelProcessos" header="Processos"
+				<p:panel id="pnlDadosTabelProcessos" header="Requerimentos"
 					visible="#{not empty consultarProcessoMB.listarPessoaProcesso}"
 					style="margin-bottom:20px;width : 100%" toggleable="false">
 
@@ -129,7 +136,7 @@
 						 -->
 						 
 					</h:panelGrid>
-					<p:dataTable id="processotb" var="processoLista"
+					<p:dataTable id="processotb" var="processoLista" 
 						paginatorPosition="top" sortMode="multiple"
 						value="#{consultarProcessoMB.listarPessoaProcesso}"
 						paginator="true" rows="20">
@@ -172,11 +179,11 @@
 						</p:column>
 
 						<p:column headerText="Número CPF"
-							sortBy="#{processoLista.pessoa.numCpfCnpj}" resizable="true">
+							sortBy="#{processoLista.pessoa.numCpf}" resizable="true">
 							<f:facet name="header">
 								<h:outputText value="Número CPF" />
 							</f:facet>
-							<h:outputText value="#{processoLista.pessoa.numCpfCnpj}" />
+							<h:outputText value="#{processoLista.pessoa.numCpf}" />
 						</p:column>
 
 						<p:column headerText="Nome Pessoa" resizable="true">

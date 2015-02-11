@@ -33,6 +33,7 @@ public class FinalizadorPhaseListener implements PhaseListener
 	public void afterPhase(PhaseEvent event)
 	{
 		// liberar o objeto armazenado no Cache da JPAUtil
+	    System.out.println("Limpando cache...");
 		JPAUtil.limparCacheEntityManager();
 	}
 

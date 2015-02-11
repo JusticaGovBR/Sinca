@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.gov.mj.sinca.dao.TipoAnaliseJulgamentoDAO;
 import br.gov.mj.sinca.entidades.TipoAnaliseJulgamento;
 
@@ -30,10 +32,13 @@ public class ManterJulgamentoMB implements Serializable{
 
     private Integer codTipoAnaliseJug;
 
+    private Logger logger;
+
 
     @PostConstruct
     public void Init() {
-	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
+	logger = Logger.getLogger(this.getClass());
+	logger.info("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
 	instanciaAtributos();
     }
 

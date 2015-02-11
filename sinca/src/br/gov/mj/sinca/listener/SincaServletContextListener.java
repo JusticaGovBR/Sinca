@@ -7,8 +7,6 @@ import javax.servlet.ServletContextListener;
 
 import br.gov.mj.sinca.ConstantSinca;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
-import br.gov.mj.sinca.dao.EstadoUfDAO;
-import br.gov.mj.sinca.dao.LocalizacaoDAO;
 
 public class SincaServletContextListener implements ServletContextListener{
 
@@ -26,7 +24,7 @@ public class SincaServletContextListener implements ServletContextListener{
 		try {
 		    System.out.println("Carregando lista de dominios...."+new Date());
 			
-			context.getServletContext().setAttribute(ConstantSinca.LISTA_ESTADO_CIVIL, new EstadoCivilDAO().lerTodos());
+			//context.getServletContext().setAttribute(ConstantSinca.LISTA_ESTADO_CIVIL, new EstadoCivilDAO().lerTodos());
 			//context.getServletContext().setAttribute(ConstantSinca.LISTA_LOCALIZACAO, new LocalizacaoDAO().lerTodos());
 			//context.getServletContext().setAttribute(ConstantSinca.LISTA_UF, new EstadoUfDAO().lerTodos());
 			

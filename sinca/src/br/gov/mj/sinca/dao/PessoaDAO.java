@@ -21,29 +21,25 @@ public class PessoaDAO extends SincaAbastractDAO<Pessoa> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Pessoa> listaPessoaPorNomeLk(Integer codTipo,String nome) {
-	Query query = getEntityManager().createQuery("SELECT p FROM Pessoa p where p.codTipo="+codTipo
-		+" and p.nomePessoa like '" + nome + "%'");
+    public List<Pessoa> listaPessoaPorNomeLk(String nome) {
+	Query query = getEntityManager().createQuery("SELECT p FROM Pessoa p where p.nomePessoa like '" + nome + "%'");
 	return query.getResultList();
     }
 
     @SuppressWarnings("unchecked")
-    public List<Pessoa> listaPessoaPorNomeCpfCnpj(Integer codTipo, String numCpf, String nome) {
+    public List<Pessoa> listaPessoaPorNomeCpf(String numCpf, String nome) {
 	List<Pessoa> lista = null;
 	String where = "";
 	Query query = null;
 	if (numCpf != null && nome == null) {
-	    where = "where p.codTipo="+codTipo
-		+" and p.numCpfCnpj like '%"+numCpf+"%'";
+	    where = "where p.codTipo=p.numCpfCnpj like '%"+numCpf+"%'";
 	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
 	} else if (numCpf == null && nome != null) {
-	    where = "where p.codTipo="+codTipo
-		+" and p.nomePessoa=:nome";
+	    where = "where p.nomePessoa=:nome";
 	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
 	    query.setParameter("nome", nome);
 	} else if (numCpf != null && nome != null) {
-	    where = "where p.codTipo="+codTipo
-		+" and  p.numCpfCnpj=:numCpf and p.nomePessoa=:nome";
+	    where = "where  p.numCpfCnpj=:numCpf and p.nomePessoa=:nome";
 	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
 
 	    query.setParameter("numCpf", numCpf);
@@ -56,7 +52,7 @@ public class PessoaDAO extends SincaAbastractDAO<Pessoa> {
     
     public static void main(String[] args) {
 	PessoaDAO dao = new PessoaDAO();
-	List<Pessoa> lista = dao.listaPessoaPorNomeLk(1,"Sebastião");
+	List<Pessoa> lista = dao.listaPessoaPorNomeLk("Sebastião");
 	for (Pessoa pessoa : lista) {
 	     System.out.println(pessoa.getNomePessoa());
 	}
