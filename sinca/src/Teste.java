@@ -12,5 +12,6 @@ public class Teste {
 	PessoaFisica pessoa = em.find(PessoaFisica.class,89l);
 	System.out.println(pessoa.getNomePessoa());
 	em.getTransaction().commit();
+	
     }
 }
