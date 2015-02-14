@@ -57,6 +57,21 @@ public class ProcessoDAO extends SincaAbastractDAO<Processo> {
 	return listaData;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<String> listarDataProtocoloSEI() {
+	Query query = getEntityManager().
+		createNativeQuery("SELECT DISTINCT\r\n" + 
+			"    DATE_FORMAT(DATA_PROTOCOLO_CA,'%d/%m/%Y') AS DATA_CADASTRO\r\n" + 
+			"FROM\r\n" + 
+			"    Processo\r\n" + 
+			"WHERE\r\n" + 
+			"    DATA_PROTOCOLO_CA IS NOT NULL\r\n" + 
+			"ORDER BY\r\n" + 
+			"    DATA_PROTOCOLO_CA");
+	List<String> listaData = query.getResultList();
+	return listaData;
+    }
+
     public Integer bustaUltimoNumeroProcessoCA() {
 	Query query = getEntityManager().createQuery("SELECT max(p.numProtocoloCa) FROM Processo p");
 	Integer id = (Integer) query.getSingleResult();

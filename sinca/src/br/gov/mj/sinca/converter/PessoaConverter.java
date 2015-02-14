@@ -6,15 +6,15 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import br.gov.mj.sinca.dao.PessoaDAO;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.util.StringUtil;
 
-@FacesConverter(value="pessoaConverter",forClass=Pessoa.class)
+@FacesConverter(value="pessoaConverter",forClass=PessoaFisica.class)
 public class PessoaConverter implements Converter {
     
     
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-    	Pessoa pessoa = new Pessoa();
+    	PessoaFisica pessoa = new PessoaFisica();
     	try {
     		if(StringUtil.ehInteiro(value)){
     		  pessoa = new PessoaDAO().lerPorId( Long.parseLong(value) );
@@ -28,7 +28,7 @@ public class PessoaConverter implements Converter {
 
     
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-    	Pessoa c = (Pessoa) value;
+    	PessoaFisica c = (PessoaFisica) value;
     	if(c==null || c.getIdPessoa() == null){
     		return "";
     	}

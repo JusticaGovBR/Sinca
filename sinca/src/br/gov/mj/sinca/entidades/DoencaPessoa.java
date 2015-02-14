@@ -43,7 +43,7 @@ public class DoencaPessoa implements Serializable {
 	//bi-directional many-to-one association to Pessoa
 	@ManyToOne
 	@JoinColumn(name="ID_PESSOA")
-	private Pessoa pessoa;
+	private PessoaFisica pessoa;
 
 	public DoencaPessoa() {
 	}
@@ -96,11 +96,11 @@ public class DoencaPessoa implements Serializable {
 		this.doenca = doenca;
 	}
 
-	public Pessoa getPessoa() {
+	public PessoaFisica getPessoa() {
 		return this.pessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
+	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
 

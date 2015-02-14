@@ -30,7 +30,7 @@ import br.gov.mj.sinca.dao.TipoTelefoneDAO;
 import br.gov.mj.sinca.entidades.DadosPcpa;
 import br.gov.mj.sinca.entidades.Endereco;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
@@ -72,7 +72,7 @@ public class CargaBD {
 		    processo = new ProcessoDAO().salvar(processo);
 		    
 		    
-		    Pessoa pessoaReq = new Pessoa();
+		    PessoaFisica pessoaReq = new PessoaFisica();
 		    pessoaReq.setDataHoraCadastro(new Date());
 		    pessoaReq.setDataNascimento(setaDataPessoa(pcpa.getData_Nascimento_requer_PCPA()));
 		    if (pcpa.getCPF_requer_PCPA() != null && pcpa.getCPF_requer_PCPA().length() >= 10) {
@@ -117,7 +117,7 @@ public class CargaBD {
 		    pessoaProcReq = new PessoaProcessoDAO().salvar(pessoaProcReq);
 
 		    if (pcpa.getNome_anistiando() != null && !pcpa.getNome_anistiando().equals("")) {
-			Pessoa pessoaAnist = new Pessoa();
+			PessoaFisica pessoaAnist = new PessoaFisica();
 			pessoaAnist.setDataHoraCadastro(new Date());
 			pessoaAnist.setDataNascimento(setaDataPessoa(pcpa.getData_nascimento_anistiando()));
 
@@ -140,7 +140,7 @@ public class CargaBD {
 
 		    // Requerente Secundário
 		    if (pcpa.getNome_PCPA_S() != null) {
-			Pessoa pessoaReqS = new Pessoa();
+			PessoaFisica pessoaReqS = new PessoaFisica();
 			pessoaReqS.setDataHoraCadastro(new Date());
 			pessoaReqS.setDataNascimento(setaDataPessoa(pcpa.getDataNascimento_PCPA_S()));
 

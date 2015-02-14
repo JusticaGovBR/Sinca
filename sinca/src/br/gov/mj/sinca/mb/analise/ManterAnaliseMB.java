@@ -17,7 +17,7 @@ import br.gov.mj.sinca.dao.TipoPerseguicaoDAO;
 import br.gov.mj.sinca.entidades.AnaliseProcesso;
 import br.gov.mj.sinca.entidades.AnalistaProcesso;
 import br.gov.mj.sinca.entidades.PerseguicaoAnalise;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.SubStatusProcesso;
 import br.gov.mj.sinca.entidades.TipoAnaliseJulgamento;
@@ -54,12 +54,12 @@ public class ManterAnaliseMB implements Serializable {
     
     private List<PerseguicaoAnalise> listarPerseguicaoAnalise = new ArrayList<PerseguicaoAnalise>();
     
-    private List<Pessoa> listarPessoa = new ArrayList<Pessoa>();
+    private List<PessoaFisica> listarPessoa = new ArrayList<PessoaFisica>();
 
     private Integer idSubStatusProcesso;
     private AnaliseProcesso analiseProcesso;
     private AnalistaProcesso analistaProcesso;
-    private Pessoa pessoaAnalista;
+    private PessoaFisica pessoaAnalista;
     private TipoPerseguicao tipoPerseguicao;
     private PerseguicaoAnalise perseguicaoAnalise;
 
@@ -83,7 +83,7 @@ public class ManterAnaliseMB implements Serializable {
 	listarTipoAnaliseJulgamento = new TipoAnaliseJulgamentoDAO().lerTodos();
 	analiseProcesso = new AnaliseProcesso();
 	analistaProcesso = new AnalistaProcesso();
-	pessoaAnalista = new Pessoa();
+	pessoaAnalista = new PessoaFisica();
 	perseguicaoAnalise = new PerseguicaoAnalise();
 	perseguicaoAnalise.setTipoPerseguicao(new TipoPerseguicao());
 	tipoPerseguicao = new TipoPerseguicao();
@@ -99,12 +99,12 @@ public class ManterAnaliseMB implements Serializable {
 	return null;
     }
 
-    public List<Pessoa> consultarPessoas() {
+    public List<PessoaFisica> consultarPessoas() {
 
 	analistaProcesso = new AnalistaProcesso();
-	List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	List<PessoaFisica> pessoas = new ArrayList<PessoaFisica>();
 	setListarPessoa(pessoas);
-	listarPessoa = new ArrayList<Pessoa>();
+	listarPessoa = new ArrayList<PessoaFisica>();
 	String nomePessoa = pessoaAnalista != null ? pessoaAnalista.getNomePessoa() : null;
 
 	if (pessoaAnalista != null && pessoaAnalista.getIdPessoa() != null && pessoaAnalista.getIdPessoa() > 0) {
@@ -148,7 +148,7 @@ public class ManterAnaliseMB implements Serializable {
 	if (getListarPessoa().isEmpty()) {
 	    JSFUtil.retornarMensagem(null, "Nenhuma pessoa Analista encontrada!");
 	    JSFUtil.getRequestContext().execute("PF('dlg_responsavel').hide()");
-	    return new ArrayList<Pessoa>();
+	    return new ArrayList<PessoaFisica>();
 	}
 
 	JSFUtil.getRequestContext().execute("PF('dlg_responsavel').show()");
@@ -238,10 +238,10 @@ public class ManterAnaliseMB implements Serializable {
      }
 
 
-    public List<Pessoa> listarPessoaPorNomeLike(String nome) {
+    public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -293,19 +293,19 @@ public class ManterAnaliseMB implements Serializable {
 	this.numCpf = numCpf;
     }
 
-    public Pessoa getPessoaAnalista() {
+    public PessoaFisica getPessoaAnalista() {
 	return pessoaAnalista;
     }
 
-    public void setPessoaAnalista(Pessoa pessoaAnalista) {
+    public void setPessoaAnalista(PessoaFisica pessoaAnalista) {
 	this.pessoaAnalista = pessoaAnalista;
     }
 
-    public List<Pessoa> getListarPessoa() {
+    public List<PessoaFisica> getListarPessoa() {
 	return listarPessoa;
     }
 
-    public void setListarPessoa(List<Pessoa> listarPessoa) {
+    public void setListarPessoa(List<PessoaFisica> listarPessoa) {
 	this.listarPessoa = listarPessoa;
     }
 

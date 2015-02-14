@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 
-public class PessoaDAO extends SincaAbastractDAO<Pessoa> {
+public class PessoaDAO extends SincaAbastractDAO<PessoaFisica> {
 
     public static Integer PESSOA_FISICA = 1;
     public static Integer PESSOA_JURIDICA = 2;
@@ -21,14 +21,14 @@ public class PessoaDAO extends SincaAbastractDAO<Pessoa> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Pessoa> listaPessoaPorNomeLk(String nome) {
+    public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
 	Query query = getEntityManager().createQuery("SELECT p FROM Pessoa p where p.nomePessoa like '" + nome + "%'");
 	return query.getResultList();
     }
 
     @SuppressWarnings("unchecked")
-    public List<Pessoa> listaPessoaPorNomeCpf(String numCpf, String nome) {
-	List<Pessoa> lista = null;
+    public List<PessoaFisica> listaPessoaPorNomeCpf(String numCpf, String nome) {
+	List<PessoaFisica> lista = null;
 	String where = "";
 	Query query = null;
 	if (numCpf != null && nome == null) {
@@ -52,8 +52,8 @@ public class PessoaDAO extends SincaAbastractDAO<Pessoa> {
     
     public static void main(String[] args) {
 	PessoaDAO dao = new PessoaDAO();
-	List<Pessoa> lista = dao.listaPessoaPorNomeLk("Sebastião");
-	for (Pessoa pessoa : lista) {
+	List<PessoaFisica> lista = dao.listaPessoaPorNomeLk("Sebastião");
+	for (PessoaFisica pessoa : lista) {
 	     System.out.println(pessoa.getNomePessoa());
 	}
     }

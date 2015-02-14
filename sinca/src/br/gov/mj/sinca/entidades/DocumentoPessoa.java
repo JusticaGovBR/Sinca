@@ -47,7 +47,7 @@ public class DocumentoPessoa implements Serializable {
 	//bi-directional many-to-one association to Pessoa
 	@ManyToOne
 	@JoinColumn(name="ID_PESSOA")
-	private Pessoa pessoa;
+	private PessoaFisica pessoa;
 
 	//bi-directional many-to-one association to TipoDocumento
 	@ManyToOne
@@ -129,11 +129,11 @@ public class DocumentoPessoa implements Serializable {
 		this.zonaEleitoral = zonaEleitoral;
 	}
 
-	public Pessoa getPessoa() {
+	public PessoaFisica getPessoa() {
 		return this.pessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
+	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
 

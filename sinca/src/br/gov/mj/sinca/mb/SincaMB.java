@@ -8,7 +8,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.util.JSFUtil;
 import br.gov.mj.sinca.ws.sei.RetornoConsultaProcedimento;
 import br.gov.mj.sinca.ws.sei.SeiServiceLocator;
@@ -36,7 +36,7 @@ public class SincaMB implements Serializable{
 
 	private String numProcessoSei;
 
-	private List<Pessoa> pessoas;
+	private List<PessoaFisica> pessoas;
 	
 	public String acaoConsultarProcesso() throws IOException{
 	   return "pages/processos/consultarProcesso.jsf";
@@ -71,18 +71,18 @@ public class SincaMB implements Serializable{
 		return null;
 	}
 
-	public List<Pessoa> carregaPessoas() {
+	public List<PessoaFisica> carregaPessoas() {
 		if (pessoas == null) {
 			//pessoas = pessoaDAO.lerTodos();
 		}
 		return pessoas;
 	 }
 	
-        public List<Pessoa> getPessoas() {
+        public List<PessoaFisica> getPessoas() {
 		return pessoas;
 	}
 
-	public void setPessoas(List<Pessoa> pessoas) {
+	public void setPessoas(List<PessoaFisica> pessoas) {
 		this.pessoas = pessoas;
 	}
 
@@ -144,8 +144,8 @@ public class SincaMB implements Serializable{
 
 	public static void main(String[] args) {
 		SincaMB mb = new SincaMB();
-		List<Pessoa> lista = mb.carregaPessoas();
-		for (Pessoa pessoa : lista) {
+		List<PessoaFisica> lista = mb.carregaPessoas();
+		for (PessoaFisica pessoa : lista) {
 			System.out.println(pessoa.getNomePessoa());
 		}
 	}

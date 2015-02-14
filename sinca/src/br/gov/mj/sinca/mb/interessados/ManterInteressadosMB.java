@@ -37,7 +37,7 @@ import br.gov.mj.sinca.entidades.DoencaPessoa;
 import br.gov.mj.sinca.entidades.Endereco;
 import br.gov.mj.sinca.entidades.Estado;
 import br.gov.mj.sinca.entidades.EstadoCivil;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
@@ -71,7 +71,7 @@ public class ManterInteressadosMB implements Serializable {
     private Integer idTipo;
 
 
-    private List<Pessoa> listarPessoa;
+    private List<PessoaFisica> listarPessoa;
     private List<Processo> listarProcessos;
     private List<PessoaProcesso> listarPessoaProcesso;
     private List<TipoPessoaProcesso> listarTipoPessoaProc;
@@ -96,8 +96,8 @@ public class ManterInteressadosMB implements Serializable {
     private TipoTelefone tipoTelefone = new TipoTelefone();
     private TelefonePessoa telefonePessoa = new TelefonePessoa();
 
-    private Pessoa pessoa;
-    private Pessoa pessoaCadastro = new Pessoa();
+    private PessoaFisica pessoa;
+    private PessoaFisica pessoaCadastro = new PessoaFisica();
     private Processo processo;
     private PessoaProcesso pessoaProcesso;
 
@@ -153,7 +153,7 @@ public class ManterInteressadosMB implements Serializable {
     private void instanciaAtributos() {
 
 
-	listarPessoa = new ArrayList<Pessoa>();
+	listarPessoa = new ArrayList<PessoaFisica>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
 	listarProcessos = new ArrayList<Processo>();
 	listarTipoPessoaProc = new TipoPessoaProcessoDAO().lerTodos();
@@ -172,8 +172,8 @@ public class ManterInteressadosMB implements Serializable {
 	    numProcessoMJ = pessoaProcessoP.getProcesso().getNumProtocoloMj();
 	    listarPessoaProcesso = new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso());
 	} else {
-	    pessoa = new Pessoa();
-	    pessoaCadastro = new Pessoa();
+	    pessoa = new PessoaFisica();
+	    pessoaCadastro = new PessoaFisica();
 	    pessoaProcesso = new PessoaProcesso();
 	    processo = new Processo();
 	    numProcessoMJ = "";
@@ -184,18 +184,18 @@ public class ManterInteressadosMB implements Serializable {
     }
 
   
-    public List<Pessoa> listarPessoaPorNomeLike(String nome) {
+    public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    logger.info("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
-    public List<Pessoa> consultarPessoas() {
+    public List<PessoaFisica> consultarPessoas() {
 
-	List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	List<PessoaFisica> pessoas = new ArrayList<PessoaFisica>();
 	setListarPessoa(pessoas);
-	listarPessoa = new ArrayList<Pessoa>();
+	listarPessoa = new ArrayList<PessoaFisica>();
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
@@ -301,7 +301,7 @@ public class ManterInteressadosMB implements Serializable {
 
     }
 
-    private void validaDadosPessoa(Pessoa pessoaCadastro) {
+    private void validaDadosPessoa(PessoaFisica pessoaCadastro) {
 	String numCpf = pessoaCadastro.getNumCpf() == null ? "" : pessoaCadastro.getNumCpf();
 	numCpf = numCpf.replace(".", "").replace("-", "");
 	if (!CpfCnpjUtil.ValidateCPF(CpfCnpjUtil.FormatCPF(numCpf)) || numCpf.equals("")
@@ -350,7 +350,7 @@ public class ManterInteressadosMB implements Serializable {
 		pessoaCadastro.setDataHoraCadastro(new Date());
 	    }
 	    
-	    Pessoa pessoaSalva = new PessoaDAO().salvar(pessoaCadastro);
+	    PessoaFisica pessoaSalva = new PessoaDAO().salvar(pessoaCadastro);
 
 	    if (pessoaSalva.getIdPessoa() != null) {
 		List<PessoaEndereco> pssEndList = new PessoaEnderecoDAO().listarPorIdPessoa(pessoaSalva.getIdPessoa());
@@ -463,7 +463,7 @@ public class ManterInteressadosMB implements Serializable {
 	return map;
     }
 
-    private void carregarDocumentosPessoa(Pessoa pessoa) {
+    private void carregarDocumentosPessoa(PessoaFisica pessoa) {
 	listarDocumentoPessoa = new ArrayList<DocumentoPessoa>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
 	    for (DocumentoPessoa doc : pessoaCadastro.getDocumentoPessoas()) {
@@ -472,7 +472,7 @@ public class ManterInteressadosMB implements Serializable {
 	}
     }
 
-    private void carregarEnderecosPessoa(Pessoa pessoa) {
+    private void carregarEnderecosPessoa(PessoaFisica pessoa) {
 	listarEnderecos = new ArrayList<Endereco>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
 	    for (PessoaEndereco endereco : pessoaCadastro.getPessoaEnderecos()) {
@@ -481,7 +481,7 @@ public class ManterInteressadosMB implements Serializable {
 	}
     }
 
-    private void carregarTelefonesPessoa(Pessoa pessoa) {
+    private void carregarTelefonesPessoa(PessoaFisica pessoa) {
 	listarTelefones = new ArrayList<TelefonePessoa>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
 	    for (TelefonePessoa telefonePessoa : pessoaCadastro.getTelefonePessoas()) {
@@ -490,7 +490,7 @@ public class ManterInteressadosMB implements Serializable {
 	}
     }
 
-    private void carregarDoencaPessoa(Pessoa pessoa) {
+    private void carregarDoencaPessoa(PessoaFisica pessoa) {
 	listarDoencaPessoa = new ArrayList<DoencaPessoa>();
 	if (pessoaCadastro.getIdPessoa() > 0) {
 	    for (DoencaPessoa doencaPessoa : pessoaCadastro.getDoencaPessoas()) {
@@ -719,11 +719,11 @@ public class ManterInteressadosMB implements Serializable {
 	this.numProcessoMJ = numProcessoMJ;
     }
 
-    public List<Pessoa> getListarPessoa() {
+    public List<PessoaFisica> getListarPessoa() {
 	return listarPessoa;
     }
 
-    public void setListarPessoa(List<Pessoa> listarPessoa) {
+    public void setListarPessoa(List<PessoaFisica> listarPessoa) {
 	this.listarPessoa = listarPessoa;
     }
 
@@ -743,11 +743,11 @@ public class ManterInteressadosMB implements Serializable {
 	this.listarPessoaProcesso = listarPessoaProcesso;
     }
 
-    public Pessoa getPessoa() {
+    public PessoaFisica getPessoa() {
 	return pessoa;
     }
 
-    public void setPessoa(Pessoa pessoa) {
+    public void setPessoa(PessoaFisica pessoa) {
 	this.pessoa = pessoa;
     }
 
@@ -783,11 +783,11 @@ public class ManterInteressadosMB implements Serializable {
 	this.listarTipoPessoaProc = listarTipoPessoaProc;
     }
 
-    public Pessoa getPessoaCadastro() {
+    public PessoaFisica getPessoaCadastro() {
 	return pessoaCadastro;
     }
 
-    public void setPessoaCadastro(Pessoa pessoaCadastro) {
+    public void setPessoaCadastro(PessoaFisica pessoaCadastro) {
 	this.pessoaCadastro = pessoaCadastro;
     }
 

@@ -25,7 +25,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import br.gov.mj.sinca.dao.PessoaDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.util.DateUtil;
@@ -54,12 +54,12 @@ public class ConsultarProcessoMB implements Serializable {
     private String numProcessoMJ;
     private Date dataProtocoloMJ;
 
-    private List<Pessoa> listarPessoa;
+    private List<PessoaFisica> listarPessoa;
     private List<Processo> listarProcessos;
     private List<PessoaProcesso> listarPessoaProcesso;
     private List<String> listaDataProtocoloCA;
     
-    private Pessoa pessoa;
+    private PessoaFisica pessoa;
     private Processo processo;
     private PessoaProcesso pessoaProcesso;
     
@@ -76,12 +76,12 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     private void instanciaAtributos() {
-	listarPessoa = new ArrayList<Pessoa>();
+	listarPessoa = new ArrayList<PessoaFisica>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
 	JSFUtil.getSessionMap().put(LISTA_SESSAO, listarPessoaProcesso);
 	listarProcessos = new ArrayList<Processo>();
 	listaDataProtocoloCA = new ProcessoDAO().listarDataProtocoloCa();
-	pessoa = new Pessoa();
+	pessoa = new PessoaFisica();
 	pessoaProcesso = new PessoaProcesso();
 	processo = new Processo();
 	numProcessoMJ = null;
@@ -94,12 +94,12 @@ public class ConsultarProcessoMB implements Serializable {
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
 
-    public List<Pessoa> consultarPessoas() {
+    public List<PessoaFisica> consultarPessoas() {
 
 	JSFUtil.retornarMensagemModal("", "Consultando pessoas!");
-	List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	List<PessoaFisica> pessoas = new ArrayList<PessoaFisica>();
 	setListarPessoa(pessoas);
-	listarPessoa = new ArrayList<Pessoa>();
+	listarPessoa = new ArrayList<PessoaFisica>();
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
@@ -178,10 +178,10 @@ public class ConsultarProcessoMB implements Serializable {
 	return null;
     }
 
-    public List<Pessoa> listaPessoaPorNomeLk(String nome) {
+    public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    logger.info("Nome Pessoa PESQUISA " + nome);
-	List<Pessoa> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -242,19 +242,19 @@ public class ConsultarProcessoMB implements Serializable {
 	this.numProcessoMJ = numProcessoMJ;
     }
 
-    public List<Pessoa> getListarPessoa() {
+    public List<PessoaFisica> getListarPessoa() {
 	return listarPessoa;
     }
 
-    public void setListarPessoa(List<Pessoa> listarPessoa) {
+    public void setListarPessoa(List<PessoaFisica> listarPessoa) {
 	this.listarPessoa = listarPessoa;
     }
 
-    public Pessoa getPessoa() {
+    public PessoaFisica getPessoa() {
 	return pessoa;
     }
 
-    public void setPessoa(Pessoa pessoa) {
+    public void setPessoa(PessoaFisica pessoa) {
 	this.pessoa = pessoa;
     }
 

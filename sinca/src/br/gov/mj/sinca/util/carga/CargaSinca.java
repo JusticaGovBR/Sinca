@@ -24,7 +24,7 @@ import br.gov.mj.sinca.dao.SubGrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.TipoPessoaProcessoDAO;
 import br.gov.mj.sinca.entidades.Endereco;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
-import br.gov.mj.sinca.entidades.Pessoa;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
@@ -115,7 +115,7 @@ public class CargaSinca {
 						if (!entityManager.getTransaction().isActive())
 							entityManager.getTransaction().begin();
 
-						Pessoa pesReq = new Pessoa();
+						PessoaFisica pesReq = new PessoaFisica();
 
 						pesReq.setNomePessoa(linha.split(";")[3]);
 
@@ -183,7 +183,7 @@ public class CargaSinca {
 
 							continue;
 						}
-						Pessoa pesProcurador = new Pessoa();
+						PessoaFisica pesProcurador = new PessoaFisica();
 						pesProcurador.setNomePessoa(linha.split(";")[29]);
 
 						entityManager.persist(pesProcurador);
@@ -204,7 +204,7 @@ public class CargaSinca {
 
 						entityManager.persist(subGrupo);
 
-						Pessoa pessAnistiado = new Pessoa();
+						PessoaFisica pessAnistiado = new PessoaFisica();
 						pessAnistiado.setNomePessoa(linha.split(";")[33]);
 						pessAnistiado.setDataNascimento(formataData(linha
 								.split(";")[34]));

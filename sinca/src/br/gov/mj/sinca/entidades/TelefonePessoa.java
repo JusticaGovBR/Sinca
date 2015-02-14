@@ -26,9 +26,15 @@ public class TelefonePessoa implements Serializable {
 
 	//bi-directional many-to-one association to Pessoa
 	@ManyToOne
-	@JoinColumn(name="ID_PESSOA")
-	private Pessoa pessoa;
+	@JoinColumn(name="ID_PESSOA_FISICA")
+	private PessoaFisica pessoa;
 
+	//bi-directional many-to-one association to Pessoa
+	@ManyToOne
+	@JoinColumn(name="ID_PESSOA_JURIDICA")
+	private PessoaJuridica pessoaJuridica;
+
+	
 	//bi-directional many-to-one association to TipoTelefone
 	@ManyToOne
 	@JoinColumn(name="COD_TIPO")
@@ -61,16 +67,24 @@ public class TelefonePessoa implements Serializable {
 		this.observacao = observacao;
 	}
 
-	public Pessoa getPessoa() {
+	public PessoaFisica getPessoa() {
 		return this.pessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
+	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
 
 	public TipoTelefone getTipoTelefone() {
 		return this.tipoTelefone;
+	}
+
+	public PessoaJuridica getPessoaJuridica() {
+	    return pessoaJuridica;
+	}
+
+	public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
+	    this.pessoaJuridica = pessoaJuridica;
 	}
 
 	public void setTipoTelefone(TipoTelefone tipoTelefone) {
