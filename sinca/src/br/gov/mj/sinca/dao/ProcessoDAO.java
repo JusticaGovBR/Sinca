@@ -61,13 +61,13 @@ public class ProcessoDAO extends SincaAbastractDAO<Processo> {
     public List<String> listarDataProtocoloSEI() {
 	Query query = getEntityManager().
 		createNativeQuery("SELECT DISTINCT\r\n" + 
-			"    DATE_FORMAT(DATA_PROTOCOLO_CA,'%d/%m/%Y') AS DATA_CADASTRO\r\n" + 
+			"    DATE_FORMAT(DATA_PROTOCOLO_MJ,'%d/%m/%Y') AS DATA_CADASTRO\r\n" + 
 			"FROM\r\n" + 
 			"    Processo\r\n" + 
 			"WHERE\r\n" + 
-			"    DATA_PROTOCOLO_CA IS NOT NULL\r\n" + 
+			"    DATA_PROTOCOLO_MJ IS NOT NULL\r\n" + 
 			"ORDER BY\r\n" + 
-			"    DATA_PROTOCOLO_CA");
+			"    DATA_PROTOCOLO_MJ");
 	List<String> listaData = query.getResultList();
 	return listaData;
     }

@@ -1,8 +1,3 @@
-<?xml version='1.0' encoding='ISO-8859-1' ?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-            "http://www.w3.org/TR/html4/strict.dtd">
-
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -26,7 +21,7 @@
 
 
 			<p:dialog id="autenticacaoDialog"
-				header="SINCA - Sistema de Informações da Comissão de Anistia"
+				header="SINCA - Sistema de InformaÃ§Ãµes da ComissÃ£o de Anistia"
 				modal="false" draggable="false" closable="false" resizable="false"
 				showEffect="clip" hideEffect="" visible="true" position="center">
 
@@ -37,22 +32,23 @@
 				<p:panelGrid columns="2"
 					style="margin-bottom:10px;text-align:center; width : 100%;">
 
-					<h:outputLabel for="authUsuario" value="Usuário:" />
+					<h:outputLabel for="authUsuario" value="UsuÃ¡rio:" />
 					<p:inputText id="authUsuario" required="true"
-						value="#{loginMB.nome}" title="Usuário"
-						requiredMessage="O campo usuário é obrigatório" />
+						value="#{loginMB.nome}" title="UsuÃ¡rio"
+						requiredMessage="O campo usuÃ¡rio Ã© obrigatÃ³rio" />
 
 					<h:outputLabel for="authSenha" value="Senha:" />
 					<p:password id="authSenha" required="false" title="Senha"
 						value="#{loginMB.senha}"
-						requiredMessage="O campo senha é obrigatório" />
+						requiredMessage="O campo senha Ã© obrigatÃ³rio" />
 
 				</p:panelGrid>
 
 				<h:panelGrid columns="1" style="text-align:center; width : 100%;">
 					<p:commandButton id="btnAutenticar" value="Autenticar"
+					    ajax="false"
 						action="#{loginMB.acaoAutenticar}"
-						update=":form:autenticacaoDialog" />
+						update=":form:" />
 				</h:panelGrid>
 
 			</p:dialog>

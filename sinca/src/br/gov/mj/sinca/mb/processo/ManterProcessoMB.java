@@ -29,7 +29,7 @@ import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
 import br.gov.mj.sinca.dao.LoteProcessoDAO;
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
@@ -205,6 +205,10 @@ public class ManterProcessoMB implements Serializable {
 
     public String salvarProcesso() {
 	try {
+	    
+	     manterAnaliseMB.salvarAnalise();
+	    
+	    
 	    if (validarProcesso()) {
 		JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_ERROR, "Validando...");
 		JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
@@ -339,7 +343,7 @@ public class ManterProcessoMB implements Serializable {
     public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk( nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk( nome);
 	return pessoas;
     }
 
@@ -351,7 +355,7 @@ public class ManterProcessoMB implements Serializable {
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
-	    pessoa = new PessoaDAO().lerPorId(pessoa.getIdPessoa());
+	    pessoa = new PessoaFisicaDAO().lerPorId(pessoa.getIdPessoa());
 	    pessoas.add(pessoa);
 	    setListarPessoa(pessoas);
 	    habilitaTabePessoa = true;
@@ -370,7 +374,7 @@ public class ManterProcessoMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk( nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk( nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -379,7 +383,7 @@ public class ManterProcessoMB implements Serializable {
 		    return pessoas;
 		}
 
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
 			nomePessoa);
 	    }
 	    setListarPessoa(pessoas);
@@ -429,7 +433,7 @@ public class ManterProcessoMB implements Serializable {
 	    pessoaCadastro = ((PessoaProcesso) JSFUtil.getRequestMap().get("processoLista")).getPessoa();
 	    setListarDocumentoPessoa(new ArrayList<DocumentoPessoa>());
 	    if (pessoaCadastro.getIdPessoa() > 0) {
-		pessoaCadastro = new PessoaDAO().lerPorId(pessoaCadastro.getIdPessoa());
+		pessoaCadastro = new PessoaFisicaDAO().lerPorId(pessoaCadastro.getIdPessoa());
 		pessoaCadastro.getDocumentoPessoas().size();
 		pessoaCadastro.getPessoaEnderecos().size();
 		pessoaCadastro.getTelefonePessoas().size();
@@ -502,7 +506,7 @@ public class ManterProcessoMB implements Serializable {
 		pessoaCadastro.setDataHoraCadastro(new Date());
 	    }
 	    
-	    PessoaFisica pessoaSalva = new PessoaDAO().salvar(pessoaCadastro);
+	    PessoaFisica pessoaSalva = new PessoaFisicaDAO().salvar(pessoaCadastro);
 
 	    if (pessoaSalva.getIdPessoa() != null) {
 		List<PessoaEndereco> pssEndList = new PessoaEnderecoDAO().listarPorIdPessoa(pessoaSalva.getIdPessoa());
@@ -1478,7 +1482,7 @@ public class ManterProcessoMB implements Serializable {
     public void setManterAnaliseMB(ManterAnaliseMB manterAnaliseMB) {
         this.manterAnaliseMB = manterAnaliseMB;
     }
-
+    
     
     
 }

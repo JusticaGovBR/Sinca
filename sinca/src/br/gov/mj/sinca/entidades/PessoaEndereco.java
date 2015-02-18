@@ -29,7 +29,6 @@ public class PessoaEndereco implements Serializable {
     @JoinColumn(name = "ID_PESSOA_FISICA")
     private PessoaFisica pessoa;
     
-    
     // bi-directional many-to-one association to Pessoa
     @ManyToOne
     @JoinColumn(name = "ID_PESSOA_JURIDICA")

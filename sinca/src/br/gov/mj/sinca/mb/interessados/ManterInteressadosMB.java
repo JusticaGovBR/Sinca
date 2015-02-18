@@ -22,7 +22,7 @@ import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.DoencaDAO;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.TelefonePessoaDAO;
@@ -187,7 +187,7 @@ public class ManterInteressadosMB implements Serializable {
     public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    logger.info("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -199,7 +199,7 @@ public class ManterInteressadosMB implements Serializable {
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
-	    pessoa = new PessoaDAO().lerPorId(pessoa.getIdPessoa());
+	    pessoa = new PessoaFisicaDAO().lerPorId(pessoa.getIdPessoa());
 	    pessoas.add(pessoa);
 	    setListarPessoa(pessoas);
 	    habilitaTabePessoa = true;
@@ -218,7 +218,7 @@ public class ManterInteressadosMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -227,7 +227,7 @@ public class ManterInteressadosMB implements Serializable {
 		    return pessoas;
 		}
 
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
 			nomePessoa);
 	    }
 	    setListarPessoa(pessoas);
@@ -277,7 +277,7 @@ public class ManterInteressadosMB implements Serializable {
 	    pessoaCadastro = ((PessoaProcesso) JSFUtil.getRequestMap().get("processoLista")).getPessoa();
 	    setListarDocumentoPessoa(new ArrayList<DocumentoPessoa>());
 	    if (pessoaCadastro.getIdPessoa() > 0) {
-		pessoaCadastro = new PessoaDAO().lerPorId(pessoaCadastro.getIdPessoa());
+		pessoaCadastro = new PessoaFisicaDAO().lerPorId(pessoaCadastro.getIdPessoa());
 		pessoaCadastro.getDocumentoPessoas().size();
 		pessoaCadastro.getPessoaEnderecos().size();
 		pessoaCadastro.getTelefonePessoas().size();
@@ -350,7 +350,7 @@ public class ManterInteressadosMB implements Serializable {
 		pessoaCadastro.setDataHoraCadastro(new Date());
 	    }
 	    
-	    PessoaFisica pessoaSalva = new PessoaDAO().salvar(pessoaCadastro);
+	    PessoaFisica pessoaSalva = new PessoaFisicaDAO().salvar(pessoaCadastro);
 
 	    if (pessoaSalva.getIdPessoa() != null) {
 		List<PessoaEndereco> pssEndList = new PessoaEnderecoDAO().listarPorIdPessoa(pessoaSalva.getIdPessoa());

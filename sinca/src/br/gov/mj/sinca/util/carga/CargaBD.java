@@ -18,7 +18,7 @@ import org.apache.commons.io.FileUtils;
 import br.gov.mj.sinca.dao.DadosPcpaDAO;
 import br.gov.mj.sinca.dao.EnderecoDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
@@ -86,7 +86,7 @@ public class CargaBD {
 		    if (pcpa.getGenero_requer_PCPA() != null && pcpa.getGenero_requer_PCPA().length() < 2) {
 			pessoaReq.setGenero(pcpa.getGenero_requer_PCPA());
 		    }
-		    pessoaReq = new PessoaDAO().salvar(pessoaReq);
+		    pessoaReq = new PessoaFisicaDAO().salvar(pessoaReq);
 
 		    Endereco endReq = new Endereco();
 		    endReq.setLogradouro(pcpa.getEndereco_requer_PCPA());
@@ -129,7 +129,7 @@ public class CargaBD {
 
 			pessoaAnist.setNomePessoa(pcpa.getNome_anistiando());
 			pessoaAnist.setGenero(pcpa.getGenero_anistiando());
-			pessoaAnist = new PessoaDAO().salvar(pessoaAnist);
+			pessoaAnist = new PessoaFisicaDAO().salvar(pessoaAnist);
 
 			PessoaProcesso pessoaProcAnist = new PessoaProcesso();
 			pessoaProcAnist.setProcesso(processo);
@@ -154,7 +154,7 @@ public class CargaBD {
 			if (pcpa.getSexo_PCPA_S() != null && pcpa.getSexo_PCPA_S().length() < 2) {
 			    pessoaReqS.setGenero(pcpa.getSexo_PCPA_S());
 			}
-			pessoaReqS = new PessoaDAO().salvar(pessoaReqS);
+			pessoaReqS = new PessoaFisicaDAO().salvar(pessoaReqS);
 
 			endReq = new Endereco();
 			endReq.setLogradouro(pcpa.getEndereco_PCPA_S());

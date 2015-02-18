@@ -1,9 +1,18 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -11,7 +20,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="pessoa_juriduca")
+@Table(name="pessoa_juridica")
 @NamedQuery(name="PessoaJuridica.findAll", query="SELECT p FROM PessoaJuridica p")
 public class PessoaJuridica implements Serializable {
 	private static final long serialVersionUID = 1L;

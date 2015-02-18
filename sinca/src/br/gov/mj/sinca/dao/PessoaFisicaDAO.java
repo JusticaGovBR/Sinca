@@ -7,22 +7,19 @@ import javax.persistence.Query;
 
 import br.gov.mj.sinca.entidades.PessoaFisica;
 
-public class PessoaDAO extends SincaAbastractDAO<PessoaFisica> {
+public class PessoaFisicaDAO extends SincaAbastractDAO<PessoaFisica> {
 
-    public static Integer PESSOA_FISICA = 1;
-    public static Integer PESSOA_JURIDICA = 2;
-    
-    public PessoaDAO() {
+    public PessoaFisicaDAO() {
 	super();
     }
 
-    public PessoaDAO(EntityManager manager) {
+    public PessoaFisicaDAO(EntityManager manager) {
 	super(manager);
     }
 
     @SuppressWarnings("unchecked")
     public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
-	Query query = getEntityManager().createQuery("SELECT p FROM Pessoa p where p.nomePessoa like '" + nome + "%'");
+	Query query = getEntityManager().createQuery("SELECT p FROM PessoaFisica p where p.nomePessoa like '" + nome + "%'");
 	return query.getResultList();
     }
 
@@ -33,14 +30,14 @@ public class PessoaDAO extends SincaAbastractDAO<PessoaFisica> {
 	Query query = null;
 	if (numCpf != null && nome == null) {
 	    where = "where p.codTipo=p.numCpfCnpj like '%"+numCpf+"%'";
-	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
+	    query = getEntityManager().createQuery("SELECT p FROM PessoaFisica p " + where);
 	} else if (numCpf == null && nome != null) {
 	    where = "where p.nomePessoa=:nome";
-	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
+	    query = getEntityManager().createQuery("SELECT p FROM PessoaFisica p " + where);
 	    query.setParameter("nome", nome);
 	} else if (numCpf != null && nome != null) {
 	    where = "where  p.numCpfCnpj=:numCpf and p.nomePessoa=:nome";
-	    query = getEntityManager().createQuery("SELECT p FROM Pessoa p " + where);
+	    query = getEntityManager().createQuery("SELECT p FROM PessoaFisica p " + where);
 
 	    query.setParameter("numCpf", numCpf);
 	    query.setParameter("nome", nome);
@@ -51,7 +48,7 @@ public class PessoaDAO extends SincaAbastractDAO<PessoaFisica> {
     }
     
     public static void main(String[] args) {
-	PessoaDAO dao = new PessoaDAO();
+	PessoaFisicaDAO dao = new PessoaFisicaDAO();
 	List<PessoaFisica> lista = dao.listaPessoaPorNomeLk("Sebastião");
 	for (PessoaFisica pessoa : lista) {
 	     System.out.println(pessoa.getNomePessoa());

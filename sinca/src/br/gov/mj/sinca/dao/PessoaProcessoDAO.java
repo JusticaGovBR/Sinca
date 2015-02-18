@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 
 public class PessoaProcessoDAO extends SincaAbastractDAO<PessoaProcesso> {
@@ -81,15 +82,21 @@ public class PessoaProcessoDAO extends SincaAbastractDAO<PessoaProcesso> {
 	lista = query.getResultList();
 	return lista;
     }
+    @SuppressWarnings("unchecked")
+    public List<PessoaFisica> listarPessoasProcesso(Long idProcesso) {
+	Query query = getEntityManager().createQuery("SELECT p.pessoa FROM PessoaProcesso p where p.processo.idProcesso="+idProcesso);
+	return (List<PessoaFisica>)query.getResultList();
+    }
 
     public static void main(String[] args) throws ParseException {
 	PessoaProcessoDAO dao = new PessoaProcessoDAO();
 	Date data = new SimpleDateFormat("dd/MM/yyyy").parse("28/09/2001");
-	List<PessoaProcesso> lista = dao.listarProcessoPorDataProtocolo(data, null);
-	for (PessoaProcesso pessoaProcesso : lista) {
-	    System.out.println("" + pessoaProcesso.getProcesso().getIdProcesso() + " Nome Pessoa "
-		    + pessoaProcesso.getPessoa().getNomePessoa());
+	List<PessoaFisica> lista = dao.listarPessoasProcesso(49l);
+	for (PessoaFisica pessoaFisica : lista) {
+	     System.out.println(pessoaFisica.getNomePessoa());
 	}
+	
     }
+
 
 }

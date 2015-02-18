@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:body>
+
+		<h:outputScript name="locale-primefaces.js" library="js" />
+
+		<h:form id="formDiligencia">
+
+			<div id="divMess" align="center" style="width: 100%; height: 10%">
+
+				<p:messages id="messages_diligencia" showSummary="true"
+					showDetail="true" autoUpdate="true" closable="true" />
+
+			</div>
+
+			<p:panel id="pnDadocComunicacao" header="Diligência"
+				toggleSpeed="500" closeSpeed="500"
+				style="margin-bottom:20px;width : 100%" toggleable="true">
+
+				<h:panelGrid columns="2" cellpadding="40"
+					style="margin-bottom:10px; width : 100%;">
+					<h:outputLabel value="Orgão:" />
+					<p:autoComplete id="pessoaAnistList" minQueryLength="5"
+						title="Razão Social" value="#{manterDiligenciaMB.pessoaJuridica}"
+						var="pessoaAnist" size="80" maxlength="120"
+						completeMethod="#{manterPessoaJuridicaMB.listaPessoaPorNomeLk}"
+						scrollHeight="100" itemLabel="#{pessoaAnist.nomePessoa}"
+						converter="pessoaJuridicaConverter" itemValue="#{pessoaAnist}"
+						effect="clip" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:20px;width : 100%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Envio:" />
+						<p:calendar navigator="true"
+							value="#{manterDiligenciaMB.diligencia.dataEnvio}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da Ciência:" />
+						<p:calendar navigator="true"
+							value="#{manterDiligenciaMB.diligencia.dataRetorno}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
+					cellpadding="5">
+					<p:outputLabel value="Resultado:" style=" width : 100%;" />
+					<h:selectOneRadio
+						value="#{manterDiligenciaMB.diligencia.bolresultado}">
+						<f:selectItem itemLabel="Nada consta" itemValue="{" />
+						<f:selectItem itemLabel="Positivo" itemValue="0" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:30px; width : 200px;">
+					<h:outputLabel value="Complemento:" />
+					<p:inputTextarea maxlength="400" rows="4" cols="100"
+						value="#{manterDiligenciaMB.diligencia.observacao}" />
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:5px;width : 20%">
+					<p:commandButton value="Incluir" icon="ui-icon-plusthick" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10">
+					<p:dataTable var="reparacaoLista" id="dataTbDiligenciados"
+						value="#{manterDiligenciaMB.listaPessoaFisicas}" paginator="false"
+						rows="5" style="margin-bottom:20px;width :100%"
+						emptyMessage="Não incluido Diligênciados">
+
+						<p:column headerText="Nome">
+							<h:outputText id="tpNome" value="#{reparacaoLista.nomePessoa}" />
+						</p:column>
+
+						<p:column headerText="Número Cpf">
+							<h:outputText id="tpEnvioPara" value="#{reparacaoLista.numCpf}" />
+						</p:column>
+
+						<p:column headerText="Ações" style="width:32px;text-align: center"
+							value="Ações">
+							<p:commandButton value="Remover" action="#"
+								icon="ui-icon ui-icon-trash" title="Remover Diligênciado"
+								ajax="true" update=":formDiligencia:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10">
+					<p:dataTable var="reparacaoLista" id="dataTbListaEnvio" value="#"
+						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
+						emptyMessage="Não incluido diligências">
+
+						<p:column headerText="Tipo Envio">
+							<h:outputText id="tpEnvio" value="" />
+						</p:column>
+
+						<p:column headerText="Enviado para">
+							<h:outputText id="tpEnvioPara" value="" />
+						</p:column>
+
+						<p:column headerText="Data Envio">
+							<h:outputText id="dataEnvio" value="" />
+						</p:column>
+
+						<p:column headerText="Ações" style="width:32px;text-align: center"
+							value="Ações">
+							<p:commandButton value="Remover" action="#"
+								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+								ajax="true" update=":formDiligencia:">
+								<f:setPropertyActionListener value="#{reparacaoLista}"
+									target="#" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</h:body>
+</ui:composition>

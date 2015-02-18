@@ -43,21 +43,21 @@
 							<h:outputLabel value="CPF:" />
 							<p:inputMask mask="999.999.999-99" id="inpt_numCPF_Anistiado"
 								size="15" maxlength="15"
-								value="#{manterAnistiadoMB.numCpfAnistiado}" />
+								value="#{manterPessoaFisicaMB.numCpfAnistiado}" />
 						</h:panelGrid>
 						<h:panelGrid columns="3" cellpadding="40" style=" width : 150px;">
 							<h:outputLabel value="Nome:*" />
 							<p:autoComplete id="pessoaAnistList" minQueryLength="5"
 								title="Nome Pessoa Anistiado"
-								value="#{manterAnistiadoMB.pessoaAnistiado}" var="pessoaAnist"
+								value="#{manterPessoaFisicaMB.pessoaAnistiado}" var="pessoaAnist"
 								size="50" maxlength="120"
-								completeMethod="#{manterAnistiadoMB.listaPessoaPorNomeLk}"
+								completeMethod="#{manterPessoaFisicaMB.listaPessoaPorNomeLk}"
 								scrollHeight="100" itemLabel="#{pessoaAnist.nomePessoa}"
 								converter="pessoaConverter" itemValue="#{pessoaAnist}"
 								effect="fade" />
 							<p:commandButton id="btnConsultar" value="Consultar" ajax="true"
 								update="pnlDadosTabelAnistiados"
-								action="#{manterAnistiadoMB.consultarPessoasAnistiada}"
+								action="#{manterPessoaFisicaMB.consultarPessoasAnistiada}"
 								icon="ui-icon-newwin" title="Consultaraf" />
 
 						</h:panelGrid>
@@ -66,7 +66,7 @@
 						style="text-align:center; width : 100%;">
 						<p:commandButton id="btnSalvar" value="Salvar" ajax="false"
 							update="pnlDadosTabelAnistiados"
-							actionListener="#{manterAnistiadoMB.salvarPessoaAnistia}"
+							actionListener="#{manterPessoaFisicaMB.salvarPessoaAnistia}"
 							icon="ui-icon-newwin" title="Salvar Pessoa" />
 
 					</h:panelGrid>
@@ -78,25 +78,18 @@
 					<h:panelGrid columns="3" cellpadding="40" style=" width : 100%;">
 
 						<h:panelGrid columns="3" cellpadding="10" style=" width : 50px;">
-						    <h:inputHidden value="#{manterAnistiadoMB.pessoaAnistCadasto.idPessoa}"/>
+						    <h:inputHidden value="#{manterPessoaFisicaMB.pessoaAnistCadasto.idPessoa}"/>
 							<p:outputLabel value="CPF:*" />
 							<p:inputMask mask="?999.999.999-99"
 								id="inpt_cadastro_numCPF_Anistiado" size="15" maxlength="15"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.numCpf}" />
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.numCpf}" />
 						</h:panelGrid>
 						<h:panelGrid columns="2" cellpadding="10" style=" width : 150px;">
 							<p:outputLabel value="Nome:*" />
 							<p:inputText id="inpt_cadastro_nomeAnistida"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePessoa}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.nomePessoa}"
 								size="100" maxlength="100" />
 						</h:panelGrid>
-					</h:panelGrid>
-					<h:panelGrid columns="2" cellpadding="1"
-						style="font-family:Arial;font-size:7px;font-weight:normal;
-									font-style:normal;text-decoration:none;color:#333333;height : 36px; width : 200px;">
-						<h:outputLabel value="Mesmo Requerente:*" />
-						<p:selectBooleanCheckbox label="Mesmo Requerente"
-							value="#{manterAnistiadoMB.mesmoRequerente}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="4" cellpadding="40"
@@ -105,13 +98,13 @@
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 							<h:outputLabel value="Data Nascimento:" />
 							<p:calendar id="dataNascimentoAnistidado"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.dataNascimento}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.dataNascimento}"
 								showOn="button" locale="pt" size="10" />
 						</h:panelGrid>
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
 							<h:outputLabel value="Sexo:*" />
 							<p:selectOneMenu id="sexoAnistiado"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.genero}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.genero}"
 								style="width:125px">
 								<f:selectItem itemLabel="Selecione" itemValue="" />
 								<f:selectItem itemLabel="Masculio" itemValue="M" />
@@ -121,10 +114,10 @@
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 							<h:outputLabel value="Estado Civil:" />
 							<p:selectOneMenu
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.idEstadoCivil}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.idEstadoCivil}"
 								style=" width : 150px;" effect="fade">
 								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-								<f:selectItems value="#{manterAnistiadoMB.listarEstadoCivil}"
+								<f:selectItems value="#{manterPessoaFisicaMB.listarEstadoCivil}"
 									var="item" itemLabel="#{item.descricao}"
 									itemValue="#{item.idEstadoCivil}" />
 							</p:selectOneMenu>
@@ -132,7 +125,7 @@
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
 							<h:outputLabel value="Nacionalidade:*" />
 							<p:inputText id="inpt_cadastro_nacionalidade"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.nacionalidade}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.nacionalidade}"
 								size="30" maxlength="30" />
 						</h:panelGrid>
 
@@ -143,7 +136,7 @@
 						<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
 							<h:outputLabel value="Email:*" />
 							<p:inputText id="inpt_cadastro_emailAnistiado" 
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.emailPessoa}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.emailPessoa}"
 								size="80" maxlength="100" />
 						</h:panelGrid>
 					</h:panelGrid>
@@ -155,14 +148,14 @@
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
 							<h:outputLabel value="Nome Mãe:" />
 							<p:inputText id="inpt_cadastro_nomemMae"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomeMae}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.nomeMae}"
 								size="80" maxlength="100" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="10" style=" width :100%">
 							<h:outputLabel value="Nome Pai:" />
 							<p:inputText id="inpt_cadastro_nomemPai"
-								value="#{manterAnistiadoMB.pessoaAnistCadasto.nomePai}"
+								value="#{manterPessoaFisicaMB.pessoaAnistCadasto.nomePai}"
 								size="80" maxlength="100" />
 						</h:panelGrid>
 					</h:panelGrid>
@@ -170,29 +163,29 @@
 					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 						<h:outputText value="Comunicado de Óbito: " />
 						<p:selectBooleanCheckbox id="checkAnitObito"
-							value="#{manterAnistiadoMB.comunicadoObito}"
+							value="#{manterPessoaFisicaMB.comunicadoObito}"
 							label="Comunicado de Óbito" />
 						<p:ajax event="click" update="pnlObitoAnistida"
-							listener="#{manterAnistiadoMB.habilitarPainelObito}" />
+							listener="#{manterPessoaFisicaMB.habilitarPainelObito}" />
 					</h:panelGrid>
 				</p:panel>
 
 				<p:panel id="pnlObitoAnistida" header="Comunicado de Óbito"
 					style="margin-bottom:20px;width : 100%" toggleable="true"
-					visible="#{manterAnistiadoMB.comunicadoObito}">
+					visible="#{manterPessoaFisicaMB.comunicadoObito}">
 
 					<h:panelGrid columns="4" cellpadding="10"
 						style=" margin-bottom:20px;width : 100%">
 
 						<h:outputLabel value="Data do Óbito" style=" width : 50%" />
 						<p:calendar id="dataObito_anistiado"
-							value="#{manterAnistiadoMB.pessoaAnistCadasto.dataObito}"
+							value="#{manterPessoaFisicaMB.pessoaAnistCadasto.dataObito}"
 							showOn="button" locale="pt" size="10" style=" width : 50%" />
 
 						<h:outputLabel value="Data do Comunicado do Óbito"
 							style=" width : 50%" />
 						<p:calendar id="dataComunicadoObito_anistiado"
-							value="#{manterAnistiadoMB.pessoaAnistCadasto.dataComunicadoObito}"
+							value="#{manterPessoaFisicaMB.pessoaAnistCadasto.dataComunicadoObito}"
 							showOn="button" locale="pt" size="10" style=" width : 50%" />
 
 
@@ -201,7 +194,7 @@
 						<h:outputLabel value="Observações do Comunicado::" />
 						<p:inputTextarea id="txtAreaObservaObitoAnistiado" maxlength="400"
 							rows="4" cols="100"
-							value="#{manterAnistiadoMB.pessoaAnistCadasto.observacaoObito}" />
+							value="#{manterPessoaFisicaMB.pessoaAnistCadasto.observacaoObito}" />
 					</h:panelGrid>
 
 
@@ -217,7 +210,7 @@
 					</h:panelGrid>
 
 					<p:dataTable var="documentosAnisti" id="listaDocumentos"
-						value="#{manterAnistiadoMB.listarDocumentoPessoa}"
+						value="#{manterPessoaFisicaMB.listarDocumentoPessoa}"
 						paginator="false" rows="10">
 						<p:column headerText="Tipo Documento">
 							<h:outputText value="#{documentosAnisti.tipoDocumento.descricao}" />
@@ -234,22 +227,22 @@
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Editar" id="Editar_Doc_anist"
-								actionListener="#{manterAnistiadoMB.detalharDocumentoAnistia}"
+								actionListener="#{manterPessoaFisicaMB.detalharDocumentoAnistia}"
 								update=":formFormularioAnistiado_Cadastro:documentoDetalhe"
 								icon="ui-icon-search" title="Detalhar" ajax="true">
 								<f:setPropertyActionListener value="#{documentosAnisti}"
-									target="#{manterAnistiadoMB.documentoPessDetalhar}" />
+									target="#{manterPessoaFisicaMB.documentoPessDetalhar}" />
 
 							</p:commandButton>
 						</p:column>
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Excluir" id="Excluir_Doc_anist"
-								actionListener="#{manterAnistiadoMB.removerDocumento}"
+								actionListener="#{manterPessoaFisicaMB.removerDocumento}"
 								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
 								update="listaDocumentos">
 								<f:setPropertyActionListener value="#{documentosAnisti}"
-									target="#{manterAnistiadoMB.documentoPessDetalhar}" />
+									target="#{manterPessoaFisicaMB.documentoPessDetalhar}" />
 
 							</p:commandButton>
 						</p:column>
@@ -268,7 +261,7 @@
 					</h:panelGrid>
 
 					<p:dataTable var="enderecosAnistia" id="listaEnderecos"
-						value="#{manterAnistiadoMB.listarEnderecoAnistia}"
+						value="#{manterPessoaFisicaMB.listarEnderecoAnistia}"
 						paginator="false" rows="10">
 						<p:column headerText="Tipo Endereço">
 							<h:outputText value="#{enderecosAnistia.tipoEndereco.descricao}" />
@@ -289,22 +282,22 @@
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Editar" id="Editar_Endereco_anist"
-								actionListener="#{manterAnistiadoMB.detalharEnderecoAnistia}"
+								actionListener="#{manterPessoaFisicaMB.detalharEnderecoAnistia}"
 								update=":formFormularioAnistiado_Cadastro:enderecoDetalhe" icon="ui-icon-search"
 								title="Detalhar Endereço" ajax="true">
 								<f:setPropertyActionListener value="#{enderecosAnistia}"
-									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaFisicaMB.enderecoAnistCadastro}" />
 
 							</p:commandButton>
 						</p:column>
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Excluir" id="Excluir_Endereco_anist"
-								actionListener="#{manterAnistiadoMB.removerEndereco}"
+								actionListener="#{manterPessoaFisicaMB.removerEndereco}"
 								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
 								update="listaEnderecos">
 								<f:setPropertyActionListener value="#{enderecosAnistia}"
-									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaFisicaMB.enderecoAnistCadastro}" />
 
 							</p:commandButton>
 						</p:column>
@@ -321,7 +314,7 @@
 					</h:panelGrid>
 
 					<p:dataTable var="telefoneAnistia" id="listaTelefonesAnistiado"
-						value="#{manterAnistiadoMB.listarTelefonePessoa}"
+						value="#{manterPessoaFisicaMB.listarTelefonePessoa}"
 						paginator="false" rows="10">
 						<p:column headerText="Tipo Telefone">
 							<h:outputText value="#{telefoneAnistia.tipoTelefone.descricao}" />
@@ -337,22 +330,22 @@
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Editar" id="Editar_telefone_anist"
-								actionListener="#{manterAnistiadoMB.detalharTelefoneAnistia}"
+								actionListener="#{manterPessoaFisicaMB.detalharTelefoneAnistia}"
 								update=":formFormularioAnistiado_Cadastro:detalheTelefone"
 								icon="ui-icon-search" title="Detalhar" ajax="true">
 								<f:setPropertyActionListener value="#{enderecosAnistia}"
-									target="#{manterAnistiadoMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaFisicaMB.enderecoAnistCadastro}" />
 
 							</p:commandButton>
 						</p:column>
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Excluir" id="Excluir_telefone_anist"
-								actionListener="#{manterAnistiadoMB.removerTelefone}"
+								actionListener="#{manterPessoaFisicaMB.removerTelefone}"
 								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
 								update="listaTelefonesAnistiado">
 								<f:setPropertyActionListener value="#{telefoneAnistia}"
-									target="#{manterAnistiadoMB.telefonePessoa}" />
+									target="#{manterPessoaFisicaMB.telefonePessoa}" />
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
@@ -365,7 +358,7 @@
 						style="margin-bottom:20px;width : 100%" toggleable="false">
 
 						<p:dataTable var="pessoaLista"
-							value="#{manterAnistiadoMB.listarPessoaAnistiado}"
+							value="#{manterPessoaFisicaMB.listarPessoaAnistiado}"
 							paginator="true" rows="5">
 							<p:column headerText="CPF">
 								<h:outputText value="#{pessoaLista.numCpf}" />
@@ -387,10 +380,10 @@
 
 							<p:column style="width:32px;text-align: center">
 								<p:commandButton value="Visualizar"
-									action="#{manterAnistiadoMB.detalharAnistiado}"
+									action="#{manterPessoaFisicaMB.detalharAnistiado}"
 									icon="ui-icon-search" title="Detalhar" ajax="false">
 									<f:setPropertyActionListener value="#{pessoaLista}"
-										target="#{manterAnistiadoMB.pessoa}" />
+										target="#{manterPessoaFisicaMB.pessoa}" />
 								</p:commandButton>
 							</p:column>
 
@@ -409,10 +402,10 @@
 						<h:panelGrid columns="1" style=" width : 80px;">
 							<h:outputLabel value="Tipo Documento:*" style=" width : 150px;" />
 							<p:selectOneMenu id="TipoDocumentoAnist"
-								value="#{manterAnistiadoMB.tipoDocumento.idTipoDocumento}"
+								value="#{manterPessoaFisicaMB.tipoDocumento.idTipoDocumento}"
 								style="width:150px">
 								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-								<f:selectItems value="#{manterAnistiadoMB.listarTipoDocumento}"
+								<f:selectItems value="#{manterPessoaFisicaMB.listarTipoDocumento}"
 									var="item" itemLabel="#{item.descricao}"
 									itemValue="#{item.idTipoDocumento}" />
 							</p:selectOneMenu>
@@ -421,14 +414,14 @@
 						<h:panelGrid columns="1" style=" width : 50px;">
 							<h:outputLabel value="Número:*" style=" width : 100px;" />
 							<p:inputText id="inpt_ducmento_numero"
-								value="#{manterAnistiadoMB.documentoPessoa.numeroDocumento}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.numeroDocumento}"
 								size="50" maxlength="100" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 							<h:outputLabel value="Data Emissão:" />
 							<p:calendar id="dataEmissaoAnistidado"
-								value="#{manterAnistiadoMB.documentoPessoa.dataEmissao}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.dataEmissao}"
 								showOn="button" locale="pt" size="10" />
 						</h:panelGrid>
 
@@ -438,7 +431,7 @@
 						style="margin-bottom:20px;  width : 100%; height : 100%">
 						<h:outputLabel value="Órgão Emissor:*" style=" width : 100px;" />
 						<p:inputText id="inpt_ducmento_descOrgao"
-							value="#{manterAnistiadoMB.documentoPessoa.descOrgao}" size="120"
+							value="#{manterPessoaFisicaMB.documentoPessoa.descOrgao}" size="120"
 							maxlength="120" />
 					</h:panelGrid>
 
@@ -448,21 +441,21 @@
 						<h:panelGrid columns="1" style="width : 60%; height :60%">
 							<h:outputLabel value="Livro:" style=" width : 60px;" />
 							<p:inputText id="inpt_observacao_livro"
-								value="#{manterAnistiadoMB.documentoPessoa.observacao}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.observacao}"
 								size="80" maxlength="80" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" style="width : 60%; height :60%">
 							<h:outputLabel value="Zona Eleitoral" style=" width : 50px;" />
 							<p:inputText id="inpt_observacao_zona"
-								value="#{manterAnistiadoMB.documentoPessoa.zonaEleitoral}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.zonaEleitoral}"
 								size="40" maxlength="40" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" style="width : 60%; height :60%">
 							<h:outputLabel value="Seção" style=" width : 50px;" />
 							<p:inputText id="inpt_observacao_secao"
-								value="#{manterAnistiadoMB.documentoPessoa.secao}" size="40"
+								value="#{manterPessoaFisicaMB.documentoPessoa.secao}" size="40"
 								maxlength="40" />
 						</h:panelGrid>
 
@@ -476,14 +469,14 @@
 							style="margin-bottom:40px;  width : 100%; height : 100%">
 							<h:outputLabel value="País de Origem:*" style=" width : 100px;" />
 							<p:inputText id="inpt_ducmento_paisOrigem"
-								value="#{manterAnistiadoMB.documentoPessoa.paisOrigem}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.paisOrigem}"
 								size="120" maxlength="120" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 							<h:outputLabel value="Validade:" />
 							<p:calendar id="dataValidadeAnistidado"
-								value="#{manterAnistiadoMB.documentoPessoa.dataValidade}"
+								value="#{manterPessoaFisicaMB.documentoPessoa.dataValidade}"
 								showOn="button" locale="pt" size="10" />
 						</h:panelGrid>
 
@@ -494,7 +487,7 @@
 						<p:commandButton id="btnSalvarDocumentoAnistiado"
 							value="Adicionar" update="listaDocumentos" ajax="true"
 							style="horizontal-align:center"
-							action="#{manterAnistiadoMB.addDocumentoAnistia}"
+							action="#{manterPessoaFisicaMB.addDocumentoAnistia}"
 							icon="ui-icon-newwin" title="Documentos">
 						</p:commandButton>
 						<p:commandButton value="Fechar" id="FecharDocumentoAnistr"
@@ -516,11 +509,11 @@
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="Tipo" style=" width : 100px;" />
 								<p:selectOneMenu id="TipoEnderecoAnist"
-									value="#{manterAnistiadoMB.tipoEndereco.idTipoEndereco}"
+									value="#{manterPessoaFisicaMB.tipoEndereco.idTipoEndereco}"
 									style="width:100px">
 									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 									<f:selectItems
-										value="#{manterAnistiadoMB.listaTipoEnderecoAnistiado}"
+										value="#{manterPessoaFisicaMB.listaTipoEnderecoAnistiado}"
 										var="item" itemLabel="#{item.descricao}"
 										itemValue="#{item.idTipoEndereco}" />
 								</p:selectOneMenu>
@@ -529,11 +522,11 @@
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="UF:" style=" width : 100px;" />
 								<p:selectOneMenu id="IDUF"
-									value="#{manterAnistiadoMB.endereco.uf}" style="width:100px">
-									<p:ajax listener="#{manterAnistiadoMB.onEstadoChange}"
+									value="#{manterPessoaFisicaMB.endereco.uf}" style="width:100px">
+									<p:ajax listener="#{manterPessoaFisicaMB.onEstadoChange}"
 										update="IDCidaddes" />
 									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-									<f:selectItems value="#{manterAnistiadoMB.listarEstadouf}"
+									<f:selectItems value="#{manterPessoaFisicaMB.listarEstadouf}"
 										var="item" itemLabel="#{item.sigla}" itemValue="#{item.sigla}" />
 								</p:selectOneMenu>
 							</h:panelGrid>
@@ -541,10 +534,10 @@
 							<h:panelGrid columns="1" cellpadding="1" style=" width : 312px;">
 								<h:outputLabel value="Cidade:" style=" width : 10px;" />
 								<p:selectOneMenu id="IDCidaddes" editable="true"
-									value="#{manterAnistiadoMB.cidadeAnistiado.nome}"
+									value="#{manterPessoaFisicaMB.cidadeAnistiado.nome}"
 									style="width:300px">
 									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-									<f:selectItems value="#{manterAnistiadoMB.listarCidades}"
+									<f:selectItems value="#{manterPessoaFisicaMB.listarCidades}"
 										var="item" itemLabel="#{item.nome}" itemValue="#{item.nome}" />
 								</p:selectOneMenu>
 							</h:panelGrid>
@@ -557,13 +550,13 @@
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="Rua/Quadra:*" style=" width : 100px;" />
 								<p:inputText id="inpt_endereo_Logradouro"
-									value="#{manterAnistiadoMB.enderecoAnistCadastro.logradouro}"
+									value="#{manterPessoaFisicaMB.enderecoAnistCadastro.logradouro}"
 									size="70" maxlength="150" />
 							</h:panelGrid>
 							<h:panelGrid columns="1" style=" width : 150px;">
 								<h:outputLabel value="Bairro:" />
 								<p:inputText id="inpt_cadastro_bairro_anist"
-									value="#{manterAnistiadoMB.enderecoAnistCadastro.bairro}"
+									value="#{manterPessoaFisicaMB.enderecoAnistCadastro.bairro}"
 									size="50" maxlength="100" />
 							</h:panelGrid>
 							
@@ -574,21 +567,21 @@
 							<h:panelGrid columns="1" style=" width : 20px;">
 								<h:outputLabel value="Número:" />
 								<p:inputText id="inpt_cadastro_numero_anist"
-									value="#{manterAnistiadoMB.enderecoAnistCadastro.numero}"
+									value="#{manterPessoaFisicaMB.enderecoAnistCadastro.numero}"
 									size="20" maxlength="20" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="Complemento:" />
 								<p:inputText id="inpt_cadastro_complemento_anist"
-									value="#{manterAnistiadoMB.enderecoAnistCadastro.complemento}"
+									value="#{manterPessoaFisicaMB.enderecoAnistCadastro.complemento}"
 									size="80" maxlength="80" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style=" width : 40px;">
 								<h:outputLabel value="Cep:" />
 								<p:inputMask mask="99.999-999" id="inpt_cadastro_cep_anist"
-									value="#{manterAnistiadoMB.enderecoAnistCadastro.cep}"
+									value="#{manterPessoaFisicaMB.enderecoAnistCadastro.cep}"
 									size="20" maxlength="20" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -599,7 +592,7 @@
 							<p:commandButton id="btnSalvarEndereco" value="Adicionar"
 								update="listaEnderecos" ajax="true"
 								style="horizontal-align:center"
-								action="#{manterAnistiadoMB.addEnderecoAnistia}"
+								action="#{manterPessoaFisicaMB.addEnderecoAnistia}"
 								icon="ui-icon-newwin" title="Endereço">
 							</p:commandButton>
 							<p:commandButton value="Fechar" id="FecharEndAnistrr"
@@ -623,10 +616,10 @@
 						<h:panelGrid columns="1" style=" width : 50px;">
 							<h:outputLabel value="Tipo Telefone:" style=" width : 100px;" />
 							<p:selectOneMenu id="TipoTelefoneist"
-								value="#{manterAnistiadoMB.tipoTelefone.codTipo}"
+								value="#{manterPessoaFisicaMB.tipoTelefone.codTipo}"
 								style="width:100px">
 								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-								<f:selectItems value="#{manterAnistiadoMB.listarTipoTelefone}"
+								<f:selectItems value="#{manterPessoaFisicaMB.listarTipoTelefone}"
 									var="item" itemLabel="#{item.descricao}"
 									itemValue="#{item.codTipo}" />
 							</p:selectOneMenu>
@@ -636,14 +629,14 @@
 							<h:outputLabel value="NumTelefone:" />
 							<p:inputMask mask="?99-99999999999"
 								id="inpt_cadastro_num_telefone_anist"
-								value="#{manterAnistiadoMB.telefonePessoa.numTelefone}"
+								value="#{manterPessoaFisicaMB.telefonePessoa.numTelefone}"
 								size="20" maxlength="20" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" style=" width : 40px;">
 							<h:outputLabel value="Observação:" />
 							<p:inputText id="inpt_cadastro_observ_telefone_anist"
-								value="#{manterAnistiadoMB.telefonePessoa.observacao}"
+								value="#{manterPessoaFisicaMB.telefonePessoa.observacao}"
 								size="100" maxlength="100" />
 						</h:panelGrid>
 
@@ -655,7 +648,7 @@
 						<p:commandButton id="btnSalvarTelefone" value="Adicionar"
 							update="listaTelefonesAnistiado" ajax="true"
 							style="horizontal-align:center"
-							actionListener="#{manterAnistiadoMB.addTelefoneAnistia}"
+							actionListener="#{manterPessoaFisicaMB.addTelefoneAnistia}"
 							icon="ui-icon-newwin" title="Telefones">
 						</p:commandButton>
 						<p:commandButton value="Fechar" id="FecharTelefAnistrr"

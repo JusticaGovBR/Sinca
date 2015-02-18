@@ -2,9 +2,6 @@ package br.gov.mj.sinca.util;
 
 import java.util.Map;
 
-import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.ExternalContext;
@@ -93,48 +90,6 @@ public class JSFUtil {
 	return valorInt;
     }
 
-    /**
-     * Método que pega a instância de um objeto pelo nome da variável usada na
-     * EL (Expression Language).
-     * 
-     * <br />
-     * <br />
-     * Exemplo: para pegar um Managed Bean chamado loginMB, deve-se usar o
-     * método da seguinte forma:
-     * 
-     * <br />
-     * <code>LoginMB login = (LoginMB) JSFUtil.getVariavelApplication("loginMB");</code>
-     */
-    public static Object getVariavelApplication(String nomeDaVariavel) {
-	ELContext elContexto = FacesContext.getCurrentInstance().getELContext();
-	Object obj = FacesContext.getCurrentInstance().getApplication().getELResolver()
-		.getValue(elContexto, null, nomeDaVariavel);
-
-	return obj;
-    }
-
-    /**
-     * Método que pega o valor de um expressão EL (Expression Language).
-     * 
-     * <br />
-     * <br />
-     * Exemplo: para pegar o valor de #{usuario.nome}, deve-se usar o método da
-     * seguinte forma:
-     * 
-     * <br />
-     * <code>String nome = (String) JSFUtil.getValorExpressao("usuario.nome");</code>
-     */
-    public static Object getValorExpressao(String expressao) {
-	FacesContext contexto = FacesContext.getCurrentInstance();
-	Application app = contexto.getApplication();
-
-	ValueExpression expression = app.getExpressionFactory().createValueExpression(contexto.getELContext(),
-		String.format("#{%s}", expressao), Object.class);
-
-	Object obj = expression.getValue(contexto.getELContext());
-
-	return obj;
-    }
 
     /**
      * Método que pega o objeto HttpSession associado com a requisição atual.

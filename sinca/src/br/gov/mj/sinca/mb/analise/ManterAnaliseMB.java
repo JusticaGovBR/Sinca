@@ -9,7 +9,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import br.gov.mj.sinca.dao.PessoaDAO;
+import org.apache.log4j.Logger;
+
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
+import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.dao.SubStatusProcessoDAO;
 import br.gov.mj.sinca.dao.TipoAnaliseJulgamentoDAO;
@@ -18,12 +21,14 @@ import br.gov.mj.sinca.entidades.AnaliseProcesso;
 import br.gov.mj.sinca.entidades.AnalistaProcesso;
 import br.gov.mj.sinca.entidades.PerseguicaoAnalise;
 import br.gov.mj.sinca.entidades.PessoaFisica;
+import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.SubStatusProcesso;
 import br.gov.mj.sinca.entidades.TipoAnaliseJulgamento;
 import br.gov.mj.sinca.entidades.TipoPerseguicao;
 import br.gov.mj.sinca.entidades.Usuario;
 import br.gov.mj.sinca.mb.LoginMB;
+import br.gov.mj.sinca.mb.processo.ManterProcessoMB;
 import br.gov.mj.sinca.util.DateUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 
@@ -69,9 +74,12 @@ public class ManterAnaliseMB implements Serializable {
 
     private String dataRecebimento;
     
+    private Logger logger;
+    
     @ManagedProperty(value="#{loginMB}") 
     private LoginMB loginMB;
 
+   
     
     @PostConstruct
     public void Init() {
@@ -79,6 +87,7 @@ public class ManterAnaliseMB implements Serializable {
 	instanciaAtributos();
     }
 
+    @SuppressWarnings("static-access")
     private void instanciaAtributos() {
 	listarTipoAnaliseJulgamento = new TipoAnaliseJulgamentoDAO().lerTodos();
 	analiseProcesso = new AnaliseProcesso();
@@ -89,13 +98,20 @@ public class ManterAnaliseMB implements Serializable {
 	tipoPerseguicao = new TipoPerseguicao();
 	usuario = loginMB.getUsuario();
 	dataRecebimento = DateUtil.dataHoraAtual();
-	if (true) {
-	    Processo processo = new ProcessoDAO().lerPorId(25271l);
-	    analiseProcesso.setProcesso(processo);
-	}
+	logger.getLogger(this.getClass());
+	
+//	PessoaProcesso pessoaProcesso = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
+//	
+//	if (pessoaProcesso!=null && pessoaProcesso.getProcesso().getIdProcesso()>0) {
+//	    pessoaProcesso  = new PessoaProcessoDAO().lerPorId(pessoaProcesso.getIdPessoaProcesso());
+//	    logger.debug("Inicilaindo a Analise... do processo:"+pessoaProcesso.getProcesso());
+//	    Processo processo = new ProcessoDAO().lerPorId(pessoaProcesso.getProcesso().getIdProcesso());
+//	    analiseProcesso.setProcesso(processo);
+//	}
     }
 
     public String salvarAnalise() {
+	logger.debug("Salvando a Analise... do processo:");
 	return null;
     }
 
@@ -108,7 +124,7 @@ public class ManterAnaliseMB implements Serializable {
 	String nomePessoa = pessoaAnalista != null ? pessoaAnalista.getNomePessoa() : null;
 
 	if (pessoaAnalista != null && pessoaAnalista.getIdPessoa() != null && pessoaAnalista.getIdPessoa() > 0) {
-	    pessoaAnalista = new PessoaDAO().lerPorId(pessoaAnalista.getIdPessoa());
+	    pessoaAnalista = new PessoaFisicaDAO().lerPorId(pessoaAnalista.getIdPessoa());
 	    pessoas.add(pessoaAnalista);
 	    setListarPessoa(pessoas);
 	    // habilitaTabePessoa = true;
@@ -128,7 +144,7 @@ public class ManterAnaliseMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -137,10 +153,10 @@ public class ManterAnaliseMB implements Serializable {
 		    return pessoas;
 		}
 
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(numCpf.replace(".", "").replace("-", "").trim(),
 			nomePessoa);
 		if (pessoas.isEmpty()) {
-		    pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpf.trim(), nomePessoa);
+		    pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(numCpf.trim(), nomePessoa);
 		}
 	    }
 	    setListarPessoa(pessoas);
@@ -241,7 +257,7 @@ public class ManterAnaliseMB implements Serializable {
     public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -390,6 +406,7 @@ public class ManterAnaliseMB implements Serializable {
     public void setDataRecebimento(String dataRecebimento) {
         this.dataRecebimento = dataRecebimento;
     }
+
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;

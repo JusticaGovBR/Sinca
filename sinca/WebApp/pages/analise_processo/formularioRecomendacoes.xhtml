@@ -77,35 +77,41 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
+				<h:panelGrid columns="1" style="margin-bottom:10px;width :100%"
+					cellpadding="5">
+					<p:outputLabel value="Dispositivo/(Recomendação):"
+						style="text-align:left;color:Black;font-weight:bold; width : 500px;" />
+					<p:inputTextarea maxlength="500" rows="5" cols="160" value="" />
+				</h:panelGrid>
 
-				<h:panelGrid columns="3" style="margin-bottom:20px;width :60%"
+				<h:panelGrid columns="1" style="margin-bottom:20px;width :60%"
 					cellpadding="5">
 					<p:outputLabel value="Tipo de Reparação:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:selectOneMenu value="#" effect="fade">
+				</h:panelGrid>
+
+				<h:panelGrid columns="4" style="margin-bottom:10px;width :40%"
+					cellpadding="5">
+					<p:outputLabel for="reqREaparaa" value="Houve Reaparação?"
+						style=" width : 700px;" />
+					<h:selectOneRadio id="reqREaparaa"
+						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						<f:selectItem itemLabel="Não.." itemValue="0" />
+						<f:selectItem itemLabel="Sim" itemValue="1" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" style="margin-bottom:10px;width :60%"
+					cellpadding="5">
+					<p:selectManyCheckbox id="tiposPessoa" rendered="true"
+						requiredMessage="Tipo Pessoa no Processo"
+						style="width : 100%;font-weight:bold;">
 						<f:selectItem itemValue="1" itemLabel="Reparação Econômica" />
 						<f:selectItem itemValue="2" itemLabel="Reparação Moral" />
 						<f:selectItem itemValue="3" itemLabel="Restituição de Direitos" />
-					</p:selectOneMenu>
+					</p:selectManyCheckbox>
 				</h:panelGrid>
 
-				<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
-					value="#" paginator="false" rows="5"
-					style="margin-bottom:20px;width :60%"
-					emptyMessage="Não incluido dados de Reparação...">
-
-					<p:column headerText="Tipo Reparação">
-						<h:outputText id="tpTBreparacao" value="" />
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover" action="#"
-							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:tabView_analise:formAnaliseRecomendacoes:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-				</p:dataTable>
 			</p:panel>
 
 			<p:panel id="pnEconomia" header="Econômica" toggleSpeed="500"
@@ -313,23 +319,6 @@
 				</p:column>
 
 			</p:dataTable>
-
-			<h:panelGrid columns="4" style="margin-bottom:10px;width :100%"
-				cellpadding="5">
-				<p:outputLabel for="reqDispositivoRecomendacao"
-					value="Dispositivo de Recomendação?" style=" width : 500px;" />
-				<h:selectOneRadio id="reqDispositivoRecomendacao"
-					value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
-					<f:selectItem itemLabel="Não.." itemValue="0" />
-					<f:selectItem itemLabel="Sim" itemValue="1" />
-				</h:selectOneRadio>
-				<p:inputTextarea id="txtAreaObserAnaliseProcesso" maxlength="200"
-					rows="2" cols="100" autoResize="false"
-					value="#{manterAnaliseMB.analiseProcesso.observacoes}" />
-
-			</h:panelGrid>
-
-
 
 		</h:form>
 	</h:body>

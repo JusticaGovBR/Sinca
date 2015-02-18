@@ -42,12 +42,6 @@ public class SincaMB implements Serializable{
 	   return "pages/processos/consultarProcesso.jsf";
 	}
 	
-	public String acaoManterProcesso() throws IOException{
-	    //return "pages/processos/manterPessoaProcesso.jsf";
-	    //JSFUtil.getExternalContext().getContextName();
-	    return "pages/processos/manterPessoaProcesso.jsf";
-	}
-	
 	
 	public String consultarProcesso() {
 		try {

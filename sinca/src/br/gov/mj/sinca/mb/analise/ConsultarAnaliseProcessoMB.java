@@ -10,7 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
@@ -73,7 +73,7 @@ public class ConsultarAnaliseProcessoMB implements Serializable {
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
-	    pessoa = new PessoaDAO().lerPorId(pessoa.getIdPessoa());
+	    pessoa = new PessoaFisicaDAO().lerPorId(pessoa.getIdPessoa());
 	    pessoas.add(pessoa);
 	    setListarPessoa(pessoas);
 	    return pessoas;
@@ -149,7 +149,7 @@ public class ConsultarAnaliseProcessoMB implements Serializable {
     public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 

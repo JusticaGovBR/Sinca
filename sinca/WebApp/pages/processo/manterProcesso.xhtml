@@ -39,12 +39,12 @@
 
 			<h:form id="formP">
 
-				<p:panel id="PnProcesso" header="Requerimento / Interessados"
-					style="margin-bottom:10px;width : 100%" toggleable="false"
+				<p:panel id="PnProcesso" header="Dados do Requerimento de Anistia"
+					style="margin-bottom:10px;width : 100%" toggleable="true"
 					rendered="#{manterProcessoMB.processo.idProcesso>0}">
 
 					<h:panelGrid columns="2" cellpadding="10"
-						style="margin-bottom:10px;width :100%;">
+						style="margin-bottom:5px;width :100%;">
 						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
 							<h:outputLabel value="Número Processo SEI:" />
 							<h:outputLabel
@@ -61,7 +61,8 @@
 							</h:outputLabel>
 						</h:panelGrid>
 					</h:panelGrid>
-					<h:panelGrid columns="2" cellpadding="10" style="width :100%;">
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:5px;width :100%;">
 						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
 							<h:outputLabel value="Número Requerimento:" />
 							<h:outputLabel
@@ -79,6 +80,33 @@
 						</h:panelGrid>
 					</h:panelGrid>
 
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:15px;width :100%;">
+						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
+							<h:outputLabel value="Nome do Requerente:" />
+							<h:outputLabel value="Pedro ...." />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
+							<h:outputLabel value="Localização:" />
+							<h:outputLabel value="Pedro ...." />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:5px;width :100%;">
+						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
+							<h:outputLabel value="Situação do RA:" />
+							<h:outputLabel value="Em Análise ...." />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="10" style="width :380px;">
+							<h:outputLabel value="Detalhamento da Situação do RA:" />
+							<h:outputLabel value="Em Análise" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+
 				</p:panel>
 
 				<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
@@ -95,8 +123,7 @@
 							style="margin-bottom:20px;text-align:center; width : 100%;">
 							<p:commandButton value="Salvar" id="bt_incluir_processo"
 								style="horizontal-align:center" icon="ui-icon-disk"
-								update=":tabView:formProcesso:"
-								action="#{manterProcessoMB.salvarProcesso}">
+								update="@this" action="#{manterProcessoMB.salvarProcesso}">
 							</p:commandButton>
 
 							<p:commandButton value="Cancelar" id="FecharSalvarDados"
@@ -107,19 +134,99 @@
 					</p:outputPanel>
 				</p:dialog>
 
-
+				<!-- 
 				<h:panelGrid columns="2" cellpadding="10"
 					style="margin-bottom:10px;text-align:center; width : 100%;">
 					<p:commandButton id="btnSalvarProcesso" value="Salvar Dados"
 						onclick="PF('dlg_comfirmacao').show();" icon="ui-icon-disk"
 						title="Salvar Processo" />
 				</h:panelGrid>
+				-->
 
+				<p:panel id="pnlDadosTabelPessoa" header="Histórico do Requerimento de Anistia:"
+					rendered="true" style="margin-bottom:10px;width : 100%"
+					toggleable="true">
+
+
+					<h:panelGrid columns="4" style="margin-bottom:20px;width : 80%">
+
+						<h:outputLabel value="Data Recebimento:"
+							style="text-align:left;font-weight:bold;" />
+
+						<h:outputLabel value="#{manterAnaliseMB.dataRecebimento}"
+							style="text-align:left;font-weight:bold;" />
+
+						<h:outputLabel value="Analistas(Responsável Técnico):"
+							style="text-align:left;font-weight:bold;" />
+
+						<p:outputLabel id="idAnalistaTecnico"
+							title="Analistas(Responsável Técnico)"
+							value="#{manterAnaliseMB.usuario.descUsuario}"
+							style="text-align:left;font-size:22px;font-weight:bold;" />
+
+					</h:panelGrid>
+
+					<p:dataTable var="pessoaLista" value="#" paginator="true" rows="5"
+						emptyMessage="Não incluido dados do analista responsável...">
+
+						<p:column headerText="Data Recebimento">
+							<h:outputText id="dataRecebimento" value="#">
+								<!--  
+							<f:convertDateTime for="" locale="pt_BR" dateStyle="default"
+								pattern="dd/MM/yyyy" />
+							-->
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Analista">
+							<h:outputText value="#" />
+						</p:column>
+
+						<p:column headerText="Data Conclusão">
+							<h:outputText id="dataConclusao" value="#">
+
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Julgamento Proposto">
+							<h:outputText value="#" />
+						</p:column>
+
+						<p:column headerText="Total Analise">
+							<h:outputText value="#" />
+						</p:column>
+
+						<p:column headerText="Ações" style="text-align: center">
+							<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
+								title="Editar a Analise" ajax="true">
+								<!--  
+							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
+							-->
+							</p:commandButton>
+
+							<p:commandButton value="Copiar" action="#" icon="ui-icon-copy"
+								title="Gerar Copia da Analise" ajax="true">
+								<!--  
+							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
+							-->
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+					<h:panelGrid columns="1" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 100%;">
+						<p:commandButton id="Novo" value="Novo" ajax="false" update="@all"
+							action="#{manterProcessoMB.habilitaNovo}" icon="ui-icon-disk"
+							title="Novo" />
+					</h:panelGrid>
+
+				</p:panel>
 
 			</h:form>
 
 
-			<p:tabView id="tabView" style="width: 100%" effect="scale" >
+			<p:tabView id="tabView" style="width: 100%" effect="scale">
+
 
 				<p:tab id="tab_processo" title="Requerimento">
 					<ui:insert name="processo">
@@ -128,7 +235,6 @@
 				</p:tab>
 
 				<p:tab id="tab_interessados" title="Interessados">
-					<!-- INTERESSADOS -->
 					<ui:insert name="interessados">
 						<ui:include src="/pages/processo/formularioInteressados.xhtml" />
 					</ui:insert>
@@ -139,6 +245,7 @@
 						<ui:include src="/pages/analise_processo/manterAnalise.xhtml" />
 					</ui:insert>
 				</p:tab>
+
 
 				<p:tab id="tab_julgamento_processo" title="Decisões/Julgamento">
 					<ui:insert name="Decisões/Julgamento">
@@ -160,7 +267,8 @@
 
 				<p:tab id="tab_andmentos_sei" title="Andamentos no Sei!">
 					<ui:insert name="Andamentos Sei!">
-						<iframe id="ifFrameAdamentoSei" src='#{manterProcessoMB.linkDocSel}' height="600" width="970"></iframe> 
+						<iframe id="ifFrameAdamentoSei"
+							src='#{manterProcessoMB.linkDocSel}' height="600" width="970"></iframe>
 					</ui:insert>
 				</p:tab>
 

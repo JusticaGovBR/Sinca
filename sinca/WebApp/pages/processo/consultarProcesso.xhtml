@@ -44,33 +44,26 @@
 				</p:dialog>
 
 				<p:panel id="pnDetalhament" header="Consultar Requerimentos"
-					style="margin-bottom:10px;width : 100%" toggleable="true">
-
+					style="margin-bottom:5px;width : 100%" toggleable="true">
 					<h:panelGrid columns="4" cellpadding="10"
-						style=" margin-bottom:10px ;width : 70%; height : 40px; ">
-						
-
+						style=" margin-bottom:5px ;width : 70%; height : 40px; ">
 						<h:outputLabel for="inpt_numProtocoloCa"
 							value="Nº Requerimento CA:" style=" width : 100%" />
-							
 						<p:inputMask mask="?9999999999" id="inpt_numProtocoloCa" size="20"
 							maxlength="20" value="#{consultarProcessoMB.numProcessoCA}" />
-
-
 						<h:outputLabel for="dataProtocoloCA" value="Data Requerimento CA:"
 							style=" width : 100%" />
-
-						<p:autoComplete id="dataProtocoloCA" style="width : 100%" 
-							title="Data Protocolo CA" value="#{consultarProcessoMB.dataProtocoloCA}"
-							var="data" size="15" maxlength="10"  dropdown="true"
-							scrollHeight="200" 
+						<p:autoComplete id="dataProtocoloCA" style="width : 100%"
+							title="Data Protocolo CA"
+							value="#{consultarProcessoMB.dataProtocoloCA}" var="data"
+							size="15" maxlength="10" dropdown="true" scrollHeight="200"
 							itemLabel="#{data}" itemValue="#{data}"
 							completeMethod="#{consultarProcessoMB.listaDataProtocoCA}"
-							 effect="clip" />
+							effect="clip" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="4" cellpadding="10"
-						style=" margin-bottom:10px ;width : 70%; height : 40px; ">
+						style=" margin-bottom:5px ;width : 70%; height : 40px; ">
 						<h:outputLabel value="Nº Protocolo MJ-SEI:" style="width:100%;" />
 						<p:inputText id="inpt_numProtocoloMJ_SEI" size="20" maxlength="20"
 							disabled="false" value="#{consultarProcessoMB.numProcessoMJ}" />
@@ -78,38 +71,50 @@
 						<h:outputLabel for="dataProtocoloMJ"
 							value="Data Protocolo MJ-SEI:" style=" width : 100%" />
 
-						<p:calendar id="dataProtocoloMJ" navigator="true"
-							value="#{consultarProcessoMB.dataProtocoloMJ}" showOn="button"
-							locale="pt" pattern="dd/MM/yyyy" size="10" />
+						<p:autoComplete id="dataProtocoloMJ" style="width : 100%"
+							title="Data Protocolo SEI"
+							value="#{consultarProcessoMB.dataProtocoloSEI}" var="data"
+							size="15" maxlength="10" dropdown="true" scrollHeight="200"
+							itemLabel="#{data}" itemValue="#{data}"
+							completeMethod="#{consultarProcessoMB.listaDataProtocoSEI}"
+							effect="clip" />
+					</h:panelGrid>
 
-                    </h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:10px ;width :100%">
 
-					<h:panelGrid columns="4" cellpadding="10"
-						style="margin-bottom:20px ;width : 880px; height : 40px;">
-						<h:outputLabel value="Nome Pessoa  :" style="width:100%;" />
+						<h:outputLabel value="Nome do Interessado:" style="width:100%;" />
 
-						<p:autoComplete id="pessoaList" style="width : 100%"
+						<p:autoComplete id="pessoaList" style="width : 100%x"
 							title="Nome da Pessoa" value="#{consultarProcessoMB.pessoa}"
-							var="pessoa" size="100" maxlength="120" minQueryLength="3"
+							var="pessoa" size="120" maxlength="120" minQueryLength="3"
 							completeMethod="#{consultarProcessoMB.listaPessoaPorNomeLk}"
 							scrollHeight="500" itemLabel="#{pessoa.nomePessoa}"
-							converter="pessoaConverter" itemValue="#{pessoa}"
-							effect="clip">
-						  
-						 	
-						</p:autoComplete>	
+							converter="pessoaConverter" itemValue="#{pessoa}" effect="clip">
+
+
+						</p:autoComplete>
 
 					</h:panelGrid>
 
 
-					<h:panelGrid columns="1" cellpadding="10"
+
+					<h:panelGrid columns="2" cellpadding="10"
 						style="text-align:center; width : 100%;">
 						<p:commandButton id="btnConsultarProcesso" value="Consultar"
 							ajax="true"
 							actionListener="#{consultarProcessoMB.consultarProcesso}"
 							update=":formProcesso:" onclick="PF('dlg_mensagem').show();"
 							icon="ui-icon-document" />
+
+						<p:commandButton id="btnNovoRA" value="Criar Novo RA"
+							action="#{consultarProcessoMB.acaoNovoProcesso}"
+							update=":formProcesso:" title="Detalhar" ajax="true"
+							icon="ui-icon-new" />
+
 					</h:panelGrid>
+
+
 				</p:panel>
 
 				<p:panel id="pnlDadosTabelProcessos" header="Requerimentos"
@@ -134,9 +139,9 @@
 								fileName="processos" />
 						</h:commandLink>
 						 -->
-						 
+
 					</h:panelGrid>
-					<p:dataTable id="processotb" var="processoLista" 
+					<p:dataTable id="processotb" var="processoLista"
 						paginatorPosition="top" sortMode="multiple"
 						value="#{consultarProcessoMB.listarPessoaProcesso}"
 						paginator="true" rows="20">
@@ -216,8 +221,8 @@
 
 						<p:column style="width:32px;text-align:center;"
 							headerText="Dirigência" exportable="false">
-							<p:commandButton value="Dirigência"
-								action="#{consultarProcessoMB.detalharProcesso}"
+							<p:commandButton value="Diligências"
+								action="#{consultarProcessoMB.manterDiligencia}"
 								update=":formProcesso:" icon="ui-icon-search" title="Detalhar"
 								ajax="true">
 								<f:setPropertyActionListener value="#{processoLista}"
@@ -227,9 +232,18 @@
 
 					</p:dataTable>
 				</p:panel>
-
-
 			</h:form>
+
+			<p:dialog header="Diligência" resizable="false" showEffect="clip"
+				hideEffect="clip" widgetVar="dlg_diligencia" modal="true"
+				height="100%" width="50%">
+				<p:outputPanel id="diligencia">
+					<ui:insert name="diligencia_">
+						<ui:include src="/pages/diligencia/formularioDiligencia.xhtml" />
+					</ui:insert>
+				</p:outputPanel>
+			</p:dialog>
+
 		</h:body>
 	</ui:define>
 </ui:composition>

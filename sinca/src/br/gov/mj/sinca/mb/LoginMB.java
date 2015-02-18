@@ -3,8 +3,10 @@ package br.gov.mj.sinca.mb;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -35,21 +37,34 @@ public class LoginMB implements Serializable {
     }
     
 
-    public String acaoAutenticar() {
-	Usuario usuario = new UsuarioDAO().buscarUsuario(nome);
-	
+    public void acaoAutenticar() {
+	Usuario usuario = null;
+	try{	
+	usuario = new UsuarioDAO().buscarUsuario(nome);
+	}catch(Exception e){
+	    logger.error("Error :: "+nome+" ERROR :"+e.getMessage());
+	    e.printStackTrace();
+	}
 	logger.debug("Autenticando usuário :: "+nome);
 	
 	if (usuario == null) {
+	    logger.debug("Usuário não existe. :: "+nome);
 	    JSFUtil.retornarMensagem(null, "Usuário não existe.");
-	    return "login?faces-redirect=true";
+	    JSFUtil.getHttpSession().setAttribute("USUARIO_AUTENTICADO", false);
+	    //return null;
 	} else if (usuario.senhaCorreta(this.getSenha())) {
 	    this.setUsuario(usuario);
 	    this.autenticado = true;
-	    return "index?faces-redirect=true";
+	    JSFUtil.getHttpSession().setAttribute("USUARIO_AUTENTICADO", this.autenticado);
+	    logger.debug("Redirecionando::"+nome);
+	    NavigationHandler nh = FacesContext.getCurrentInstance().getApplication().getNavigationHandler();  
+            nh.handleNavigation(FacesContext.getCurrentInstance(), null, "principal");  
+	    //return "index";
 	} else {
+	    JSFUtil.getHttpSession().setAttribute("USUARIO_AUTENTICADO", false);
+	    logger.debug("Usuário senha incorreta. :: "+nome);
 	    JSFUtil.retornarMensagem(null, "Senha inválida.");
-	    return "login?faces-redirect=true";
+	    //return null;
 	}
     }
 
@@ -96,10 +111,5 @@ public class LoginMB implements Serializable {
     public void setAutenticado(boolean autenticado) {
 	this.autenticado = autenticado;
     }
-
-    public static void main(String[] args) {
-	LoginMB loginMB = new LoginMB();
-	loginMB.Init();
-    }
-    
+     
 }

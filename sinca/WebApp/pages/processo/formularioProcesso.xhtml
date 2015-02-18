@@ -214,7 +214,7 @@
 							</p:selectOneMenu>
 						</h:panelGrid>
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-							<h:outputLabel value="Status do Processo:*" />
+							<h:outputLabel value="Situação do RA:*" />
 							<p:selectOneMenu value="#{manterProcessoMB.idStatusProcesso}"
 								style=" width: 737px;" effect="fade">
 								<f:selectItem itemLabel="Selecione um Status do Processo"
@@ -225,7 +225,7 @@
 							</p:selectOneMenu>
 						</h:panelGrid>
 						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-							<h:outputLabel value="Substatus do Processo:*" />
+							<h:outputLabel value="Detalhamento da Situação do RA:*" />
 							<p:selectOneMenu value="#{manterProcessoMB.idSubStatusProcesso}"
 								style=" width : 737px;" effect="fade">
 								<f:selectItem itemLabel="Selecione Sub Status do Processo"
@@ -238,7 +238,7 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="30" style=" width : 200px;">
-							<h:outputLabel value="Complemento do Status:" />
+							<h:outputLabel value="Complemento do Situação:" />
 							<p:inputTextarea id="txtAreaComplementoStatus" maxlength="400"
 								rows="4" cols="100"
 								value="#{manterProcessoMB.processo.descComplementoStatus}" />
@@ -283,7 +283,7 @@
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Grupo Social" />
+						<h:outputLabel value="Grupo Vocabulário Controlado" />
 						<p:selectOneMenu value="#{manterProcessoMB.idGrupoSocial}"
 							style=" width : 737px;" effect="fade">
 							<f:selectItem itemLabel="Selecione Grupo Social"
@@ -295,7 +295,7 @@
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-						<h:outputLabel value="Subgrupo Social" />
+						<h:outputLabel value="Subgrupo Vocabulário Controlado" />
 						<p:selectOneMenu value="#{manterProcessoMB.idSubGrupoSocial}"
 							style=" width : 737px;" effect="fade">
 							<f:selectItem itemLabel="Selecione Sub Grupo Social"

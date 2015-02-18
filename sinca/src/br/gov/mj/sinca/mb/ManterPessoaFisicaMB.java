@@ -14,7 +14,7 @@ import br.gov.mj.sinca.ConstantSinca;
 import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
 import br.gov.mj.sinca.dao.TelefonePessoaDAO;
 import br.gov.mj.sinca.dao.TipoDocumentoPessoaDAO;
@@ -93,7 +93,7 @@ public class ManterPessoaFisicaMB implements Serializable {
     public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -107,7 +107,7 @@ public class ManterPessoaFisicaMB implements Serializable {
     }
     
     public void salvarPessoaAnistia() {
-	PessoaDAO pessoaDao = new PessoaDAO();
+	PessoaFisicaDAO pessoaDao = new PessoaFisicaDAO();
 	PessoaEnderecoDAO pessoaEndeDAO = new PessoaEnderecoDAO();
 	TelefonePessoaDAO telefonePessoaDAO = new TelefonePessoaDAO();
 	DocumentoPessoaDAO documentoPessoaDAO = new DocumentoPessoaDAO();
@@ -209,7 +209,7 @@ public class ManterPessoaFisicaMB implements Serializable {
 
 	if (pessoaAnistiado != null && pessoaAnistiado.getIdPessoa() != null && pessoaAnistiado.getIdPessoa() > 0) {
 	    JSFUtil.getSessionMap().put(ConstantSinca.PESSOA_SALVA_ANISTIADO_PROPOSTA,null);
-	    pessoaAnistCadasto = new PessoaDAO().lerPorId(pessoaAnistiado.getIdPessoa());
+	    pessoaAnistCadasto = new PessoaFisicaDAO().lerPorId(pessoaAnistiado.getIdPessoa());
 	    pessoaAnistCadasto.getPessoaEnderecos().size();
 	    pessoaAnistCadasto.getTelefonePessoas();
 	    pessoas.add(pessoaAnistCadasto);
@@ -233,10 +233,10 @@ public class ManterPessoaFisicaMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 3 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    } else {
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    }
 	    setListarPessoaAnistiado(pessoas);
@@ -259,7 +259,7 @@ public class ManterPessoaFisicaMB implements Serializable {
 
 	if (pessoaAnistiado != null && pessoaAnistiado.getIdPessoa() != null && pessoaAnistiado.getIdPessoa() > 0) {
 	    JSFUtil.getSessionMap().put(ConstantSinca.PESSOA_SALVA_ANISTIADO_PROPOSTA,null);
-	    pessoaAnistCadasto = new PessoaDAO().lerPorId(pessoaAnistiado.getIdPessoa());
+	    pessoaAnistCadasto = new PessoaFisicaDAO().lerPorId(pessoaAnistiado.getIdPessoa());
 	    pessoaAnistCadasto.getPessoaEnderecos().size();
 	    pessoaAnistCadasto.getTelefonePessoas();
 	    pessoas.add(pessoaAnistCadasto);
@@ -283,10 +283,10 @@ public class ManterPessoaFisicaMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 3 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaDAO().listaPessoaPorNomeLk(nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    } else {
-		pessoas = new PessoaDAO().listaPessoaPorNomeCpf(
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeCpf(
 			numCpfAnistiado.replaceAll(".", "").replaceAll("-", "").trim(), nomePessoa);
 		JSFUtil.getRequestContext().execute("PF('dlg_pessoa_anistiado').show()");
 	    }

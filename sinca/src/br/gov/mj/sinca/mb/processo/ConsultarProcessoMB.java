@@ -22,7 +22,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 
-import br.gov.mj.sinca.dao.PessoaDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.entidades.PessoaFisica;
@@ -58,20 +58,21 @@ public class ConsultarProcessoMB implements Serializable {
     private List<Processo> listarProcessos;
     private List<PessoaProcesso> listarPessoaProcesso;
     private List<String> listaDataProtocoloCA;
-    
+    private List<String> listaDataProtocoloSEI;
+
     private PessoaFisica pessoa;
     private Processo processo;
     private PessoaProcesso pessoaProcesso;
-    
+
     private String dataProtocoloCA;
-    
-    private Logger logger = null; 
-    
-    
+    private String dataProtocoloSEI;
+
+    private Logger logger = null;
+
     @PostConstruct
     public void Init() {
 	logger = Logger.getLogger(this.getClass());
-	logger.info("Chamada Init <>  PosConstruct");
+	logger.info("Chamada Init <>  PosConstruct"+this.getClass().getName());
 	instanciaAtributos();
     }
 
@@ -81,6 +82,7 @@ public class ConsultarProcessoMB implements Serializable {
 	JSFUtil.getSessionMap().put(LISTA_SESSAO, listarPessoaProcesso);
 	listarProcessos = new ArrayList<Processo>();
 	listaDataProtocoloCA = new ProcessoDAO().listarDataProtocoloCa();
+	listaDataProtocoloSEI = new ProcessoDAO().listarDataProtocoloSEI();
 	pessoa = new PessoaFisica();
 	pessoaProcesso = new PessoaProcesso();
 	processo = new Processo();
@@ -89,11 +91,21 @@ public class ConsultarProcessoMB implements Serializable {
 	this.mensagem = "Pesquisando....";
     }
 
+    public String acaoNovoProcesso() throws IOException {
+	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
+    }
+
     public String detalharProcesso() {
 	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
 
+    public void manterDiligencia() {
+	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
+	JSFUtil.getRequestContext().execute("PF('dlg_diligencia').show()");
+    }
+
+    
     public List<PessoaFisica> consultarPessoas() {
 
 	JSFUtil.retornarMensagemModal("", "Consultando pessoas!");
@@ -103,7 +115,7 @@ public class ConsultarProcessoMB implements Serializable {
 	String nomePessoa = pessoa != null ? pessoa.getNomePessoa() : null;
 
 	if (pessoa != null && pessoa.getIdPessoa() != null && pessoa.getIdPessoa() > 0) {
-	    pessoa = new PessoaDAO().lerPorId(pessoa.getIdPessoa());
+	    pessoa = new PessoaFisicaDAO().lerPorId(pessoa.getIdPessoa());
 	    pessoas.add(pessoa);
 	    setListarPessoa(pessoas);
 	    return pessoas;
@@ -150,16 +162,16 @@ public class ConsultarProcessoMB implements Serializable {
 		lista = new PessoaProcessoDAO().ListarProcesso(numProcessoCA, numProcessoMJ);
 		setListarPessoaProcesso(lista);
 	    }
-	    if ((lista==null || lista.isEmpty()) && dataProtocoloCA != null || dataProtocoloMJ != null) {
-		lista = new PessoaProcessoDAO().listarProcessoPorDataProtocolo(DateUtil.
-			parseDate(dataProtocoloCA, DateUtil.DD_MM_YYYY), dataProtocoloMJ);
+	    if ((lista == null || lista.isEmpty()) && dataProtocoloCA != null || dataProtocoloMJ != null) {
+		lista = new PessoaProcessoDAO().listarProcessoPorDataProtocolo(
+			DateUtil.parseDate(dataProtocoloCA, DateUtil.DD_MM_YYYY), dataProtocoloMJ);
 		processo = new Processo();
 		setListarPessoaProcesso(lista);
 		JSFUtil.getSessionMap().put(LISTA_SESSAO, getListarPessoaProcesso());
 		JSFUtil.getRequestContext().execute("PF('dlg_mensagem').hide()");
 		return null;
 	    }
-	    
+
 	    if (lista == null || lista.isEmpty()) {
 		JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_WARN,
 			"Não foi localizando o processo com os parâmentros de pesquisa");
@@ -181,23 +193,34 @@ public class ConsultarProcessoMB implements Serializable {
     public List<PessoaFisica> listaPessoaPorNomeLk(String nome) {
 	if (nome != null && nome.equals(""))
 	    logger.info("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaDAO().listaPessoaPorNomeLk(nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
     public List<String> listaDataProtocoCA(String data) {
 	List<String> lista = new ArrayList<String>();
-	if(listaDataProtocoloCA!=null && !listaDataProtocoloCA.isEmpty()){
+	if (listaDataProtocoloCA != null && !listaDataProtocoloCA.isEmpty()) {
 	    for (String dataCA : listaDataProtocoloCA) {
-		 if(dataCA!=null && dataCA.startsWith(data)){
-		     lista.add(dataCA);
-		 }
+		if (dataCA != null && dataCA.startsWith(data)) {
+		    lista.add(dataCA);
+		}
 	    }
 	}
 	return lista;
     }
 
-    
+    public List<String> listaDataProtocoSEI(String data) {
+	List<String> lista = new ArrayList<String>();
+	if (listaDataProtocoloSEI != null && !listaDataProtocoloSEI.isEmpty()) {
+	    for (String dataCA : listaDataProtocoloSEI) {
+		if (dataCA != null && dataCA.startsWith(data)) {
+		    lista.add(dataCA);
+		}
+	    }
+	}
+	return lista;
+    }
+
     public void postProcessXLS(Object document) {
 	HSSFWorkbook wb = (HSSFWorkbook) document;
 	HSSFSheet sheet = wb.getSheetAt(0);
@@ -220,11 +243,10 @@ public class ConsultarProcessoMB implements Serializable {
 
 	BaseFont helvetica = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
 	Font font = new Font(helvetica, 12, Font.NORMAL);
-	Chunk chunk = new Chunk("",font);
+	Chunk chunk = new Chunk("", font);
 	pdf.add(chunk);
-	
-	
-	//pdf.setPageSize(PageSize.CROWN_QUARTO);
+
+	// pdf.setPageSize(PageSize.CROWN_QUARTO);
 
 	ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
 		.getContext();
@@ -319,7 +341,6 @@ public class ConsultarProcessoMB implements Serializable {
 	this.mensagem = mensagem;
     }
 
-
     public Date getDataProtocoloMJ() {
 	return dataProtocoloMJ;
     }
@@ -329,19 +350,35 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     public List<String> getListaDataProtocoloCA() {
-        return listaDataProtocoloCA;
+	return listaDataProtocoloCA;
     }
 
     public void setListaDataProtocoloCA(List<String> listaDataProtocoloCA) {
-        this.listaDataProtocoloCA = listaDataProtocoloCA;
+	this.listaDataProtocoloCA = listaDataProtocoloCA;
     }
 
     public String getDataProtocoloCA() {
-        return dataProtocoloCA;
+	return dataProtocoloCA;
+    }
+
+    public String getDataProtocoloSEI() {
+	return dataProtocoloSEI;
+    }
+
+    public void setDataProtocoloSEI(String dataProtocoloSEI) {
+	this.dataProtocoloSEI = dataProtocoloSEI;
+    }
+
+    public List<String> getListaDataProtocoloSEI() {
+	return listaDataProtocoloSEI;
+    }
+
+    public void setListaDataProtocoloSEI(List<String> listaDataProtocoloSEI) {
+	this.listaDataProtocoloSEI = listaDataProtocoloSEI;
     }
 
     public void setDataProtocoloCA(String dataProtocoloCA) {
-        this.dataProtocoloCA = dataProtocoloCA;
+	this.dataProtocoloCA = dataProtocoloCA;
     }
-    
+
 }

@@ -23,6 +23,8 @@
 }
 </style>
 		<h:form id="formAnalise">
+		
+		   <h:inputHidden value="#{manterProcessoMB.processo}"  id="processoCarregado" />
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
 
@@ -44,124 +46,8 @@
 			</p:dialog>
 
 
-						<p:panel id="PnAndamentos" header="Andamentos"
-							style="margin-bottom:10px;width : 100%" toggleable="true">
 
-							<p:dataTable var="reparacaoLista" value="#" paginator="false"
-								rows="5" style="margin-bottom:20px;"
-								emptyMessage="Não incluido dados de Reparação...">
-
-								<p:column headerText="Situação Requerimento">
-									<h:outputText id="tpStatuso" value="" />
-								</p:column>
-
-								<p:column headerText="Data Recebimento">
-									<h:outputText value="" />
-								</p:column>
-
-								<p:column headerText="Data Finalização">
-									<h:outputText value="" />
-								</p:column>
-
-								<p:column headerText="Análise">
-									<h:outputText value="" />
-								</p:column>
-
-								<p:column headerText="Recomendações">
-									<h:outputText value="" />
-								</p:column>
-
-								<p:column headerText="Decisão">
-									<h:outputText value="" />
-								</p:column>
-
-
-								<p:column headerText="Finalização">
-									<h:outputText value="" />
-								</p:column>
-
-								<p:column style="width:32px;text-align: center">
-									<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-										title="Editar" ajax="true">
-										<f:setPropertyActionListener value="#{reparacaoLista}"
-											target="#" />
-									</p:commandButton>
-								</p:column>
-
-							</p:dataTable>
-							<h:panelGrid columns="1" cellpadding="10"
-								style="margin-bottom:20px;text-align:center; width : 100%;">
-								<p:commandButton id="Novo" value="Novo" ajax="false"
-									update="@all" action="#{manterProcessoMB.habilitaNovo}"
-									icon="ui-icon-disk" title="Novo" />
-							</h:panelGrid>
-						</p:panel>
-
-			<p:panel id="pnlDadosTabelPessoa" header="Histórico da Análise"
-				rendered="true" style="margin-bottom:10px;width : 100%"
-				toggleable="true">
-
-
-				<h:panelGrid columns="4" style="margin-bottom:20px;width : 80%">
-
-					<h:outputLabel value="Data Recebimento:"
-						style="text-align:left;font-weight:bold;" />
-
-					<h:outputLabel value="#{manterAnaliseMB.dataRecebimento}"
-						style="text-align:left;font-weight:bold;" />
-
-					<h:outputLabel value="Analistas(Responsável Técnico):"
-						style="text-align:left;font-weight:bold;" />
-
-					<p:outputLabel id="idAnalistaTecnico"
-						title="Analistas(Responsável Técnico)"
-						value="#{manterAnaliseMB.usuario.descUsuario}"
-						style="text-align:left;font-size:22px;font-weight:bold;" />
-
-				</h:panelGrid>
-
-				<p:dataTable var="pessoaLista"
-					value="#{manterAnaliseMB.listarAnalistaProcesso}" paginator="true"
-					rows="5"
-					emptyMessage="Não incluido dados do analista responsável...">
-
-					<p:column headerText="Data Recebimento">
-						<h:outputText id="dataRecebimento"
-							value="#{pessoaLista.dataRecebimento}">
-							<f:convertDateTime for="" locale="pt_BR" dateStyle="default"
-								pattern="dd/MM/yyyy" />
-						</h:outputText>
-					</p:column>
-
-					<p:column headerText="Analista">
-						<h:outputText value="#{pessoaLista.pessoa.nomePessoa}" />
-					</p:column>
-
-					<p:column headerText="Data Conclusão">
-						<h:outputText id="dataConclusao"
-							value="#{pessoaLista.dataConlusao}">
-
-							<f:convertDateTime for="dataConclusao" locale="pt_BR"
-								dateStyle="long" pattern="dd/MM/yyyy" />
-
-						</h:outputText>
-					</p:column>
-
-
-					<p:column headerText="Complemento">
-						<h:outputText value="#{pessoaLista.complemento}" />
-					</p:column>
-
-					<p:column headerText="Total Analise">
-						<h:outputText value="#{pessoaLista.acoes}" />
-					</p:column>
-
-
-				</p:dataTable>
-			</p:panel>
-
-
-			<p:panel id="pnlAtosDeExcecao" header="Atos de Exceção"
+		<p:panel id="pnlAtosDeExcecao" header="Atos de Exceção"
 				style="margin-bottom:10px;width : 100%" toggleable="true">
 
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
