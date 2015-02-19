@@ -80,6 +80,7 @@ public class ConsultarProcessoMB implements Serializable {
 	listarPessoa = new ArrayList<PessoaFisica>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
 	JSFUtil.getSessionMap().put(LISTA_SESSAO, listarPessoaProcesso);
+	JSFUtil.getSessionMap().put("processoLista", null);
 	listarProcessos = new ArrayList<Processo>();
 	listaDataProtocoloCA = new ProcessoDAO().listarDataProtocoloCa();
 	listaDataProtocoloSEI = new ProcessoDAO().listarDataProtocoloSEI();
@@ -99,12 +100,10 @@ public class ConsultarProcessoMB implements Serializable {
 	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
-
     public void manterDiligencia() {
 	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
 	JSFUtil.getRequestContext().execute("PF('dlg_diligencia').show()");
     }
-
     
     public List<PessoaFisica> consultarPessoas() {
 

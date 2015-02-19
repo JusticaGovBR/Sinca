@@ -78,17 +78,18 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="10">
-					<p:dataTable var="reparacaoLista" id="dataTbDiligenciados"
+				
+					<p:dataTable var="pessoas" id="dataTbDiligenciados" widgetVar="pessoasDiligencia"
 						value="#{manterDiligenciaMB.listaPessoaFisicas}" paginator="false"
 						rows="5" style="margin-bottom:20px;width :100%"
 						emptyMessage="Não incluido Diligênciados">
 
 						<p:column headerText="Nome">
-							<h:outputText id="tpNome" value="#{reparacaoLista.nomePessoa}" />
+							<h:outputText id="tpNome" value="#{pessoas.nomePessoa}" />
 						</p:column>
 
 						<p:column headerText="Número Cpf">
-							<h:outputText id="tpEnvioPara" value="#{reparacaoLista.numCpf}" />
+							<h:outputText id="tpEnvioPara" value="#{pessoas.numCpf}" />
 						</p:column>
 
 						<p:column headerText="Ações" style="width:32px;text-align: center"

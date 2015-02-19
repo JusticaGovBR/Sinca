@@ -18,14 +18,12 @@ import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.util.JSFUtil;
 
-
 @ManagedBean(name = "manterDiligenciaMB")
 @ViewScoped
 public class ManterDiligencia {
 
     private Logger logger = null;
-    
-    
+
     private Diligencia diligencia;
     private DiligenciaProcesso diligenciaProcesso;
     private Processo processo;
@@ -37,75 +35,80 @@ public class ManterDiligencia {
     @PostConstruct
     public void Init() {
 	logger = Logger.getLogger(this.getClass());
-	logger.info("Chamada Init <>  PosConstruct"+this.getClass().getName());
+	logger.info("Chamada Init <>  PosConstruct" + this.getClass().getName());
 	instanciaAtributos();
     }
-    
+
     private void instanciaAtributos() {
 	diligencia = new Diligencia();
 	diligenciaProcesso = new DiligenciaProcesso();
-	PessoaProcesso pessoaProcessoP = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
 	diligenciaProcessos = new ArrayList<DiligenciaProcesso>();
-	if (pessoaProcessoP != null) {
-	    processo = pessoaProcessoP.getProcesso();
-	    listaPessoaFisicas = new PessoaProcessoDAO().listarPessoasProcesso(pessoaProcessoP.getIdPessoaProcesso());
+	listaPessoaFisicas = new ArrayList<PessoaFisica>();
+	PessoaProcesso pessoaProcesso = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
+	if(pessoaProcesso!=null && pessoaProcesso.getIdPessoaProcesso()>0){
+	    listaPessoaFisicas = new PessoaProcessoDAO().listarPessoasProcesso(pessoaProcesso.getProcesso().getIdProcesso());
 	}
+
     }
 
     public DiligenciaProcesso getDiligenciaProcesso() {
-        return diligenciaProcesso;
+	return diligenciaProcesso;
     }
 
     public Processo getProcesso() {
-        return processo;
+	return processo;
     }
 
     public List<DiligenciaProcesso> getDiligenciaProcessos() {
-        return diligenciaProcessos;
+	return diligenciaProcessos;
     }
 
     public void setDiligenciaProcesso(DiligenciaProcesso diligenciaProcesso) {
-        this.diligenciaProcesso = diligenciaProcesso;
+	this.diligenciaProcesso = diligenciaProcesso;
     }
 
     public void setProcesso(Processo processo) {
-        this.processo = processo;
+	this.processo = processo;
     }
 
     public void setDiligenciaProcessos(List<DiligenciaProcesso> diligenciaProcessos) {
-        this.diligenciaProcessos = diligenciaProcessos;
+	this.diligenciaProcessos = diligenciaProcessos;
     }
 
     public Diligencia getDiligencia() {
-        return diligencia;
+	return diligencia;
     }
 
     public void setDiligencia(Diligencia diligencia) {
-        this.diligencia = diligencia;
+	this.diligencia = diligencia;
     }
 
     public PessoaProcesso getPessoaProcesso() {
-        return pessoaProcesso;
+	return pessoaProcesso;
     }
 
     public void setPessoaProcesso(PessoaProcesso pessoaProcesso) {
-        this.pessoaProcesso = pessoaProcesso;
+	this.pessoaProcesso = pessoaProcesso;
     }
 
     public List<PessoaFisica> getListaPessoaFisicas() {
-        return listaPessoaFisicas;
+	PessoaProcesso pessoaProcesso = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
+	if(pessoaProcesso!=null && pessoaProcesso.getIdPessoaProcesso()>0){
+	    listaPessoaFisicas = new PessoaProcessoDAO().listarPessoasProcesso(pessoaProcesso.getProcesso().getIdProcesso());
+	}
+	return listaPessoaFisicas;
     }
 
     public PessoaJuridica getPessoaJuridica() {
-        return pessoaJuridica;
+	return pessoaJuridica;
     }
 
     public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
-        this.pessoaJuridica = pessoaJuridica;
+	this.pessoaJuridica = pessoaJuridica;
     }
 
     public void setListaPessoaFisicas(List<PessoaFisica> listaPessoaFisicas) {
-        this.listaPessoaFisicas = listaPessoaFisicas;
+	this.listaPessoaFisicas = listaPessoaFisicas;
     }
-    
+
 }
