@@ -18,7 +18,7 @@ public class ReparacaoAnalise implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_REPARACAO")
-	private Long idReparacao;
+	private int idReparacao;
 
 	private String acao;
 
@@ -38,11 +38,11 @@ public class ReparacaoAnalise implements Serializable {
 	public ReparacaoAnalise() {
 	}
 
-	public Long getIdReparacao() {
+	public int getIdReparacao() {
 		return this.idReparacao;
 	}
 
-	public void setIdReparacao(Long idReparacao) {
+	public void setIdReparacao(int idReparacao) {
 		this.idReparacao = idReparacao;
 	}
 

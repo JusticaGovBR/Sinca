@@ -32,6 +32,10 @@ public class SubStatusProcesso implements Serializable {
 	public SubStatusProcesso() {
 	}
 
+	public SubStatusProcesso(Integer idSubStatusProcesso2) {
+	   this.idSubStatusProcesso = idSubStatusProcesso2;
+	}
+
 	public Integer getIdSubStatusProcesso() {
 		return this.idSubStatusProcesso;
 	}

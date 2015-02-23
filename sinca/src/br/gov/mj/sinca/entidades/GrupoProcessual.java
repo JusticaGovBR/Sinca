@@ -31,6 +31,11 @@ public class GrupoProcessual implements Serializable {
     public GrupoProcessual() {
     }
 
+    public GrupoProcessual(Integer idGrupoProcessual) {
+	super();
+	this.idGrupoProcessual = idGrupoProcessual;
+    }
+
     public GrupoProcessual(String descGrupoProcessual) {
 	super();
 	this.descGrupoProcessual = descGrupoProcessual;

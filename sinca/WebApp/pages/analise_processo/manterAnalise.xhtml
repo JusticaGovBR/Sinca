@@ -8,11 +8,11 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-		<h:body>
+	<h:body>
 
-			<h:outputScript name="locale-primefaces.js" library="js" />
+		<h:outputScript name="locale-primefaces.js" library="js" />
 
-			<style type="text/css">
+		<style type="text/css">
 .aplicar {
 	background-image: url("../sinca/resources/imagens/apply.png") !important;
 }
@@ -23,7 +23,42 @@
 }
 </style>
 
-			<p:tabView id="tabView_analise" effect="clip">
+		<h:form id="formManterAnalise">
+
+			<h:panelGrid columns="1" cellpadding="10"
+				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="brnsalvarAnálise"
+					value="Salvar Análise"
+					actionListener="#{manterAnaliseMB.salvarAnalise}"
+					icon="ui-icon-disk" title="Atualizar">
+					<p:confirm header="Comfirmação"
+						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Comfirma" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" cellpadding="10"
+				rendered="#{!manterAnaliseMB.habilitaAnailiseIniciada}"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="btnIniciarAnalise" value="Iniciar Análise"
+					icon="ui-icon-disk" title="Iniciar Análise"  ajax="true" 
+					update=":tabView:formManterAnalise:"
+					action="#{manterAnaliseMB.iniciarAnalise}">
+					
+				</p:commandButton>
+			</h:panelGrid>
+
+
+			<p:tabView id="tabView_analise" effect="clip"
+				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}">
 				<p:tab id="tab_dados_analise" title="Dados da Análise">
 					<ui:insert name="analise">
 						<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
@@ -38,7 +73,7 @@
 				</p:tab>
 			</p:tabView>
 
+		</h:form>
 
-
-		</h:body>
+	</h:body>
 </ui:composition>

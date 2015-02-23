@@ -31,6 +31,10 @@ public class SituacaoCadastro implements Serializable {
 	public SituacaoCadastro() {
 	}
 
+	public SituacaoCadastro(Integer codSituacao ) {
+	    this.codSituacaoCadastro = codSituacao;
+	}
+
 	public Integer getCodSituacaoCadastro() {
 		return this.codSituacaoCadastro;
 	}

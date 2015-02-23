@@ -12,7 +12,7 @@
 
 		<h:outputScript name="locale-primefaces.js" library="js" />
 
-		<h:form id="formDiligencia">
+		<h:form id="formDiligencia" prependId="false" styleClass="semBorda">
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
 
@@ -21,14 +21,74 @@
 
 			</div>
 
-			<p:panel id="pnDadocComunicacao" header="Diligência"
+			<p:panel id="pnDadocComunicacao" header="Dados da Diligência"
 				toggleSpeed="500" closeSpeed="500"
-				style="margin-bottom:20px;width : 100%" toggleable="true">
+				style="margin-bottom:10px;width : 100%" toggleable="false">
+
+				<h:panelGrid columns="1" cellpadding="10" style="width :100%">
+					<p:dataTable var="diligenciasP" id="dataTbDiligencias"
+						value="#{manterDiligenciaMB.listaDiligencias}" paginator="true"
+						rows="2" style="margin-bottom:20px;width :100%"
+						emptyMessage="Não incluido diligências">
+
+						<p:column headerText="Orgão">
+							<h:outputText value="#{diligenciasP.pessoaJuridica.nomePessoa}" />
+						</p:column>
+
+						<p:column headerText="Data Envio">
+							<h:outputText id="dataEnvio" value="#{diligenciasP.dataEnvio}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Data Retorno">
+							<h:outputText id="dataRetorno"
+								value="#{diligenciasP.dataRetorno}">
+								<f:convertDateTime locale="pt_BR" dateStyle="long"
+									pattern="dd/MM/yyyy" />
+							</h:outputText>
+
+						</p:column>
+
+						<p:column headerText="Ações" style="width:32px;text-align: center"
+							value="Ações">
+							<h:panelGrid columns="2" cellpadding="10">
+								<p:commandButton value="Editar"
+									action="#{manterDiligenciaMB.editarDiligencia}"
+									icon="ui-icon ui-icon-trash" title="Editar Diligência"
+									ajax="true" update=":formDiligencia:">
+									<f:setPropertyActionListener value="#{diligenciasP}"
+										target="#{manterDiligenciaMB.diligencia}" />
+								</p:commandButton>
+								<p:commandButton value="Excluir"
+									actionListener="#{manterDiligenciaMB.removerDiligencia}"
+									icon="ui-icon ui-icon-trash" title="Excluir Diligência"
+									ajax="true" update=":formDiligencia:">
+									<p:confirm header="Comfirmação" message="Comfirma a Remoção da Diligência?"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{diligenciasP}"
+										target="#{manterDiligenciaMB.diligenciaProcessoEdicao}" />
+								</p:commandButton>
+								
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="Excluir" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="Cancelar" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+								
+							</h:panelGrid>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+
 
 				<h:panelGrid columns="2" cellpadding="40"
 					style="margin-bottom:10px; width : 100%;">
 					<h:outputLabel value="Orgão:" />
-					<p:autoComplete id="pessoaAnistList" minQueryLength="5"
+					<p:autoComplete id="pessoaAnistList" minQueryLength="2"
 						title="Razão Social" value="#{manterDiligenciaMB.pessoaJuridica}"
 						var="pessoaAnist" size="80" maxlength="120"
 						completeMethod="#{manterPessoaJuridicaMB.listaPessoaPorNomeLk}"
@@ -39,7 +99,7 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" cellpadding="10"
-					style="margin-bottom:20px;width : 100%">
+					style="margin-bottom:10px;width : 100%">
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio:" />
 						<p:calendar navigator="true"
@@ -47,20 +107,20 @@
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
-						<h:outputLabel value="Data da Ciência:" />
+						<h:outputLabel value="Data da Retorno:" />
 						<p:calendar navigator="true"
 							value="#{manterDiligenciaMB.diligencia.dataRetorno}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
+				<h:panelGrid columns="2" style="margin-bottom:10px;width :53%"
 					cellpadding="5">
 					<p:outputLabel value="Resultado:" style=" width : 100%;" />
 					<h:selectOneRadio
 						value="#{manterDiligenciaMB.diligencia.bolresultado}">
-						<f:selectItem itemLabel="Nada consta" itemValue="{" />
-						<f:selectItem itemLabel="Positivo" itemValue="0" />
+						<f:selectItem itemLabel="Nada consta" itemValue="0" />
+						<f:selectItem itemLabel="Positivo" itemValue="1" />
 					</h:selectOneRadio>
 				</h:panelGrid>
 
@@ -72,66 +132,72 @@
 				</h:panelGrid>
 
 
+				<p:panel id="pnDiligenciados" header="Diligênciados:"
+					toggleSpeed="500" closeSpeed="500"
+					style="margin-bottom:10px;width : 100%" toggleable="true">
+
+					<h:panelGrid columns="3" cellpadding="10"
+						style="margin-bottom:20px;width : 520px;height:25px">
+						<h:outputLabel value="Diligênciados:" style="font-weight:bold;" />
+						<p:selectOneMenu value="#{manterDiligenciaMB.idPessoaSelecionada}"
+							style="height:25px;width: 230px;" effect="fade">
+							<f:selectItem itemLabel="Selecione uma Pessoa"
+								noSelectionOption="true" />
+							<f:selectItems
+								value="#{manterDiligenciaMB.listaPessoaFisicasProcesso}"
+								var="item" itemLabel="#{item.nomePessoa}"
+								itemValue="#{item.idPessoa}" />
+						</p:selectOneMenu>
+						<p:commandButton value="Incluir" update=":formDiligencia:"
+							ajax="true" style="horizontal-align:center"
+							actionListener="#{manterDiligenciaMB.incluirDiligencia}"
+							icon="ui-icon-circle-plus">
+						</p:commandButton>
+					</h:panelGrid>
+
+
+					<h:panelGrid columns="1" cellpadding="10" style="width :100%">
+						<p:dataTable var="pessoas" id="dataTbDiligenciados"
+							widgetVar="pessoasDiligencia"
+							value="#{manterDiligenciaMB.listaPessoaFisicas}" paginator="true"
+							rows="2" style="margin-bottom:20px;width :100%"
+							emptyMessage="Não incluido Diligênciados">
+
+							<p:column headerText="Nome">
+								<h:outputText id="tpNome" value="#{pessoas.nomePessoa}" />
+							</p:column>
+
+							<p:column headerText="Número Cpf">
+								<h:outputText id="tpEnvioPara" value="#{pessoas.numCpf}" />
+							</p:column>
+
+							<p:column headerText="Ações"
+								style="width:32px;text-align: center" value="Ações">
+								<p:commandButton value="Excluir"
+									action="#{manterDiligenciaMB.removerDiligenciado}"
+									icon="ui-icon ui-icon-trash" title="Remover Diligênciado"
+									ajax="true" update=":formDiligencia:">
+									<f:setPropertyActionListener value="#{pessoas}"
+										target="#{manterDiligenciaMB.pessoaFisicaEdicao}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:panel>
+
+
 				<h:panelGrid columns="2" cellpadding="10"
-					style="margin-bottom:5px;width : 20%">
-					<p:commandButton value="Incluir" icon="ui-icon-plusthick" />
+					style="margin-bottom:10px;text-align:center; width : 80%;">
+					<p:commandButton value="Salvar" update=":formDiligencia:"
+						ajax="true" style="horizontal-align:center"
+						actionListener="#{manterDiligenciaMB.salvarDiligencia}"
+						icon="ui-icon-circle-plus" title="Telefones">
+					</p:commandButton>
+					<p:commandButton value="Fechar" id="FecharDiligencia"
+						style="horizontal-align:center" type="button" icon="ui-icon-close"
+						onclick="PF('dlg_diligencia').hide();" />
 				</h:panelGrid>
 
-				<h:panelGrid columns="1" cellpadding="10">
-				
-					<p:dataTable var="pessoas" id="dataTbDiligenciados" widgetVar="pessoasDiligencia"
-						value="#{manterDiligenciaMB.listaPessoaFisicas}" paginator="false"
-						rows="5" style="margin-bottom:20px;width :100%"
-						emptyMessage="Não incluido Diligênciados">
-
-						<p:column headerText="Nome">
-							<h:outputText id="tpNome" value="#{pessoas.nomePessoa}" />
-						</p:column>
-
-						<p:column headerText="Número Cpf">
-							<h:outputText id="tpEnvioPara" value="#{pessoas.numCpf}" />
-						</p:column>
-
-						<p:column headerText="Ações" style="width:32px;text-align: center"
-							value="Ações">
-							<p:commandButton value="Remover" action="#"
-								icon="ui-icon ui-icon-trash" title="Remover Diligênciado"
-								ajax="true" update=":formDiligencia:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-				</h:panelGrid>
-
-				<h:panelGrid columns="1" cellpadding="10">
-					<p:dataTable var="reparacaoLista" id="dataTbListaEnvio" value="#"
-						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
-						emptyMessage="Não incluido diligências">
-
-						<p:column headerText="Tipo Envio">
-							<h:outputText id="tpEnvio" value="" />
-						</p:column>
-
-						<p:column headerText="Enviado para">
-							<h:outputText id="tpEnvioPara" value="" />
-						</p:column>
-
-						<p:column headerText="Data Envio">
-							<h:outputText id="dataEnvio" value="" />
-						</p:column>
-
-						<p:column headerText="Ações" style="width:32px;text-align: center"
-							value="Ações">
-							<p:commandButton value="Remover" action="#"
-								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-								ajax="true" update=":formDiligencia:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-				</h:panelGrid>
 			</p:panel>
 
 		</h:form>

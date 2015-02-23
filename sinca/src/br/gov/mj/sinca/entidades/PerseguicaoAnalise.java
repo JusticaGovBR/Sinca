@@ -18,7 +18,7 @@ public class PerseguicaoAnalise implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_PERSEGUICAO")
-	private Integer idPerseguicao;
+	private String idPerseguicao;
 
 	private String complemento;
 
@@ -50,11 +50,11 @@ public class PerseguicaoAnalise implements Serializable {
 	public PerseguicaoAnalise() {
 	}
 
-	public Integer getIdPerseguicao() {
+	public String getIdPerseguicao() {
 		return this.idPerseguicao;
 	}
 
-	public void setIdPerseguicao(Integer idPerseguicao) {
+	public void setIdPerseguicao(String idPerseguicao) {
 		this.idPerseguicao = idPerseguicao;
 	}
 

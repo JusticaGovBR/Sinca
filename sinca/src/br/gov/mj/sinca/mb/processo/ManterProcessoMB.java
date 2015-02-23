@@ -23,14 +23,15 @@ import br.gov.mj.sinca.ConstantSinca;
 import br.gov.mj.sinca.dao.CargoFuncaoDAO;
 import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.DoencaDAO;
+import br.gov.mj.sinca.dao.EnderecoDAO;
 import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
 import br.gov.mj.sinca.dao.LoteProcessoDAO;
-import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
+import br.gov.mj.sinca.dao.PessoaFisicaDAO;
 import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.dao.StatusProcessoDAO;
@@ -54,10 +55,11 @@ import br.gov.mj.sinca.entidades.GrupoProcessual;
 import br.gov.mj.sinca.entidades.GrupoSocial;
 import br.gov.mj.sinca.entidades.Localizacao;
 import br.gov.mj.sinca.entidades.LoteProcesso;
-import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
+import br.gov.mj.sinca.entidades.SituacaoCadastro;
 import br.gov.mj.sinca.entidades.StatusProcesso;
 import br.gov.mj.sinca.entidades.SubGrupoProcessual;
 import br.gov.mj.sinca.entidades.SubGrupoSocial;
@@ -69,7 +71,6 @@ import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
 import br.gov.mj.sinca.entidades.TipoTelefone;
 import br.gov.mj.sinca.entidades.Usuario;
 import br.gov.mj.sinca.mb.LoginMB;
-import br.gov.mj.sinca.mb.analise.ManterAnaliseMB;
 import br.gov.mj.sinca.util.CpfCnpjUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 import br.gov.mj.sinca.ws.sei.RetornoConsultaProcedimento;
@@ -161,14 +162,14 @@ public class ManterProcessoMB implements Serializable {
     private boolean habilitaEdicaoPessoa;
     private boolean habilitaTabePessoa;
     private boolean comunicadoObito = false;
-    
+    private boolean comfirmaDadosCorretos = false;
+
     private boolean novo = true;
-    
-    
+
     private String linkDocSel;
-    
-    private Usuario usuario; 
-    
+
+    private Usuario usuario;
+
     private boolean proximo;
 
     public boolean isProximo() {
@@ -187,58 +188,58 @@ public class ManterProcessoMB implements Serializable {
 	    return event.getNewStep();
 	}
     }
-    
-    @ManagedProperty(value="#{loginMB}") 
+
+    @ManagedProperty(value = "#{loginMB}")
     private LoginMB loginMB;
-    
-    @ManagedProperty(value="#{manterAnaliseMB}") 
-    private ManterAnaliseMB manterAnaliseMB;
-    
+
     @PostConstruct
     public void Init() {
 	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').show()");
 	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
 	instanciaAtributos();
 	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').hide()");
-	
+
     }
 
     public String salvarProcesso() {
 	try {
 	    
-	     manterAnaliseMB.salvarAnalise();
-	    
-	    
-	    if (validarProcesso()) {
-		JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_ERROR, "Validando...");
-		JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
-		return null;
-	    }
-
-	    if (idCargoFuncao > 0) {
-		processo.setCargoFuncao(new CargoFuncao(idCargoFuncao));
-	    }
-	   
+	    setComboProcesso();
 
 	    if (processo.getIdProcesso() == null || processo.getIdProcesso() == 0) {
 		processo.setDataCadastro(new Date());
 		processo.setDataHoraInclusao(new Timestamp(new Date().getTime()));
 		processo.setNumProtocoloCa(new ProcessoDAO().bustaUltimoNumeroProcessoCA() + 1);
+		processo.setDataProtocoloCa(new Date());
 		processo.setIdProcesso(null);
 	    } else {
 		processo.setDataHoraAtualizacao(new Timestamp(new Date().getTime()));
 	    }
+	    processo.setUsuario(loginMB.getUsuario());
+	    if (comfirmaDadosCorretos) {
+		processo.setSituacaoCadastro(new SituacaoCadastro(2));
+		if (processo.getSituacaoCadastro() != null
+			&& processo.getSituacaoCadastro().getCodSituacaoCadastro().intValue() == 1) {
+		    processo.setIdUsuarioComfirmacao(loginMB.getUsuario().getIdUsuario());
+		}
+	    }
+	    LoteProcesso loteSelecionado = (LoteProcesso) JSFUtil.getSessionMap().get("LOTE_SELECIONADO");
+	    if (loteSelecionado != null && loteSelecionado.getIdLote() > 0) {
+		processo.setLoteProcesso(loteSelecionado);
+	    }
 
 	    Processo processoSalvo = new ProcessoDAO().salvar(processo);
-
-	    List<PessoaProcesso> listaPessoaProc = getListarPessoaProcesso();
-	    for (PessoaProcesso pessoaProc : listaPessoaProc) {
-		pessoaProc.setProcesso(processoSalvo);
-		new PessoaProcessoDAO().salvar(pessoaProc);
+	   
+	    if(processo.getIdProcesso()==null){
+		PessoaProcesso pessoaProcesso = new PessoaProcesso();
+		pessoaProcesso.setProcesso(processoSalvo);
+		new PessoaProcessoDAO().salvar(pessoaProcesso);
 	    }
+	    
+	    JSFUtil.getSessionMap().put("PROCESSO_EDITADO_SESSAO", processoSalvo);
+
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
 	    JSFUtil.retornarMensagemModal("Processo", "Processo Salvo....");
-	    // limpDados();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
@@ -247,22 +248,56 @@ public class ManterProcessoMB implements Serializable {
 	return null;
     }
 
-    public void habilitaNovo(){
-	System.out.println("Habilita NOVO: "+novo);
-	if(novo){
-	  novo = false;   
-	}else{
-	  novo = true;  
+    private void setComboProcesso() {
+	if (idCargoFuncao > 0) {
+	    processo.setCargoFuncao(new CargoFuncao(idCargoFuncao));
+	}
+	if (idLocalizacao > 0) {
+	    processo.setIdLocalizacao(idLocalizacao);
+	}
+	if (idGrupoProcessual > 0) {
+	    processo.setGrupoProcessual(new GrupoProcessual(idGrupoProcessual));
+	}
+	if (idSubGrupoProcessual > 0) {
+	    processo.setSubGrupoProcessual(new SubGrupoProcessual(idSubGrupoProcessual));
+	}
+	if (idStatusProcesso > 0) {
+	    processo.setStatusProcesso(new StatusProcesso(idStatusProcesso));
+	    ;
+	}
+	if (idSubStatusProcesso > 0) {
+	    processo.setSubStatusProcesso(new SubStatusProcesso(idSubStatusProcesso));
+	}
+	if (idGrupoSocial > 0) {
+	    processo.setGrupoSocial(new GrupoSocial(idGrupoSocial));
+	}
+	if (idSubGrupoSocial > 0) {
+	    processo.setSubGrupoSocial(new SubGrupoSocial(idSubGrupoSocial));
+	}
+
+    }
+
+    public void habilitaNovo() {
+	System.out.println("Habilita NOVO: " + novo);
+	if (novo) {
+	    novo = false;
+	} else {
+	    novo = true;
 	}
     }
-    
-    private boolean validarProcesso() {
-	return true;
+
+    public boolean isComfirmaDadosCorretos() {
+	return comfirmaDadosCorretos;
+    }
+
+    public void setComfirmaDadosCorretos(boolean comfirmaDadosCorretos) {
+	this.comfirmaDadosCorretos = comfirmaDadosCorretos;
     }
 
     private void instanciaAtributos() {
 
-	linkDocSel = "http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=12&infra_hash=ca477862c7589a4dab02c7bb0d936f92";
+	// linkDocSel =
+	// "http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=12&infra_hash=ca477862c7589a4dab02c7bb0d936f92";
 	// linkDocSel ="http://www.globo.com";
 
 	listarPessoa = new ArrayList<PessoaFisica>();
@@ -271,14 +306,11 @@ public class ManterProcessoMB implements Serializable {
 	listarTipoPessoaProc = new TipoPessoaProcessoDAO().lerTodos();
 	listarDoenca = new DoencaDAO().lerTodos();
 	doencaPessoa.setDoenca(new Doenca());
-	
+
 	usuario = loginMB.getUsuario();
-	
+
 	listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-	
-	System.out.println("manterAnaliseMB::::"+manterAnaliseMB.getListarTipoAnaliseJulgamento().size());
-	
-	PessoaProcesso pessoaProcessoP = (PessoaProcesso) JSFUtil.getSessionMap().get("processoLista");
+	PessoaProcesso pessoaProcessoP = (PessoaProcesso) JSFUtil.getSessionMap().get("pessoaProcesso");
 	if (pessoaProcessoP != null) {
 	    // pessoa = pessoaProcessoP.getPessoa();
 	    processo = pessoaProcessoP.getProcesso();
@@ -293,12 +325,24 @@ public class ManterProcessoMB implements Serializable {
 		    : null);
 	    this.idSubGrupoProcessual = (processo.getSubGrupoProcessual() != null ? processo.getSubGrupoProcessual()
 		    .getIdSubGrupoProcessual() : null);
+	    this.idSubGrupoProcessual = (processo.getSubGrupoProcessual() != null ? processo.getSubGrupoProcessual()
+		    .getIdSubGrupoProcessual() : null);
+	    loteProcesso = (processo.getLoteProcesso() != null ? processo.getLoteProcesso() : new LoteProcesso());
+
+	    this.idCargoFuncao = (processo.getCargoFuncao() != null ? processo.getCargoFuncao().getIdCargoFuncao()
+		    : null);
+
+	    this.idSubGrupoSocial = (processo.getSubGrupoSocial() != null ? processo.getSubGrupoSocial()
+		    .getIdSubGrupoSocial() : null);
 
 	    pessoaProcesso = pessoaProcessoP;
 	    numProcessoMJ = pessoaProcessoP.getProcesso().getNumProtocoloMj();
 	    listarPessoaProcesso = new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso());
-
+	    if (processo.getSituacaoCadastro() != null && processo.getSituacaoCadastro().getCodSituacaoCadastro() == 2) {
+		comfirmaDadosCorretos = true;
+	    }
 	    JSFUtil.getSessionMap().put("processoLista", null);
+
 	} else {
 	    pessoa = new PessoaFisica();
 	    pessoaCadastro = new PessoaFisica();
@@ -309,6 +353,7 @@ public class ManterProcessoMB implements Serializable {
 	    numCpf = "";
 	    this.mensagem = "Atualizando os Dados....";
 	}
+	JSFUtil.getSessionMap().put("PROCESSO_EDITADO_SESSAO", processo);
     }
 
     public String consultarProcesso() {
@@ -326,10 +371,10 @@ public class ManterProcessoMB implements Serializable {
 		processo.setDataProtocoloMJ(new SimpleDateFormat("dd/MM/yyyy").parse(retorno.getDataAutuacao()));
 		this.linkDocSel = retorno.getLinkAcesso();
 	    }
-	    
+
 	} catch (AxisFault eAxis) {
-	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
-		    "Error na Consultando WebServices do SEI: " + eAxis.getFaultString());
+	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL, "Error na Consultando WebServices do SEI: "
+		    + eAxis.getFaultString());
 	    eAxis.printStackTrace();
 	} catch (Exception e) {
 	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_FATAL,
@@ -343,7 +388,7 @@ public class ManterProcessoMB implements Serializable {
     public List<PessoaFisica> listarPessoaPorNomeLike(String nome) {
 	if (nome != null && nome.equals(""))
 	    System.out.println("Nome Pessoa PESQUISA " + nome);
-	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk( nome);
+	List<PessoaFisica> pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nome);
 	return pessoas;
     }
 
@@ -374,7 +419,7 @@ public class ManterProcessoMB implements Serializable {
 			    "Para Consulta a Pessoa Favor Informar o Nome da Pessoa com mas de 4 (quatro) caracteres!");
 		    return pessoas;
 		}
-		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk( nomePessoa);
+		pessoas = new PessoaFisicaDAO().listaPessoaPorNomeLk(nomePessoa);
 
 	    } else {
 		if (numCpf != null && numCpf.length() < 7) {
@@ -490,6 +535,34 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
+    public void salvarInteressadoProcesso() {
+	Processo processoAtual = (Processo) JSFUtil.getSessionMap().get("PROCESSO_EDITADO_SESSAO");
+	if (processoAtual == null || processoAtual.getIdProcesso()==null || processoAtual.getIdProcesso().longValue() == 0l) {
+	    JSFUtil.retornarMensagemModal("Interessados",
+		    "Requerimento não Criado ou Salvo! Favor Salvar o Requerimento de Anistia"
+			    + " para vincular os Interessados");
+	} else {
+	    if (this.listarPessoaProcesso != null && !listarPessoaProcesso.isEmpty()) {
+		List<PessoaProcesso> lista = new PessoaProcessoDAO().listarProcesso(processoAtual.getIdProcesso());
+		for (PessoaProcesso pessoaProcesso : lista) {
+		    new PessoaProcessoDAO().excluir(pessoaProcesso);
+		}
+		for (PessoaProcesso pessoaProcesso : listarPessoaProcesso) {
+		    if(pessoaProcesso.getPessoa()!=null || pessoaProcesso.getPessoa().getIdPessoa()>0){
+			new PessoaProcessoDAO().salvar(pessoaProcesso);
+		    }
+		}
+		JSFUtil.retornarMensagemModal("Interessados",
+			"Interssados no Requerimento de Anistia atualizados com Sucesso!");
+
+	    } else {
+		JSFUtil.retornarMensagemModal("Interessados",
+			"Nenhum Interessado Incluido para vincular no Requerimento de Anistia.");
+	    }
+	}
+
+    }
+
     public void salvarInteressado() {
 	try {
 	    if (pessoaCadastro.getIdEstadoCivil() == null || pessoaCadastro.getIdEstadoCivil() == 0) {
@@ -501,32 +574,30 @@ public class ManterProcessoMB implements Serializable {
 	    pessoaCadastro.setPessoaEnderecos(null);
 	    pessoaCadastro.setDocumentoPessoas(null);
 	    pessoaCadastro.setTelefonePessoas(null);
-	    
-	    if(pessoaCadastro.getDataHoraCadastro()==null){
+
+	    if (pessoaCadastro.getDataHoraCadastro() == null) {
 		pessoaCadastro.setDataHoraCadastro(new Date());
 	    }
-	    
+
 	    PessoaFisica pessoaSalva = new PessoaFisicaDAO().salvar(pessoaCadastro);
 
 	    if (pessoaSalva.getIdPessoa() != null) {
 		List<PessoaEndereco> pssEndList = new PessoaEnderecoDAO().listarPorIdPessoa(pessoaSalva.getIdPessoa());
 
-		Map<Integer, Endereco> mapEndercos = getMapEndereco();
+		for (PessoaEndereco pessoaEndereco : pssEndList) {
+			new PessoaEnderecoDAO().excluir(pessoaEndereco);
+		}
+
+		for (Endereco endereco : getListarEnderecos()) {
+		    	PessoaEndereco pessEnd = new PessoaEndereco();
+		    	Endereco endSalvo = new EnderecoDAO().salvar(endereco);
+		    		pessEnd.setEndereco(endSalvo );
+		    		pessEnd.setPessoa(pessoaSalva);
+		    	new PessoaEnderecoDAO().salvar(pessEnd);
+		}
+
 		Map<Integer, TelefonePessoa> mapTelefones = getMapTelefones();
 		Map<Integer, DocumentoPessoa> mapDocumentos = getMapDocumentoPessoa();
-
-		for (PessoaEndereco pessoaEndereco : pssEndList) {
-		    if (!mapEndercos.containsKey(pessoaEndereco.getEndereco())) {
-			new PessoaEnderecoDAO().excluir(pessoaEndereco);
-		    }
-		}
-		for (Endereco endereco : getListarEnderecos()) {
-		    endereco.setIdEndereco(null);
-		    PessoaEndereco pessEnd = new PessoaEndereco();
-		    pessEnd.setEndereco(endereco);
-		    pessEnd.setPessoa(pessoaSalva);
-		    new PessoaEnderecoDAO().salvar(pessEnd);
-		}
 
 		List<TelefonePessoa> listaTelefone = new TelefonePessoaDAO().listarTelefonePorIdPessoa(pessoaSalva
 			.getIdPessoa());
@@ -559,7 +630,7 @@ public class ManterProcessoMB implements Serializable {
 		setListarPessoaProcesso(new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso()));
 	    }
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem').hide()");
-	    JSFUtil.retornarMensagemModal("Atualizando Anistiado", "Dados atualizados com Sucesso!");
+	    JSFUtil.retornarMensagemModal("Atualizando", "Dados atualizados com Sucesso!");
 	} catch (Exception e) {
 	    JSFUtil.retornarMensagem(null, FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao salvar o processo!");
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem').hide()");
@@ -839,6 +910,14 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
+    public void habilitarComfirmaDados() {
+	if (comfirmaDadosCorretos) {
+	    comfirmaDadosCorretos = true;
+	} else {
+	    comfirmaDadosCorretos = false;
+	}
+    }
+
     public void cidDoencaChanged(ValueChangeEvent e) {
 	// assign new value to localeCode
 	String codCid = e.getNewValue().toString();
@@ -850,56 +929,57 @@ public class ManterProcessoMB implements Serializable {
 	}
     }
 
-    public void addLoteProcesso(){
+    public void addLoteProcesso() {
 	loteProcesso = new LoteProcesso();
 	JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').show()");
     }
 
-    public void salvarLoteProcesso(){
+    public void salvarLoteProcesso() {
 	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
-	    	  loteAtualizar.setIdUsuario(usuario.getIdUsuario());
-		  new LoteProcessoDAO().salvar(loteAtualizar);  
-		  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Atualizado....");
-		  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-		  return;
+	if (loteAtualizar != null && loteAtualizar.getIdLote() > 0) {
+	    loteAtualizar.setIdUsuario(usuario.getIdUsuario());
+	    new LoteProcessoDAO().salvar(loteAtualizar);
+	    JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Atualizado....");
+	    listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	    return;
 	}
-	if(loteProcesso.getDescricao()!=null && loteProcesso.getDescricao().length()>0){
-	  if(loteProcesso.getIdLote()==null){
-	     loteProcesso.setDataCriacao(new Date());
-	  }else{
-	     loteProcesso.setDataAtualizacao(new Date()); 
-	  }
-	  
-	  loteProcesso.setIdUsuario(usuario.getIdUsuario());
-	  new LoteProcessoDAO().salvar(loteProcesso);  
-	  JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Salvo....");
-	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	if (loteProcesso.getDescricao() != null && loteProcesso.getDescricao().length() > 0) {
+	    if (loteProcesso.getIdLote() == null) {
+		loteProcesso.setDataCriacao(new Date());
+	    } else {
+		loteProcesso.setDataAtualizacao(new Date());
+	    }
+
+	    loteProcesso.setIdUsuario(usuario.getIdUsuario());
+	    new LoteProcessoDAO().salvar(loteProcesso);
+	    JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Salvo....");
+	    listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
 	}
 
     }
-    
-    public void excluirLoteProcesso(){
+
+    public void excluirLoteProcesso() {
 	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0 && loteAtualizar.getDescricao().length()>0){
-	    loteAtualizar.setDataAtualizacao(new Date()); 
+	if (loteAtualizar != null && loteAtualizar.getIdLote() > 0 && loteAtualizar.getDescricao().length() > 0) {
+	    loteAtualizar.setDataAtualizacao(new Date());
 	    loteAtualizar.setAtivo((byte) 0);
 	    loteAtualizar.setIdUsuario(usuario.getIdUsuario());
-	    new LoteProcessoDAO().salvar(loteAtualizar);  
+	    new LoteProcessoDAO().salvar(loteAtualizar);
 	    JSFUtil.retornarMensagemModal("Lote do Requerimento", "Lote do Requerimento Exluido....");
 	    listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
 	}
     }
-    
-    public void selecionarLoteProcesso(){
+
+    public void selecionarLoteProcesso() {
 	LoteProcesso loteAtualizar = (LoteProcesso) JSFUtil.getRequestMap().get("loteEdicao");
-	if(loteAtualizar!=null && loteAtualizar.getIdLote()>0){
+	JSFUtil.getSessionMap().put("LOTE_SELECIONADO", loteAtualizar);
+	if (loteAtualizar != null && loteAtualizar.getIdLote() > 0) {
 	    loteProcesso = loteAtualizar;
 	}
-	  listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
-	  JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').hide()");
+	listaLoteProcesso = new LoteProcessoDAO().lerTodosAtivos();
+	JSFUtil.getRequestContext().execute("PF('dlg_loteProcesso').hide()");
     }
-    
+
     public String getNumCpf() {
 	return numCpf;
     }
@@ -1436,53 +1516,43 @@ public class ManterProcessoMB implements Serializable {
     }
 
     public Integer getIdLoteProcesso() {
-        return idLoteProcesso;
+	return idLoteProcesso;
     }
 
     public void setIdLoteProcesso(Integer idLoteProcesso) {
-        this.idLoteProcesso = idLoteProcesso;
+	this.idLoteProcesso = idLoteProcesso;
     }
 
     public LoteProcesso getLoteProcesso() {
-        return loteProcesso;
+	return loteProcesso;
     }
 
     public List<LoteProcesso> getListaLoteProcesso() {
-        return listaLoteProcesso;
+	return listaLoteProcesso;
     }
 
     public void setLoteProcesso(LoteProcesso loteProcesso) {
-        this.loteProcesso = loteProcesso;
+	this.loteProcesso = loteProcesso;
     }
 
     public void setListaLoteProcesso(List<LoteProcesso> listaLoteProcesso) {
-        this.listaLoteProcesso = listaLoteProcesso;
+	this.listaLoteProcesso = listaLoteProcesso;
     }
 
     public LoginMB getLoginMB() {
-        return loginMB;
+	return loginMB;
     }
 
     public void setLoginMB(LoginMB loginMB) {
-        this.loginMB = loginMB;
+	this.loginMB = loginMB;
     }
 
     public boolean getNovo() {
-        return novo;
+	return novo;
     }
 
     public void setNovo(boolean novo) {
-        this.novo = novo;
+	this.novo = novo;
     }
 
-    public ManterAnaliseMB getManterAnaliseMB() {
-        return manterAnaliseMB;
-    }
-
-    public void setManterAnaliseMB(ManterAnaliseMB manterAnaliseMB) {
-        this.manterAnaliseMB = manterAnaliseMB;
-    }
-    
-    
-    
 }

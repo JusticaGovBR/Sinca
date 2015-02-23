@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -28,6 +29,7 @@ import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
 import br.gov.mj.sinca.entidades.Processo;
+import br.gov.mj.sinca.mb.diligencia.ManterDiligencia;
 import br.gov.mj.sinca.util.DateUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 
@@ -68,7 +70,10 @@ public class ConsultarProcessoMB implements Serializable {
     private String dataProtocoloSEI;
 
     private Logger logger = null;
-
+    
+    @ManagedProperty(value="#{manterDiligenciaMB}") 
+    private ManterDiligencia manterDiligenciaMB;
+    
     @PostConstruct
     public void Init() {
 	logger = Logger.getLogger(this.getClass());
@@ -97,12 +102,13 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     public String detalharProcesso() {
-	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
+	JSFUtil.getSessionMap().put("pessoaProcesso", JSFUtil.getRequestMap().get("processoLista"));
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
     public void manterDiligencia() {
-	JSFUtil.getSessionMap().put("processoLista", pessoaProcesso);
-	JSFUtil.getRequestContext().execute("PF('dlg_diligencia').show()");
+	JSFUtil.getSessionMap().put("pessoaProcessoDiligenica", JSFUtil.getRequestMap().get("processoLista"));
+	getManterDiligenciaMB().carregarDaddos();
+	//JSFUtil.getRequestContext().execute("PF('dlg_diligencia').show()");
     }
     
     public List<PessoaFisica> consultarPessoas() {
@@ -378,6 +384,14 @@ public class ConsultarProcessoMB implements Serializable {
 
     public void setDataProtocoloCA(String dataProtocoloCA) {
 	this.dataProtocoloCA = dataProtocoloCA;
+    }
+
+    public ManterDiligencia getManterDiligenciaMB() {
+        return manterDiligenciaMB;
+    }
+
+    public void setManterDiligenciaMB(ManterDiligencia manterDiligenciaMB) {
+        this.manterDiligenciaMB = manterDiligenciaMB;
     }
 
 }

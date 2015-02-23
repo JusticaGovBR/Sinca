@@ -10,9 +10,9 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="diligencia_processo")
-@NamedQuery(name="DiligenciaProcesso.findAll", query="SELECT d FROM DiligenciaProcesso d")
-public class DiligenciaProcesso implements Serializable {
+@Table(name="diligencia_pessoa")
+@NamedQuery(name="DiligenciaPessoa.findAll", query="SELECT d FROM DiligenciaPessoa d")
+public class DiligenciaPessoa implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -32,18 +32,14 @@ public class DiligenciaProcesso implements Serializable {
 	private int idUsuario;
 
 	@ManyToOne
-	@JoinColumn(name="ID_PROCESSO")
-	private Processo processo;
-
-	@ManyToOne
-	@JoinColumn(name="ID_PESSO_JURIDICA")
-	private PessoaJuridica pessoaJuridica;
+	@JoinColumn(name="ID_DILIGENCIA")
+	private Diligencia diligencia;
 
 	@ManyToOne
 	@JoinColumn(name="ID_PESSO_FISICA")
 	private PessoaFisica pessoaFisica;
 
-	public DiligenciaProcesso() {
+	public DiligenciaPessoa() {
 	}
 
 	public Long getIdDiligenciaProcesso() {
@@ -78,24 +74,16 @@ public class DiligenciaProcesso implements Serializable {
 		this.idUsuario = idUsuario;
 	}
 
-	public Processo getProcesso() {
-		return this.processo;
-	}
-
-	public void setProcesso(Processo processo) {
-		this.processo = processo;
-	}
-
-	public PessoaJuridica getPessoaJuridica() {
-		return this.pessoaJuridica;
-	}
-
-	public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
-		this.pessoaJuridica = pessoaJuridica;
-	}
-
 	public PessoaFisica getPessoaFisica() {
 		return this.pessoaFisica;
+	}
+
+	public Diligencia getDiligencia() {
+	    return diligencia;
+	}
+
+	public void setDiligencia(Diligencia diligencia) {
+	    this.diligencia = diligencia;
 	}
 
 	public void setPessoaFisica(PessoaFisica pessoaFisica) {

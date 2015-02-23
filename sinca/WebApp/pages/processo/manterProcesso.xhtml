@@ -134,17 +134,8 @@
 					</p:outputPanel>
 				</p:dialog>
 
-				<!-- 
-				<h:panelGrid columns="2" cellpadding="10"
-					style="margin-bottom:10px;text-align:center; width : 100%;">
-					<p:commandButton id="btnSalvarProcesso" value="Salvar Dados"
-						onclick="PF('dlg_comfirmacao').show();" icon="ui-icon-disk"
-						title="Salvar Processo" />
-				</h:panelGrid>
-				-->
-
-				<p:panel id="pnlDadosTabelPessoa" header="Histórico do Requerimento de Anistia:"
-					rendered="true" style="margin-bottom:10px;width : 100%"
+				<p:panel id="pnlHistorico" header="Histórico do Requerimento de Anistia:"
+					rendered="true" style="margin-bottom:5px;width : 100%"
 					toggleable="true">
 
 
@@ -167,6 +158,7 @@
 					</h:panelGrid>
 
 					<p:dataTable var="pessoaLista" value="#" paginator="true" rows="5"
+						style="margin-bottom:10px;width : 100%"
 						emptyMessage="Não incluido dados do analista responsável...">
 
 						<p:column headerText="Data Recebimento">

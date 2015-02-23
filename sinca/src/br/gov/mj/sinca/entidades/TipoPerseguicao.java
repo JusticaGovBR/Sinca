@@ -26,6 +26,10 @@ public class TipoPerseguicao implements Serializable {
 	@OneToMany(mappedBy="tipoPerseguicao")
 	private List<PerseguicaoAnalise> perseguicaoAnalises;
 
+	//bi-directional many-to-one association to AtosExcecaoAnalise
+	@OneToMany(mappedBy="tipoPerseguicao")
+	private List<AtosExcecaoAnalise> atosExcecaoAnalises;
+
 	public TipoPerseguicao() {
 	}
 
@@ -65,6 +69,28 @@ public class TipoPerseguicao implements Serializable {
 		perseguicaoAnalis.setTipoPerseguicao(null);
 
 		return perseguicaoAnalis;
+	}
+
+	public List<AtosExcecaoAnalise> getAtosExcecaoAnalises() {
+		return this.atosExcecaoAnalises;
+	}
+
+	public void setAtosExcecaoAnalises(List<AtosExcecaoAnalise> atosExcecaoAnalises) {
+		this.atosExcecaoAnalises = atosExcecaoAnalises;
+	}
+
+	public AtosExcecaoAnalise addAtosExcecaoAnalis(AtosExcecaoAnalise atosExcecaoAnalis) {
+		getAtosExcecaoAnalises().add(atosExcecaoAnalis);
+		atosExcecaoAnalis.setTipoPerseguicao(this);
+
+		return atosExcecaoAnalis;
+	}
+
+	public AtosExcecaoAnalise removeAtosExcecaoAnalis(AtosExcecaoAnalise atosExcecaoAnalis) {
+		getAtosExcecaoAnalises().remove(atosExcecaoAnalis);
+		atosExcecaoAnalis.setTipoPerseguicao(null);
+
+		return atosExcecaoAnalis;
 	}
 
 }

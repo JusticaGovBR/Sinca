@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Tomcat v7.0"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss 4.2 Runtime"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/Aplicativos/Java/jboss-4.2.3_MJ/server/default/deploy/mj/03comp/MJ_Corporativo.jar"/>
+	<classpathentry kind="lib" path="D:/Aplicativos/Java/jboss-4.2.3_MJ/server/default/deploy/mj/03comp/MJSeguranca2.jar"/>
 	<classpathentry kind="output" path="WebApp/WEB-INF/classes"/>
 </classpath>

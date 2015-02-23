@@ -1,13 +1,15 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -15,9 +17,9 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
-	private static final long serialVersionUID = 1L;
+    
+	private static final long serialVersionUID = 188787987L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,6 +34,14 @@ public class Usuario implements Serializable {
 
 	@Column(name="SENHA")
 	private String senha;
+
+	@Column(name="DATA_CADASTRO")
+	private Date dataCadastro;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="DATA_ULTIMO_ACESSO")
+	private Date dataUltimoAcesso;
+
 
 	public Usuario() {
 	}
@@ -76,6 +86,22 @@ public class Usuario implements Serializable {
 
 	public void setSenha(String senha) {
 	    this.senha = senha;
+	}
+
+	public Date getDataCadastro() {
+	    return dataCadastro;
+	}
+
+	public Date getDataUltimoAcesso() {
+	    return dataUltimoAcesso;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+	    this.dataCadastro = dataCadastro;
+	}
+
+	public void setDataUltimoAcesso(Date dataUltimoAcesso) {
+	    this.dataUltimoAcesso = dataUltimoAcesso;
 	}
        
 

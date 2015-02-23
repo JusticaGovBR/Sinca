@@ -23,8 +23,6 @@
 }
 </style>
 		<h:form id="formAnalise">
-		
-		   <h:inputHidden value="#{manterProcessoMB.processo}"  id="processoCarregado" />
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
 
@@ -54,8 +52,8 @@
 					cellpadding="5">
 					<p:outputLabel value="Atos de Exceção:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
-						action="#{manterAnaliseMB.addPerseguica}" ajax="true"
+					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
+						action="#{manterAnaliseMB.addPerseguica}" ajax="true"						
 						icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
@@ -90,7 +88,7 @@
 						<p:commandButton value="Editar"
 							action="#{manterAnaliseMB.editarPerseguicao}" icon="ui-icon-aply"
 							title="Editar" ajax="true"
-							update=":tabView:tabView_analise:formAnalise:">
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{perseguicaoLista}"
 								target="#{manterAnaliseMB.perseguicaoAnalise}" />
 						</p:commandButton>
@@ -100,7 +98,7 @@
 						<p:commandButton value="Remover"
 							action="#{manterAnaliseMB.removerPerseguicao}"
 							icon="ui-icon ui-icon-trash" title="Remover do Processo"
-							ajax="true" update=":tabView:tabView_analise:formAnalise:">
+							ajax="true" update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{perseguicaoLista}"
 								target="#{manterAnaliseMB.perseguicaoAnalise}" />
 						</p:commandButton>
@@ -120,7 +118,7 @@
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 150px;">
 						<h:outputLabel value="Data 1º Protocolo:" />
 						<p:calendar id="dataProcesso" navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.processo.dataCadastro}"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 
@@ -144,7 +142,7 @@
 
 					<h:outputLabel value="Data da Anistia:" />
 					<p:calendar id="dataAnistiaAnteriores" navigator="true"
-						value="#{manterAnaliseMB.analiseProcesso.processo.dataCadastro}"
+						value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
 						showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 
 				</h:panelGrid>
@@ -222,43 +220,22 @@
 					</h:selectOneRadio>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
+				<h:panelGrid columns="1" style="margin-bottom:20px;width :25%"
 					cellpadding="5">
 					<p:outputLabel value="Tipo de Reparação:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
-						action="#" ajax="true" icon="ui-icon-plusthick">
-					</p:commandButton>
 				</h:panelGrid>
 
-				<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
-					value="#" paginator="false" rows="5" style="margin-bottom:20px;"
-					emptyMessage="Não incluido dados de Reparação...">
-
-					<p:column headerText="Tipo Reparação">
-						<h:outputText id="tpTBreparacao" value="" />
-					</p:column>
-
-					<p:column headerText="Ações">
-						<h:outputText id="tpAcoes" value="" />
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-							title="Editar" ajax="true"
-							update=":tabView:tabView_analise:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover" action="#"
-							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:tabView_analise:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-				</p:dataTable>
+				<h:panelGrid columns="1" style="margin-bottom:10px;width :60%"
+					cellpadding="5">
+					<p:selectManyCheckbox  
+						style="width : 100%;font-weight:bold;">
+						<f:selectItem itemValue="1" itemLabel="Reparação Econômica" />
+						<f:selectItem itemValue="2" itemLabel="Reparação Moral" />
+						<f:selectItem itemValue="3" itemLabel="Restituição de Direitos" />
+					</p:selectManyCheckbox>
+				</h:panelGrid>
+				
 
 				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
 					cellpadding="5">
@@ -287,7 +264,7 @@
 					cellpadding="5">
 					<p:outputLabel value="Resumo do Pedido:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
+					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
 						action="#" label="Carrega Informações" value="Carrega Informações"
 						ajax="true" icon="ui-icon-plusthick">
 					</p:commandButton>
@@ -311,7 +288,7 @@
 					cellpadding="5">
 					<p:outputLabel value="Provas Juntadas Pelo Requerente:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:tabView_analise:formAnalise:"
+					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
 						action="#" ajax="true" icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
@@ -340,7 +317,7 @@
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
 							title="Editar" ajax="true"
-							update=":tabView:tabView_analise:formAnalise:">
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
 						</p:commandButton>
 					</p:column>
@@ -348,7 +325,7 @@
 					<p:column style="width:32px;text-align: center">
 						<p:commandButton value="Remover" action="#"
 							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:tabView_analise:formAnalise:">
+							ajax="true" update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
 							<f:setPropertyActionListener value="#{reparacaoLista}" target="" />
 						</p:commandButton>
 					</p:column>
@@ -458,7 +435,7 @@
 							<p:commandButton value="Incluir"
 								action="#{manterAnaliseMB.incluirNaAnalise}"
 								icon="ui-icon-search" title="Incluir no Processo" ajax="true"
-								update=":tabView:tabView_analise:formAnalise:">
+								update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
 								<f:setPropertyActionListener value="#{pessoaLista}"
 									target="#{manterAnaliseMB.pessoaAnalista}" />
 							</p:commandButton>
@@ -533,7 +510,7 @@
 						style="margin-bottom:20px;text-align:center; width : 70%;">
 						<p:commandButton value="Incluir" id="bt_incluir_pereg"
 							style="horizontal-align:center" icon="ui-icon-disk"
-							update=":tabView:tabView_analise:formAnalise:dataTbPerseguicaoLista"
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:dataTbPerseguicaoLista"
 							action="#{manterAnaliseMB.incluirPerseguicaoLista}">
 						</p:commandButton>
 

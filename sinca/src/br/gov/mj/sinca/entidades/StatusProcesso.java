@@ -32,6 +32,10 @@ public class StatusProcesso implements Serializable {
         public StatusProcesso() {
 	}
 
+	public StatusProcesso(Integer idStatusProcesso2) {
+	    this.idStatusProcesso = idStatusProcesso2;
+	}
+
 	public Integer getIdStatusProcesso() {
 		return this.idStatusProcesso;
 	}

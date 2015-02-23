@@ -12,7 +12,7 @@
 
 		<h:outputScript name="locale-primefaces.js" library="js" />
 
-<style type="text/css">
+		<style type="text/css">
 .aplicar {
 	background-image: url("../sinca/resources/imagens/apply.png") !important;
 }
@@ -21,11 +21,10 @@
 	background-image: url("../sinca/resources/imagens/icoEnquete.png")
 		!important;
 }
-
 </style>
 
 
-	<script type="text/javascript">
+		<script type="text/javascript">
 		function mascara(o,f){ 
 			v_obj=o 
 			v_fun=f 
@@ -33,7 +32,7 @@
 		} 
 	}
 	</script>
-	
+
 		<h:form id="formInteressados" styleClass="semBorda">
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
@@ -43,7 +42,6 @@
 
 
 			</div>
-
 			<p:dialog header="ALERTA!" resizable="false" showEffect="clip"
 				closable="false" hideEffect="clip" widgetVar="dlg_mensagem"
 				modal="true" width="250px">
@@ -55,6 +53,25 @@
 					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
 				</h:panelGrid>
 			</p:dialog>
+
+			<h:panelGrid columns="1" cellpadding="10"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="salvarInteressadoProcesso"
+					value="Salvar Interessados" actionListener="#{manterProcessoMB.salvarInteressadoProcesso}"
+					icon="ui-icon-disk" title="Atualizar">
+					<p:confirm header="Comfirmação"
+						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Comfirma" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:panelGrid>
+
 
 			<p:panel id="pnlDadosInteressados" header="Dados dos Interessados"
 				style="margin-bottom:20px;width : 100%" toggleable="true">
@@ -91,7 +108,7 @@
 							update=":tabView:formInteressados:" icon="ui-icon-newwin"
 							title="Novo Interessado!">
 							<f:setPropertyActionListener value="true"
-									target="#{manterProcessoMB.habilitaEdicaoPessoa}" />
+								target="#{manterProcessoMB.habilitaEdicaoPessoa}" />
 						</p:commandButton>
 
 					</h:panelGrid>
@@ -189,7 +206,7 @@
 						<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
 					</p:column>
 
-					<p:column style="width:32px;align: center">
+					<p:column style="width:32px;align: center" rendered="#{!processoLista.pessoa eq null}">
 						<p:commandButton value="Editar" id="Editar_Pessoa"
 							actionListener="#{manterProcessoMB.editarPessoaProcesso}"
 							update=":tabView:formInteressados:" icon="ui-icon-search"
@@ -200,7 +217,7 @@
 						</p:commandButton>
 					</p:column>
 
-					<p:column style="width:32px;align: center">
+					<p:column style="width:32px;align: center" rendered="#{!processoLista.pessoa eq null}">
 						<p:commandButton value="Remover" id="remover_pessoa_processo"
 							actionListener="#{manterProcessoMB.removerPessoaProcesso}"
 							icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
@@ -282,7 +299,8 @@
 							style=" width : 150px;" effect="explode">
 							<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 							<f:selectItems value="#{manterProcessoMB.listarEstadoCivil}"
-								var="item" itemLabel="#{item.descricao}" itemValue="#{item.idEstadoCivil}" />
+								var="item" itemLabel="#{item.descricao}"
+								itemValue="#{item.idEstadoCivil}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">

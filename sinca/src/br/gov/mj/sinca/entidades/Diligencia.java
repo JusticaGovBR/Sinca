@@ -1,9 +1,21 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -20,6 +32,14 @@ public class Diligencia implements Serializable {
 	@Column(name="ID_DILIGENCIA")
 	private Long idDiligencia;
 
+	@ManyToOne
+	@JoinColumn(name="ID_PESSOA_JURIDICA")
+	private PessoaJuridica pessoaJuridica;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_PROCESSO")
+	private Processo processo;
+	
 	private byte bolresultado;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -39,9 +59,12 @@ public class Diligencia implements Serializable {
 	private Date dataRetorno;
 
 	@Column(name="ID_USUARIO")
-	private BigInteger idUsuario;
+	private Integer idUsuario;
 
 	private String observacao;
+	
+	@OneToMany(mappedBy="diligencia",cascade = CascadeType.ALL)
+	private List<DiligenciaPessoa> listaDiligenciaPessoa;
 
 	public Diligencia() {
 	}
@@ -94,11 +117,11 @@ public class Diligencia implements Serializable {
 		this.dataRetorno = dataRetorno;
 	}
 
-	public BigInteger getIdUsuario() {
+	public Integer getIdUsuario() {
 		return this.idUsuario;
 	}
 
-	public void setIdUsuario(BigInteger idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 
@@ -109,5 +132,39 @@ public class Diligencia implements Serializable {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+
+	public PessoaJuridica getPessoaJuridica() {
+	    return pessoaJuridica;
+	}
+
+	public Processo getProcesso() {
+	    return processo;
+	}
+
+	public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
+	    this.pessoaJuridica = pessoaJuridica;
+	}
+
+	public void setProcesso(Processo processo) {
+	    this.processo = processo;
+	}
+
+	public List<DiligenciaPessoa> getListaDiligenciaPessoa() {
+	    return listaDiligenciaPessoa;
+	}
+
+	public void setListaDiligenciaPessoa(List<DiligenciaPessoa> listaDiligenciaPessoa) {
+	    this.listaDiligenciaPessoa = listaDiligenciaPessoa;
+	}
+
+	@Override
+	public String toString() {
+	    return "Diligencia [idDiligencia=" + idDiligencia + ", pessoaJuridica=" + pessoaJuridica + ", processo="
+		    + processo + ", bolresultado=" + bolresultado + ", dataAtualizacao=" + dataAtualizacao
+		    + ", dataCadastro=" + dataCadastro + ", dataEnvio=" + dataEnvio + ", dataRetorno=" + dataRetorno
+		    + ", idUsuario=" + idUsuario + ", observacao=" + observacao + "]";
+	}
+
+
 
 }

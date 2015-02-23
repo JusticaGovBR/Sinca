@@ -1,7 +1,10 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -21,25 +24,50 @@ public class AnaliseProcesso implements Serializable {
 	@Column(name="ID_ANALISE")
 	private Long idAnalise;
 
-	@Column(name="ALTERACAO_DILIGENCIA")
-	private byte alteracaoDiligencia;
+	@Column(name="ATO_REPARATORIO")
+	private String atoReparatorio;
 
-	@Column(name="ALTERACAO_PEDITO")
-	private byte alteracaoPedito;
+	@Column(name="BOL_DECISAO_ANTERIOR")
+	private byte bolDecisaoAnterior;
 
-	@Column(name="ALTERACAO_PROBATORIA")
-	private byte alteracaoProbatoria;
+	@Column(name="BOL_OUTROS_PEDIDOS")
+	private byte bolOutrosPedidos;
 
-	@Column(name="ALTERACAO_PROCESSOS_RELACIONADOS")
-	private byte alteracaoProcessosRelacionados;
+	@Column(name="BOL_PEDIDO_INTERESSADO")
+	private byte bolPedidoInteressado;
+
+	@Column(name="BOL_PUBLICACAO_PORTARIA")
+	private byte bolPublicacaoPortaria;
+
+	@Column(name="BOL_REPARACAO_ECONOMICA")
+	private byte bolReparacaoEconomica;
+
+	@Column(name="BOL_REPARACAO_MORAL")
+	private byte bolReparacaoMoral;
+
+	@Column(name="BOL_REQ_ANISTIADO")
+	private byte bolReqAnistiado;
+
+	@Column(name="BOL_RESTITUICAO_DIREITOS")
+	private byte bolRestituicaoDireitos;
 
 	private String complemento;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="DATA_ALTERACAO")
-	private Date dataAlteracao;
+	@Column(name="COMPLEMENTO_PEDIDO")
+	private String complementoPedido;
+
+	@Column(name="CONCLUSOES_FINAIS")
+	private String conclusoesFinais;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="DATA_ANISTIA")
+	private Date dataAnistia;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="DATA_ATUALIZACAO")
+	private Date dataAtualizacao;
+
+	@Temporal(TemporalType.DATE)
 	@Column(name="DATA_CADASTRO")
 	private Date dataCadastro;
 
@@ -47,52 +75,27 @@ public class AnaliseProcesso implements Serializable {
 	@Column(name="DATA_PRIMEIRO_PROTOCOLO")
 	private Date dataPrimeiroProtocolo;
 
-	@Column(name="DESC_COMPLEMENTO_PEDIDO")
-	private String descComplementoPedido;
+	@Column(name="DECRICAO_PORTARI")
+	private String decricaoPortari;
 
-	@Column(name="DESC_LITERATURA_ASSUNTO")
-	private String descLiteraturaAssunto;
+	private String desicao;
 
-	@Column(name="DESC_LOCAIS_PERSEGUICOES")
-	private String descLocaisPerseguicoes;
-
-	@Column(name="DESC_OUTRAS_FONTES")
-	private String descOutrasFontes;
-
-	@Column(name="DESC_PESSOAS_ENVOLVIDAS")
-	private String descPessoasEnvolvidas;
-
-	@Column(name="DESC_RELATO_REQUERENTE")
-	private String descRelatoRequerente;
-
-	@Column(name="DESC_TESTEMUNHAS")
-	private String descTestemunhas;
-
-	@Column(name="DESC_TIPO_BENEF_ANT")
-	private String descTipoBenefAnt;
+	@Column(name="ID_USUARIO")
+	private int idUsuario;
 
 	private String observacoes;
 
-	@Column(name="OUTROS_PEDIDO")
-	private byte outrosPedido;
+	@Column(name="ORGAO_ANISTIA")
+	private String orgaoAnistia;
 
-	@Column(name="REQ_ANISTIADO")
-	private byte reqAnistiado;
-
-	@Column(name="TIPO_ANISTIA")
-	private byte tipoAnistia;
-
-	@Column(name="TIPO_ANISTIANDO")
-	private byte tipoAnistiando;
+	@Lob
+	@Column(name="RESULMO_PEDIDO")
+	private String resulmoPedido;
 
 	//bi-directional many-to-one association to Processo
 	@ManyToOne
 	@JoinColumn(name="ID_PROCESSO")
 	private Processo processo;
-
-	//bi-directional many-to-one association to AnalistaProcesso
-	@OneToMany(mappedBy="analiseProcesso")
-	private List<AnalistaProcesso> analistaProcessos;
 
 	//bi-directional many-to-one association to PerseguicaoAnalise
 	@OneToMany(mappedBy="analiseProcesso")
@@ -101,6 +104,18 @@ public class AnaliseProcesso implements Serializable {
 	//bi-directional many-to-one association to ReparacaoAnalise
 	@OneToMany(mappedBy="analiseProcesso")
 	private List<ReparacaoAnalise> reparacaoAnalises;
+
+	//bi-directional many-to-one association to AtosExcecaoAnalise
+	@OneToMany(mappedBy="analiseProcesso")
+	private List<AtosExcecaoAnalise> atosExcecaoAnalises;
+
+	//bi-directional many-to-one association to ProvasAnalise
+	@OneToMany(mappedBy="analiseProcesso")
+	private List<ProvasAnalise> provasAnalises;
+
+	//bi-directional many-to-one association to RecomendacaoAnalise
+	@OneToMany(mappedBy="analiseProcesso")
+	private List<RecomendacaoAnalise> recomendacaoAnalises;
 
 	public AnaliseProcesso() {
 	}
@@ -113,36 +128,76 @@ public class AnaliseProcesso implements Serializable {
 		this.idAnalise = idAnalise;
 	}
 
-	public byte getAlteracaoDiligencia() {
-		return this.alteracaoDiligencia;
+	public String getAtoReparatorio() {
+		return this.atoReparatorio;
 	}
 
-	public void setAlteracaoDiligencia(byte alteracaoDiligencia) {
-		this.alteracaoDiligencia = alteracaoDiligencia;
+	public void setAtoReparatorio(String atoReparatorio) {
+		this.atoReparatorio = atoReparatorio;
 	}
 
-	public byte getAlteracaoPedito() {
-		return this.alteracaoPedito;
+	public byte getBolDecisaoAnterior() {
+		return this.bolDecisaoAnterior;
 	}
 
-	public void setAlteracaoPedito(byte alteracaoPedito) {
-		this.alteracaoPedito = alteracaoPedito;
+	public void setBolDecisaoAnterior(byte bolDecisaoAnterior) {
+		this.bolDecisaoAnterior = bolDecisaoAnterior;
 	}
 
-	public byte getAlteracaoProbatoria() {
-		return this.alteracaoProbatoria;
+	public byte getBolOutrosPedidos() {
+		return this.bolOutrosPedidos;
 	}
 
-	public void setAlteracaoProbatoria(byte alteracaoProbatoria) {
-		this.alteracaoProbatoria = alteracaoProbatoria;
+	public void setBolOutrosPedidos(byte bolOutrosPedidos) {
+		this.bolOutrosPedidos = bolOutrosPedidos;
 	}
 
-	public byte getAlteracaoProcessosRelacionados() {
-		return this.alteracaoProcessosRelacionados;
+	public byte getBolPedidoInteressado() {
+		return this.bolPedidoInteressado;
 	}
 
-	public void setAlteracaoProcessosRelacionados(byte alteracaoProcessosRelacionados) {
-		this.alteracaoProcessosRelacionados = alteracaoProcessosRelacionados;
+	public void setBolPedidoInteressado(byte bolPedidoInteressado) {
+		this.bolPedidoInteressado = bolPedidoInteressado;
+	}
+
+	public byte getBolPublicacaoPortaria() {
+		return this.bolPublicacaoPortaria;
+	}
+
+	public void setBolPublicacaoPortaria(byte bolPublicacaoPortaria) {
+		this.bolPublicacaoPortaria = bolPublicacaoPortaria;
+	}
+
+	public byte getBolReparacaoEconomica() {
+		return this.bolReparacaoEconomica;
+	}
+
+	public void setBolReparacaoEconomica(byte bolReparacaoEconomica) {
+		this.bolReparacaoEconomica = bolReparacaoEconomica;
+	}
+
+	public byte getBolReparacaoMoral() {
+		return this.bolReparacaoMoral;
+	}
+
+	public void setBolReparacaoMoral(byte bolReparacaoMoral) {
+		this.bolReparacaoMoral = bolReparacaoMoral;
+	}
+
+	public byte getBolReqAnistiado() {
+		return this.bolReqAnistiado;
+	}
+
+	public void setBolReqAnistiado(byte bolReqAnistiado) {
+		this.bolReqAnistiado = bolReqAnistiado;
+	}
+
+	public byte getBolRestituicaoDireitos() {
+		return this.bolRestituicaoDireitos;
+	}
+
+	public void setBolRestituicaoDireitos(byte bolRestituicaoDireitos) {
+		this.bolRestituicaoDireitos = bolRestituicaoDireitos;
 	}
 
 	public String getComplemento() {
@@ -153,12 +208,36 @@ public class AnaliseProcesso implements Serializable {
 		this.complemento = complemento;
 	}
 
-	public Date getDataAlteracao() {
-		return this.dataAlteracao;
+	public String getComplementoPedido() {
+		return this.complementoPedido;
 	}
 
-	public void setDataAlteracao(Date dataAlteracao) {
-		this.dataAlteracao = dataAlteracao;
+	public void setComplementoPedido(String complementoPedido) {
+		this.complementoPedido = complementoPedido;
+	}
+
+	public String getConclusoesFinais() {
+		return this.conclusoesFinais;
+	}
+
+	public void setConclusoesFinais(String conclusoesFinais) {
+		this.conclusoesFinais = conclusoesFinais;
+	}
+
+	public Date getDataAnistia() {
+		return this.dataAnistia;
+	}
+
+	public void setDataAnistia(Date dataAnistia) {
+		this.dataAnistia = dataAnistia;
+	}
+
+	public Date getDataAtualizacao() {
+		return this.dataAtualizacao;
+	}
+
+	public void setDataAtualizacao(Date dataAtualizacao) {
+		this.dataAtualizacao = dataAtualizacao;
 	}
 
 	public Date getDataCadastro() {
@@ -177,68 +256,28 @@ public class AnaliseProcesso implements Serializable {
 		this.dataPrimeiroProtocolo = dataPrimeiroProtocolo;
 	}
 
-	public String getDescComplementoPedido() {
-		return this.descComplementoPedido;
+	public String getDecricaoPortari() {
+		return this.decricaoPortari;
 	}
 
-	public void setDescComplementoPedido(String descComplementoPedido) {
-		this.descComplementoPedido = descComplementoPedido;
+	public void setDecricaoPortari(String decricaoPortari) {
+		this.decricaoPortari = decricaoPortari;
 	}
 
-	public String getDescLiteraturaAssunto() {
-		return this.descLiteraturaAssunto;
+	public String getDesicao() {
+		return this.desicao;
 	}
 
-	public void setDescLiteraturaAssunto(String descLiteraturaAssunto) {
-		this.descLiteraturaAssunto = descLiteraturaAssunto;
+	public void setDesicao(String desicao) {
+		this.desicao = desicao;
 	}
 
-	public String getDescLocaisPerseguicoes() {
-		return this.descLocaisPerseguicoes;
+	public int getIdUsuario() {
+		return this.idUsuario;
 	}
 
-	public void setDescLocaisPerseguicoes(String descLocaisPerseguicoes) {
-		this.descLocaisPerseguicoes = descLocaisPerseguicoes;
-	}
-
-	public String getDescOutrasFontes() {
-		return this.descOutrasFontes;
-	}
-
-	public void setDescOutrasFontes(String descOutrasFontes) {
-		this.descOutrasFontes = descOutrasFontes;
-	}
-
-	public String getDescPessoasEnvolvidas() {
-		return this.descPessoasEnvolvidas;
-	}
-
-	public void setDescPessoasEnvolvidas(String descPessoasEnvolvidas) {
-		this.descPessoasEnvolvidas = descPessoasEnvolvidas;
-	}
-
-	public String getDescRelatoRequerente() {
-		return this.descRelatoRequerente;
-	}
-
-	public void setDescRelatoRequerente(String descRelatoRequerente) {
-		this.descRelatoRequerente = descRelatoRequerente;
-	}
-
-	public String getDescTestemunhas() {
-		return this.descTestemunhas;
-	}
-
-	public void setDescTestemunhas(String descTestemunhas) {
-		this.descTestemunhas = descTestemunhas;
-	}
-
-	public String getDescTipoBenefAnt() {
-		return this.descTipoBenefAnt;
-	}
-
-	public void setDescTipoBenefAnt(String descTipoBenefAnt) {
-		this.descTipoBenefAnt = descTipoBenefAnt;
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public String getObservacoes() {
@@ -249,36 +288,20 @@ public class AnaliseProcesso implements Serializable {
 		this.observacoes = observacoes;
 	}
 
-	public byte getOutrosPedido() {
-		return this.outrosPedido;
+	public String getOrgaoAnistia() {
+		return this.orgaoAnistia;
 	}
 
-	public void setOutrosPedido(byte outrosPedido) {
-		this.outrosPedido = outrosPedido;
+	public void setOrgaoAnistia(String orgaoAnistia) {
+		this.orgaoAnistia = orgaoAnistia;
 	}
 
-	public byte getReqAnistiado() {
-		return this.reqAnistiado;
+	public String getResulmoPedido() {
+		return this.resulmoPedido;
 	}
 
-	public void setReqAnistiado(byte reqAnistiado) {
-		this.reqAnistiado = reqAnistiado;
-	}
-
-	public byte getTipoAnistia() {
-		return this.tipoAnistia;
-	}
-
-	public void setTipoAnistia(byte tipoAnistia) {
-		this.tipoAnistia = tipoAnistia;
-	}
-
-	public byte getTipoAnistiando() {
-		return this.tipoAnistiando;
-	}
-
-	public void setTipoAnistiando(byte tipoAnistiando) {
-		this.tipoAnistiando = tipoAnistiando;
+	public void setResulmoPedido(String resulmoPedido) {
+		this.resulmoPedido = resulmoPedido;
 	}
 
 	public Processo getProcesso() {
@@ -287,28 +310,6 @@ public class AnaliseProcesso implements Serializable {
 
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
-	}
-
-	public List<AnalistaProcesso> getAnalistaProcessos() {
-		return this.analistaProcessos;
-	}
-
-	public void setAnalistaProcessos(List<AnalistaProcesso> analistaProcessos) {
-		this.analistaProcessos = analistaProcessos;
-	}
-
-	public AnalistaProcesso addAnalistaProcesso(AnalistaProcesso analistaProcesso) {
-		getAnalistaProcessos().add(analistaProcesso);
-		analistaProcesso.setAnaliseProcesso(this);
-
-		return analistaProcesso;
-	}
-
-	public AnalistaProcesso removeAnalistaProcesso(AnalistaProcesso analistaProcesso) {
-		getAnalistaProcessos().remove(analistaProcesso);
-		analistaProcesso.setAnaliseProcesso(null);
-
-		return analistaProcesso;
 	}
 
 	public List<PerseguicaoAnalise> getPerseguicaoAnalises() {
@@ -353,6 +354,72 @@ public class AnaliseProcesso implements Serializable {
 		reparacaoAnalis.setAnaliseProcesso(null);
 
 		return reparacaoAnalis;
+	}
+
+	public List<AtosExcecaoAnalise> getAtosExcecaoAnalises() {
+		return this.atosExcecaoAnalises;
+	}
+
+	public void setAtosExcecaoAnalises(List<AtosExcecaoAnalise> atosExcecaoAnalises) {
+		this.atosExcecaoAnalises = atosExcecaoAnalises;
+	}
+
+	public AtosExcecaoAnalise addAtosExcecaoAnalis(AtosExcecaoAnalise atosExcecaoAnalis) {
+		getAtosExcecaoAnalises().add(atosExcecaoAnalis);
+		atosExcecaoAnalis.setAnaliseProcesso(this);
+
+		return atosExcecaoAnalis;
+	}
+
+	public AtosExcecaoAnalise removeAtosExcecaoAnalis(AtosExcecaoAnalise atosExcecaoAnalis) {
+		getAtosExcecaoAnalises().remove(atosExcecaoAnalis);
+		atosExcecaoAnalis.setAnaliseProcesso(null);
+
+		return atosExcecaoAnalis;
+	}
+
+	public List<ProvasAnalise> getProvasAnalises() {
+		return this.provasAnalises;
+	}
+
+	public void setProvasAnalises(List<ProvasAnalise> provasAnalises) {
+		this.provasAnalises = provasAnalises;
+	}
+
+	public ProvasAnalise addProvasAnalis(ProvasAnalise provasAnalis) {
+		getProvasAnalises().add(provasAnalis);
+		provasAnalis.setAnaliseProcesso(this);
+
+		return provasAnalis;
+	}
+
+	public ProvasAnalise removeProvasAnalis(ProvasAnalise provasAnalis) {
+		getProvasAnalises().remove(provasAnalis);
+		provasAnalis.setAnaliseProcesso(null);
+
+		return provasAnalis;
+	}
+
+	public List<RecomendacaoAnalise> getRecomendacaoAnalises() {
+		return this.recomendacaoAnalises;
+	}
+
+	public void setRecomendacaoAnalises(List<RecomendacaoAnalise> recomendacaoAnalises) {
+		this.recomendacaoAnalises = recomendacaoAnalises;
+	}
+
+	public RecomendacaoAnalise addRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
+		getRecomendacaoAnalises().add(recomendacaoAnalis);
+		recomendacaoAnalis.setAnaliseProcesso(this);
+
+		return recomendacaoAnalis;
+	}
+
+	public RecomendacaoAnalise removeRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
+		getRecomendacaoAnalises().remove(recomendacaoAnalis);
+		recomendacaoAnalis.setAnaliseProcesso(null);
+
+		return recomendacaoAnalis;
 	}
 
 }

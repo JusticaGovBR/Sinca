@@ -72,10 +72,6 @@ public class PessoaFisica implements Serializable {
 	@Column(name="OBSERVACAO_OBITO")
 	private String observacaoObito;
 
-	//bi-directional many-to-one association to AnalistaProcesso
-	@OneToMany(mappedBy="pessoa")
-	private List<AnalistaProcesso> analistaProcessos;
-
 	//bi-directional many-to-one association to DocumentoPessoa
 	@OneToMany(mappedBy="pessoa")
 	private List<DocumentoPessoa> documentoPessoas;
@@ -171,10 +167,6 @@ public class PessoaFisica implements Serializable {
 	    return observacaoObito;
 	}
 
-	public List<AnalistaProcesso> getAnalistaProcessos() {
-	    return analistaProcessos;
-	}
-
 	public List<DocumentoPessoa> getDocumentoPessoas() {
 	    return documentoPessoas;
 	}
@@ -265,10 +257,6 @@ public class PessoaFisica implements Serializable {
 
 	public void setObservacaoObito(String observacaoObito) {
 	    this.observacaoObito = observacaoObito;
-	}
-
-	public void setAnalistaProcessos(List<AnalistaProcesso> analistaProcessos) {
-	    this.analistaProcessos = analistaProcessos;
 	}
 
 	public void setDocumentoPessoas(List<DocumentoPessoa> documentoPessoas) {

@@ -24,7 +24,7 @@
 		!important;
 }
 </style>
-			<h:form id="formProcesso" styleClass="semBorda">
+			<h:form id="formProcesso" prependId="false" styleClass="semBorda">
 
 				<div id="divMess" align="center" style="width: 100%; height: 10%">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
@@ -223,7 +223,7 @@
 							headerText="Dirigência" exportable="false">
 							<p:commandButton value="Diligências"
 								action="#{consultarProcessoMB.manterDiligencia}"
-								update=":formProcesso:" icon="ui-icon-search" title="Detalhar"
+								update=":dgDiligencias:" icon="ui-icon-note" title="Detalhar"
 								ajax="true">
 								<f:setPropertyActionListener value="#{processoLista}"
 									target="#{consultarProcessoMB.pessoaProcesso}" />
@@ -234,14 +234,13 @@
 				</p:panel>
 			</h:form>
 
-			<p:dialog header="Diligência" resizable="false" showEffect="clip"
-				hideEffect="clip" widgetVar="dlg_diligencia" modal="true"
-				height="100%" width="50%">
-				<p:outputPanel id="diligencia">
+			<p:dialog id="dgDiligencias" header="Diligências"  showEffect="clip" hideEffect="explode"  position="center"
+				widgetVar="dlg_diligencia" modal="false" height="500px" width="770px">
+				
 					<ui:insert name="diligencia_">
 						<ui:include src="/pages/diligencia/formularioDiligencia.xhtml" />
 					</ui:insert>
-				</p:outputPanel>
+				
 			</p:dialog>
 
 		</h:body>

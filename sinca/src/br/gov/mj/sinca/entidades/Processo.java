@@ -75,9 +75,6 @@ public class Processo implements Serializable {
     private String prioridadeTurma;
 
     @OneToMany(mappedBy = "processo")
-    private List<AnaliseProcesso> analiseProcessos;
-
-    @OneToMany(mappedBy = "processo")
     private List<PessoaProcesso> pessoaProcessos;
 
     @ManyToOne
@@ -111,6 +108,10 @@ public class Processo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO")
     private Usuario usuario;
+    
+    @Column(name = "ID_USUARIO_COMFIRMACAO")
+    private Integer idUsuarioComfirmacao;
+
 
     @ManyToOne
     @JoinColumn(name = "ID_LOTE")
@@ -227,26 +228,13 @@ public class Processo implements Serializable {
 	this.prioridadeTurma = prioridadeTurma;
     }
 
-    public List<AnaliseProcesso> getAnaliseProcessos() {
-	return this.analiseProcessos;
+
+    public Integer getIdUsuarioComfirmacao() {
+        return idUsuarioComfirmacao;
     }
 
-    public void setAnaliseProcessos(List<AnaliseProcesso> analiseProcessos) {
-	this.analiseProcessos = analiseProcessos;
-    }
-
-    public AnaliseProcesso addAnaliseProcesso(AnaliseProcesso analiseProcesso) {
-	getAnaliseProcessos().add(analiseProcesso);
-	analiseProcesso.setProcesso(this);
-
-	return analiseProcesso;
-    }
-
-    public AnaliseProcesso removeAnaliseProcesso(AnaliseProcesso analiseProcesso) {
-	getAnaliseProcessos().remove(analiseProcesso);
-	analiseProcesso.setProcesso(null);
-
-	return analiseProcesso;
+    public void setIdUsuarioComfirmacao(Integer idUsuarioComfirmacao) {
+        this.idUsuarioComfirmacao = idUsuarioComfirmacao;
     }
 
     public List<PessoaProcesso> getPessoaProcessos() {

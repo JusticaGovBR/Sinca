@@ -1,7 +1,9 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -28,6 +30,10 @@ public class GrupoSocial implements Serializable {
 	private List<Processo> processos;
 
 	public GrupoSocial() {
+	}
+
+	public GrupoSocial(Integer idGrupoSocial2) {
+	    this.idGrupoSocial = idGrupoSocial2;
 	}
 
 	public Integer getIdGrupoSocial() {

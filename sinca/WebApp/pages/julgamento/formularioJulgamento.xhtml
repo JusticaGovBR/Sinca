@@ -214,46 +214,202 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
+				<h:panelGrid columns="1" style="margin-bottom:20px;width :25%"
 					cellpadding="5">
 					<p:outputLabel value="Tipo de Reparação:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formJulgamentoe:" action="#"
-						ajax="true" icon="ui-icon-plusthick">
-					</p:commandButton>
 				</h:panelGrid>
-
-				<p:dataTable var="reparacaoLista" id="dataTbReparacaoLista"
-					value="#" paginator="false" rows="5" style="margin-bottom:20px;"
-					emptyMessage="Não incluido dados de Reparação...">
-
-					<p:column headerText="Tipo Reparação">
-						<h:outputText id="tpTBreparacao" value="" />
-					</p:column>
-
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-							title="Editar" ajax="true" update=":tabView:formJulgamentoe:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-
-					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover" action="#"
-							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:formJulgamentoe:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-						</p:commandButton>
-					</p:column>
-				</p:dataTable>
-
+				
+				<h:panelGrid columns="1" style="margin-bottom:10px;width :60%"
+					cellpadding="5">
+					<p:selectManyCheckbox id="tiposPessoa" rendered="true"
+						requiredMessage="Tipo Pessoa no Processo"
+						style="width : 100%;font-weight:bold;">
+						<f:selectItem itemValue="1" itemLabel="Reparação Econômica" />
+						<f:selectItem itemValue="2" itemLabel="Reparação Moral" />
+						<f:selectItem itemValue="3" itemLabel="Restituição de Direitos" />
+					</p:selectManyCheckbox>
+				</h:panelGrid>
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:30px;margin-bottom:20px; width : 200px;">
 					<h:outputLabel value="Observações:" />
-					<p:inputTextarea maxlength="400" rows="4" cols="100" />
+					<p:inputTextarea maxlength="400" rows="3" cols="100" />
 				</h:panelGrid>
 			</p:panel>
+			
+						<p:panel id="pnEconomia" header="Econômica" toggleSpeed="500"
+				closeSpeed="500" style="margin-bottom:20px;width : 100%"
+				toggleable="true">
+
+				<h:panelGrid columns="1" cellpadding="10" style="width : 100%">
+					<h:outputLabel value="Reparação Econômica-PMPC:"
+						style="text-align:left;font-weight:bold;" />
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px; width : 50%;">
+					<h:outputLabel
+						value="Valor PMPC (Prestação Mensal Permante Continuada) R$:" />
+					<p:inputText onkeydown="mascara(this,moeda)" id="inpt_vr_pmpc"
+						size="15" maxlength="15" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="3" cellpadding="10" style="width : 70%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data do 1º protocolo:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data da retroatividade:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Prevista da Sessão de Julgamento:"
+							style="text-align:left;font-weight:bold;" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10"
+							pages="3" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="10" style="width : 100%">
+					<h:outputLabel value="Reparação Econômica - PU:"
+						style="text-align:left;font-weight:bold;" />
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:10px; width : 50%;">
+					<h:outputLabel value="Valor Prestação Única (R$):" />
+					<p:inputText onkeydown="mascara(this,moeda)" size="15"
+						maxlength="15" value="" />
+				</h:panelGrid>
+				<h:panelGrid columns="4" cellpadding="10"
+					style="margin-bottom:20px;width : 70%">
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Período Inicial PU:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Período Final PU:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data de Recebimento p/ Calculo:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data de Finalização p/ Calculo:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:20px;width : 100%">
+					<h:panelGrid columns="2" cellpadding="10" style="width : 100%">
+						<h:outputLabel value="Analista Responsável pelo Cálculo*:"
+							style="text-align:left;color:Red;font-weight:bold;" />
+						<p:autoComplete  title="Nome Pessoa"
+							style="width : 100%" value="#{manterAnaliseMB.pessoaAnalista}"
+							var="pessoaAnist" minQueryLength="4" size="100"
+							completeMethod="#{manterAnaliseMB.listarPessoaPorNomeLike}"
+							scrollHeight="500" itemLabel="#{pessoaAnist.nomePessoa}"
+							converter="pessoaConverter" itemValue="#{pessoaAnist}"
+							effect="explode" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+
+			</p:panel>
+
+
+			<p:panel id="pnMoral" header="Moral:" toggleSpeed="500"
+				closeSpeed="500"
+				style="font-weight:bold;;margin-bottom:20px;width : 100%"
+				toggleable="true">
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel
+						value="Declaração\ Ratificação de Anistiado Político:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Outras reparações de cunho moral:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+
+			</p:panel>
+
+			<p:panel id="pnRestituicao" header="Restituição de Direitos:"
+				toggleSpeed="500" closeSpeed="500"
+				style="font-weight:bold;;margin-bottom:20px;width : 100%"
+				toggleable="true">
+
+				<h:panelGrid columns="4" cellpadding="10" style="width : 70%">
+
+					<h:panelGrid columns="1" style=" width : 120px;">
+						<p:outputLabel value="Tipo:*:" />
+						<p:selectOneMenu value="#" effect="clip">
+							<f:selectItem itemValue="1" itemLabel="Contagem de Tempo" />
+							<f:selectItem itemValue="2"	itemLabel="Matricula em Curso Superior" />
+							<f:selectItem itemValue="1" itemLabel="Reconhecimento de Diploma" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Inicio:" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="10">
+						<h:outputLabel value="Data Fim"
+							style="text-align:left;font-weight:bold;" />
+						<p:calendar navigator="true"
+							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10"
+							pages="3" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Complemento:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Instituição:" />
+					<p:inputText size="100" maxlength="150" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Curso:" />
+					<p:inputText size="100" maxlength="150" value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" cellpadding="30"
+					style="margin-bottom:10px; width : 100%">
+					<h:outputLabel value="Complemento Instituição:" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+				</h:panelGrid>
+			</p:panel>
+			
+			
 
 			<p:panel id="pnlPedidoInteressado" header="Presentes"
 				style="margin-bottom:10px;width : 100%" toggleable="true">

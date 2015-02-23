@@ -30,6 +30,13 @@ public class SubGrupoProcessual implements Serializable {
 
     public SubGrupoProcessual() {
     }
+    
+
+    public SubGrupoProcessual(Integer idSubGrupoProcessual) {
+	super();
+	this.idSubGrupoProcessual = idSubGrupoProcessual;
+    }
+
 
     public SubGrupoProcessual(String descSubGrupoProcessual) {
 	this.descSubGrupoProcessual = descSubGrupoProcessual;

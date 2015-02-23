@@ -12,23 +12,17 @@ import javax.faces.bean.ViewScoped;
 import org.apache.log4j.Logger;
 
 import br.gov.mj.sinca.dao.PessoaFisicaDAO;
-import br.gov.mj.sinca.dao.PessoaProcessoDAO;
-import br.gov.mj.sinca.dao.ProcessoDAO;
 import br.gov.mj.sinca.dao.SubStatusProcessoDAO;
 import br.gov.mj.sinca.dao.TipoAnaliseJulgamentoDAO;
 import br.gov.mj.sinca.dao.TipoPerseguicaoDAO;
 import br.gov.mj.sinca.entidades.AnaliseProcesso;
-import br.gov.mj.sinca.entidades.AnalistaProcesso;
 import br.gov.mj.sinca.entidades.PerseguicaoAnalise;
 import br.gov.mj.sinca.entidades.PessoaFisica;
-import br.gov.mj.sinca.entidades.PessoaProcesso;
-import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.SubStatusProcesso;
 import br.gov.mj.sinca.entidades.TipoAnaliseJulgamento;
 import br.gov.mj.sinca.entidades.TipoPerseguicao;
 import br.gov.mj.sinca.entidades.Usuario;
 import br.gov.mj.sinca.mb.LoginMB;
-import br.gov.mj.sinca.mb.processo.ManterProcessoMB;
 import br.gov.mj.sinca.util.DateUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 
@@ -53,7 +47,6 @@ public class ManterAnaliseMB implements Serializable {
     private String numCpf;
 
     private List<TipoAnaliseJulgamento> listarTipoAnaliseJulgamento = new ArrayList<TipoAnaliseJulgamento>();
-    private List<AnalistaProcesso> listarAnalistaProcesso = new ArrayList<AnalistaProcesso>();
     private List<SubStatusProcesso> listarSubStatusProcesso = new ArrayList<SubStatusProcesso>();
     private List<TipoPerseguicao> listarTipoPerseguicao = new ArrayList<TipoPerseguicao>();
     
@@ -63,12 +56,13 @@ public class ManterAnaliseMB implements Serializable {
 
     private Integer idSubStatusProcesso;
     private AnaliseProcesso analiseProcesso;
-    private AnalistaProcesso analistaProcesso;
     private PessoaFisica pessoaAnalista;
     private TipoPerseguicao tipoPerseguicao;
     private PerseguicaoAnalise perseguicaoAnalise;
 
     private boolean habilitaTabePessoa;
+    
+    private boolean habilitaAnailiseIniciada;
     
     private Usuario usuario;
 
@@ -81,6 +75,7 @@ public class ManterAnaliseMB implements Serializable {
 
    
     
+    
     @PostConstruct
     public void Init() {
 	System.out.println("Chamada :" + this.getClass().getName() + " Init <>  PosConstruct");
@@ -91,7 +86,6 @@ public class ManterAnaliseMB implements Serializable {
     private void instanciaAtributos() {
 	listarTipoAnaliseJulgamento = new TipoAnaliseJulgamentoDAO().lerTodos();
 	analiseProcesso = new AnaliseProcesso();
-	analistaProcesso = new AnalistaProcesso();
 	pessoaAnalista = new PessoaFisica();
 	perseguicaoAnalise = new PerseguicaoAnalise();
 	perseguicaoAnalise.setTipoPerseguicao(new TipoPerseguicao());
@@ -109,6 +103,16 @@ public class ManterAnaliseMB implements Serializable {
 //	    analiseProcesso.setProcesso(processo);
 //	}
     }
+    
+    public void iniciarAnalise(){
+	System.out.println("HABILIDTAR ANANLISE::: "+ habilitaAnailiseIniciada);
+	if(!habilitaAnailiseIniciada){
+	   habilitaAnailiseIniciada = true;
+	}else{
+	    habilitaAnailiseIniciada = false;
+	}
+	instanciaAtributos();
+    }
 
     public String salvarAnalise() {
 	logger.debug("Salvando a Analise... do processo:");
@@ -117,7 +121,6 @@ public class ManterAnaliseMB implements Serializable {
 
     public List<PessoaFisica> consultarPessoas() {
 
-	analistaProcesso = new AnalistaProcesso();
 	List<PessoaFisica> pessoas = new ArrayList<PessoaFisica>();
 	setListarPessoa(pessoas);
 	listarPessoa = new ArrayList<PessoaFisica>();
@@ -172,39 +175,7 @@ public class ManterAnaliseMB implements Serializable {
 	return pessoas;
     }
 
-    public void incluirNaAnalise() {
-	List<AnalistaProcesso> lista = getListarAnalistaProcesso();
-	for (AnalistaProcesso anlst : lista) {
-	    if (anlst.getPessoa() != null && anlst.getPessoa().getIdPessoa() > 0) {
-		if (pessoaAnalista.getIdPessoa() == anlst.getPessoa().getIdPessoa()) {
-		    getListarAnalistaProcesso().remove(analistaProcesso);
-		}
-	    }
-	}
-	analistaProcesso.setIdSubStatusProcesso(idSubStatusProcesso);
-	analistaProcesso.setPessoa(pessoaAnalista);
-	getListarAnalistaProcesso().add(analistaProcesso);
-    }
-    
-
-   public void editarPessoaAnalise() {
-	if (JSFUtil.getRequestMap().get("pessoaLista") != null
-		&& ((AnalistaProcesso) JSFUtil.getRequestMap().get("pessoaLista")).getPessoa() != null) {
-	    this.analistaProcesso = ((AnalistaProcesso) JSFUtil.getRequestMap().get("pessoaLista"));
-	    this.idSubStatusProcesso = analistaProcesso.getIdSubStatusProcesso();
-	    this.pessoaAnalista = analistaProcesso.getPessoa();
-	    JSFUtil.getRequestContext().execute("PF('dlg_responsavel').show()");
-	}
-    }
-
-    public void removerPessoaAnalise() {
-	if (JSFUtil.getRequestMap().get("pessoaLista") != null
-		&& ((AnalistaProcesso) JSFUtil.getRequestMap().get("pessoaLista")).getPessoa() != null) {
-	    AnalistaProcesso analistaProc = ((AnalistaProcesso) JSFUtil.getRequestMap().get("pessoaLista"));
-	    getListarAnalistaProcesso().remove(analistaProc);
-	}
-    }
-
+ 
     public void addPerseguica(){
 	this.perseguicaoAnalise = new PerseguicaoAnalise();
 	this.perseguicaoAnalise.setTipoPerseguicao(new TipoPerseguicao());
@@ -285,22 +256,6 @@ public class ManterAnaliseMB implements Serializable {
 	this.mensagem = mensagem;
     }
 
-    public List<AnalistaProcesso> getListarAnalistaProcesso() {
-	return listarAnalistaProcesso;
-    }
-
-    public AnalistaProcesso getAnalistaProcesso() {
-	return analistaProcesso;
-    }
-
-    public void setListarAnalistaProcesso(List<AnalistaProcesso> listarAnalistaProcesso) {
-	this.listarAnalistaProcesso = listarAnalistaProcesso;
-    }
-
-    public void setAnalistaProcesso(AnalistaProcesso analistaProcesso) {
-	this.analistaProcesso = analistaProcesso;
-    }
-
     public String getNumCpf() {
 	return numCpf;
     }
@@ -350,6 +305,14 @@ public class ManterAnaliseMB implements Serializable {
 
     public void setIdSubStatusProcesso(Integer idSubStatusProcesso) {
 	this.idSubStatusProcesso = idSubStatusProcesso;
+    }
+
+    public boolean isHabilitaAnailiseIniciada() {
+        return habilitaAnailiseIniciada;
+    }
+
+    public void setHabilitaAnailiseIniciada(boolean habilitaAnailiseIniciada) {
+        this.habilitaAnailiseIniciada = habilitaAnailiseIniciada;
     }
 
     public List<TipoPerseguicao> getListarTipoPerseguicao() {
