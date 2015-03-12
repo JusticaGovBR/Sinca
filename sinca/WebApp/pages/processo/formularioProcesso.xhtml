@@ -35,7 +35,7 @@
 				hideEffect="clip" style="margin-bottom:20px;"
 				widgetVar="dlg_comfirmacao" modal="true" height="100%" width="45%">
 				<p:outputPanel id="mtndgperseg">
-					<p:outputPanel deferred="true">
+					<p:outputPanel deferred="false">
 						<h3
 							style="color: Brown; font-style: normal; text-decoration: none; font-weight: bold;">
 							Comfirma que os dados inseridos no processo estão corretos?
@@ -211,7 +211,7 @@
 						<h:outputLabel value="Situação do RA:*" />
 						<p:selectOneMenu value="#{manterProcessoMB.idStatusProcesso}"
 							style=" width: 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione um Status do Processo"
+							<f:selectItem itemLabel="Selecione Situação do RA"
 								noSelectionOption="true" />
 							<f:selectItems value="#{manterProcessoMB.listarStatusProcesso}"
 								var="item" itemLabel="#{item.descStatusProcesso}"
@@ -222,7 +222,7 @@
 						<h:outputLabel value="Detalhamento da Situação do RA:*" />
 						<p:selectOneMenu value="#{manterProcessoMB.idSubStatusProcesso}"
 							style=" width : 737px;" effect="fade">
-							<f:selectItem itemLabel="Selecione Sub Status do Processo"
+							<f:selectItem itemLabel="Selecione Detalhamento da Situação do RA"
 								noSelectionOption="true" />
 							<f:selectItems
 								value="#{manterProcessoMB.listarSubStatusProcesso}" var="item"
@@ -343,21 +343,22 @@
 
 							</h:outputText>
 						</p:column>
-						<p:column style="width:32px;align: center">
-							<p:commandButton value="Atualizar"
-								actionListener="#{manterProcessoMB.salvarLoteProcesso}"
-								update=":tabView:formProcesso:tbLoteRq_dg" icon="ui-icon-search"
-								title="Atualizar" ajax="true">
-								<f:setPropertyActionListener value="#{loteEdicao}"
-									target="#{manterProcessoMB.loteProcesso}" />
-							</p:commandButton>
-						</p:column>
 
 						<p:column style="width:32px;align: center">
 							<p:commandButton value="Selecionar"
 								icon="ui-icon-search ui-icon-trash" title="Selecionar"
 								ajax="true" update=":tabView:formProcesso:"
 								actionListener="#{manterProcessoMB.selecionarLoteProcesso}">
+								<f:setPropertyActionListener value="#{loteEdicao}"
+									target="#{manterProcessoMB.loteProcesso}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:32px;align: center">
+							<p:commandButton value="Atualizar"
+								actionListener="#{manterProcessoMB.salvarLoteProcesso}"
+								update=":tabView:formProcesso:tbLoteRq_dg" icon="ui-icon-search"
+								title="Atualizar" ajax="true">
 								<f:setPropertyActionListener value="#{loteEdicao}"
 									target="#{manterProcessoMB.loteProcesso}" />
 							</p:commandButton>

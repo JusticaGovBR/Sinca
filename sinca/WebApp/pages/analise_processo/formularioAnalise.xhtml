@@ -33,7 +33,7 @@
 
 			<p:dialog header="ALERTA!" resizable="false" showEffect="explode"
 				closable="false" hideEffect="explode"
-				widgetVar="dlg_mensagem_processo" modal="true" width="250px">
+				widgetVar="dlg_mensagem_analise" modal="true" width="250px">
 				<h:panelGrid columns="1" cellpadding="10"
 					style="margin-bottom:20px;text-align:center;">
 					<h:outputLabel value="Atualizando Informações..."
@@ -44,16 +44,59 @@
 			</p:dialog>
 
 
+			<h:panelGrid columns="1" id="pnlSalvar" cellpadding="10"
+				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="brnsalvarAnalise" value="Salvar Análise"
+					actionListener="#{manterAnaliseMB.salvarAnalise}" ajax="true"
+					update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
+					process="formAnalise" icon="ui-icon-disk"
+					onclick="PF('dlg_mensagem_analise').show();" title="Atualizar">
+					<p:confirm header="Comfirmação"
+						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="clip" hideEffect="clip">
+					<p:commandButton value="Comfirma" type="button"
+						onclick="PF('dlg_mensagem_analise').show();"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar" type="button"
+						onclick="PF('dlg_mensagem_analise').hide();"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
 
-		<p:panel id="pnlAtosDeExcecao" header="Atos de Exceção"
+			</h:panelGrid>
+
+
+			<h:panelGrid columns="4" style="margin-bottom:20px;width : 80%"
+				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}">
+
+				<h:outputLabel value="Data Recebimento:"
+					style="text-align:left;font-weight:bold;" />
+
+				<h:outputLabel value="#{manterAnaliseMB.dataRecebimento}"
+					style="text-align:left;font-weight:bold;" />
+
+				<h:outputLabel value="Analistas(Responsável Técnico):"
+					style="text-align:left;font-weight:bold;" />
+
+				<p:outputLabel id="idAnalistaTecnico"
+					title="Analistas(Responsável Técnico)"
+					value="#{manterAnaliseMB.usuario.descUsuario}"
+					style="text-align:left;font-size:22px;font-weight:bold;" />
+
+			</h:panelGrid>
+
+
+			<p:panel id="pnlAtosDeExcecao" header="Atos de Exceção"
 				style="margin-bottom:10px;width : 100%" toggleable="true">
 
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :25%"
 					cellpadding="5">
 					<p:outputLabel value="Atos de Exceção:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
-						action="#{manterAnaliseMB.addPerseguica}" ajax="true"						
+					<p:commandButton
+						update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
+						action="#{manterAnaliseMB.addPerseguica}" ajax="true"
 						icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
@@ -98,7 +141,8 @@
 						<p:commandButton value="Remover"
 							action="#{manterAnaliseMB.removerPerseguicao}"
 							icon="ui-icon ui-icon-trash" title="Remover do Processo"
-							ajax="true" update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
+							ajax="true"
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:pnlAtosDeExcecao:">
 							<f:setPropertyActionListener value="#{perseguicaoLista}"
 								target="#{manterAnaliseMB.perseguicaoAnalise}" />
 						</p:commandButton>
@@ -135,7 +179,7 @@
 					<p:outputLabel for="reqAnistiado"
 						value="Requerente já foi anistiado?" style=" width : 700px;" />
 					<h:selectOneRadio id="reqAnistiado"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="#{manterAnaliseMB.analiseProcesso.bolReqAnistiado}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -160,7 +204,7 @@
 					<h:outputLabel value="Ato Reparatório:" />
 					<p:inputTextarea id="txtAreaDescTipoBenefAnt" maxlength="400"
 						rows="4" cols="100" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+						value="#{manterAnaliseMB.analiseProcesso.atoReparatorio}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
@@ -169,7 +213,7 @@
 						value="Houve Decisão Anterior da Comissão de Anistia?"
 						style=" width : 700px;" />
 					<h:selectOneRadio id="bolDecisaoAnterio"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="#{manterAnaliseMB.analiseProcesso.bolDecisaoAnterior}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -180,7 +224,7 @@
 					<h:outputLabel value="Descreva a Decisão:" />
 					<p:inputTextarea id="txtAreaDescDecisaoAnterio" maxlength="1000"
 						rows="4" cols="100" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+						value="#{manterAnaliseMB.analiseProcesso.desicao}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
@@ -188,7 +232,7 @@
 					<p:outputLabel for="bolPublicacaoPortaria"
 						value="Houve Publicação de Portaria?" style=" width : 700px;" />
 					<h:selectOneRadio id="bolPublicacaoPortaria"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="#{manterAnaliseMB.analiseProcesso.bolPublicacaoPortaria}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -199,7 +243,7 @@
 					<h:outputLabel value="Descreva o Conteúdo da Portaria:" />
 					<p:inputTextarea id="txtAreaDescConteudoPortaria" maxlength="1000"
 						rows="4" cols="100" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descTipoBenefAnt}" />
+						value="#{manterAnaliseMB.analiseProcesso.decricaoPortari}" />
 				</h:panelGrid>
 
 
@@ -214,7 +258,7 @@
 					<p:outputLabel for="bolHoveAlteracaoPedido"
 						value="Houve Alterações?" style=" width : 700px;" />
 					<h:selectOneRadio id="bolHoveAlteracaoPedido"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="#{manterAnaliseMB.analiseProcesso.bolPedidoInteressado}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -228,21 +272,20 @@
 
 				<h:panelGrid columns="1" style="margin-bottom:10px;width :60%"
 					cellpadding="5">
-					<p:selectManyCheckbox  
-						style="width : 100%;font-weight:bold;">
+					<p:selectManyCheckbox style="width : 100%;font-weight:bold;">
 						<f:selectItem itemValue="1" itemLabel="Reparação Econômica" />
 						<f:selectItem itemValue="2" itemLabel="Reparação Moral" />
 						<f:selectItem itemValue="3" itemLabel="Restituição de Direitos" />
 					</p:selectManyCheckbox>
 				</h:panelGrid>
-				
+
 
 				<h:panelGrid columns="2" style="margin-bottom:10px;width :50%"
 					cellpadding="5">
 					<p:outputLabel for="bolOutrosPedido" value="Outros?"
 						style=" width : 700px;" />
 					<h:selectOneRadio id="bolOutrosPedido"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="#{manterAnaliseMB.analiseProcesso.bolOutrosPedidos}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -253,29 +296,32 @@
 					<h:outputLabel value="Complemento:" />
 					<p:inputTextarea id="txtAreaComplemento" maxlength="400" rows="4"
 						cols="100" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
+						value="#{manterAnaliseMB.analiseProcesso.complementoPedido}" />
 				</h:panelGrid>
 			</p:panel>
 
 			<p:panel id="pnlResumoPedido" header="Resumo do Pedido"
 				style="margin-bottom:10px;width : 100%" toggleable="true">
 
+				<!-- 
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :45%"
 					cellpadding="5">
 					<p:outputLabel value="Resumo do Pedido:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
+					<p:commandButton
+						update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
 						action="#" label="Carrega Informações" value="Carrega Informações"
 						ajax="true" icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
+				 -->
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:30px; width : 200px;">
 					<h:outputLabel value="Resumo:" />
 					<p:inputTextarea id="txtResulmoPedido" maxlength="10000" rows="20"
 						cols="140" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
+						value="#{manterAnaliseMB.analiseProcesso.resulmoPedido}" />
 
 				</h:panelGrid>
 			</p:panel>
@@ -288,45 +334,56 @@
 					cellpadding="5">
 					<p:outputLabel value="Provas Juntadas Pelo Requerente:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
-						action="#" ajax="true" icon="ui-icon-plusthick">
+					<p:commandButton
+						update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
+						action="#{manterAnaliseMB.addProvas}" ajax="true"
+						icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
 
-				<p:dataTable var="provasLista" id="dataTbprovasLista" value="#"
-					paginator="false" rows="5" style="margin-bottom:20px;"
+				<p:dataTable var="provasLista" id="dataTbprovasLista"
+					value="#{manterAnaliseMB.listarProvasAnalise}" paginator="false"
+					rows="5" style="margin-bottom:20px;"
 					emptyMessage="Não incluido dados de Reparação...">
 
 					<p:column headerText="Prova">
-						<h:outputText value="" />
+						<h:outputText value="#{provasLista.prova}" />
 					</p:column>
 
 					<p:column headerText="Data Início">
-						<h:outputText value="" />
+						<h:outputText value="#{provasLista.dataInicio}">
+							<f:convertDateTime for="" locale="pt_BR" dateStyle="default"
+								pattern="dd/MM/yyyy" />
+
+						</h:outputText>
 					</p:column>
 ´
 					<p:column headerText="Data Fim">
-						<h:outputText value="" />
+						<h:outputText value="#{provasLista.dataFim}">
+							<f:convertDateTime for="" locale="pt_BR" dateStyle="default"
+								pattern="dd/MM/yyyy" />
+						</h:outputText>
 					</p:column>
 
-
-					<p:column headerText="Ações">
-						<h:outputText id="tpAcoes_prova" value="" />
-					</p:column>
 
 					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
+						<p:commandButton value="Editar"
+							action="#{manterAnaliseMB.editarProvas}" icon="ui-icon-aply"
 							title="Editar" ajax="true"
-							update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:dataTbprovasLista">
+							<f:setPropertyActionListener value="#{provasLista}"
+								target="#{manterAnaliseMB.provasAnalise}" />
 						</p:commandButton>
 					</p:column>
 
 					<p:column style="width:32px;text-align: center">
-						<p:commandButton value="Remover" action="#"
+						<p:commandButton value="Remover"
+							action="#{manterAnaliseMB.removerProvas}"
 							icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-							ajax="true" update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="" />
+							ajax="true"
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:dataTbprovasLista">
+							<f:setPropertyActionListener value="#{provasLista}"
+								target="#{manterAnaliseMB.provasAnalise}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
@@ -340,7 +397,7 @@
 					<h:outputLabel value="Conclusões:" />
 					<p:inputTextarea id="txtConclusaoAnalise" maxlength="1000"
 						rows="10" cols="140" autoResize="false"
-						value="#{manterAnaliseMB.analiseProcesso.descComplementoPedido}" />
+						value="#{manterAnaliseMB.analiseProcesso.conclusoesFinais}" />
 				</h:panelGrid>
 
 			</p:panel>
@@ -350,107 +407,6 @@
 			 -->
 
 
-			<p:dialog header="Analistas (Dados Responsável Técnico)"
-				resizable="false" showEffect="clip" hideEffect="clip"
-				style="margin-bottom:20px;" widgetVar="dlg_responsavel" modal="true"
-				height="100%" width="70%">
-				<p:outputPanel id="responsavel">
-
-					<h:panelGrid columns="3" style="margin-bottom:20px;width : 100%">
-
-						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-							<p:outputLabel value="Data Recebimento:" />
-							<p:calendar id="dataRecebimentoAnalista" navigator="true"
-								value="#{manterAnaliseMB.analistaProcesso.dataRecebimento}"
-								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="1" cellpadding="10" style=" width : 180px;">
-							<p:outputLabel value="Substatus do Processo:" />
-							<p:selectOneMenu value="#{manterAnaliseMB.idSubStatusProcesso}"
-								style=" width :180px;" effect="fade" id="comboSubStatusAnalista">
-								<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-								<f:selectItems
-									value="#{manterAnaliseMB.listarSubStatusProcesso}" var="item"
-									itemLabel="#{item.descSubStatusProcesso}"
-									itemValue="#{item.idSubStatusProcesso}" />
-							</p:selectOneMenu>
-						</h:panelGrid>
-
-						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
-							<p:outputLabel value="Data Conclusão:" />
-							<p:calendar id="dataConlusaooAnalista" navigator="true"
-								value="#{manterAnaliseMB.analistaProcesso.dataConlusao}"
-								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
-						</h:panelGrid>
-					</h:panelGrid>
-
-					<h:panelGrid columns="2" style="margin-bottom:20px;width : 100%">
-
-						<h:panelGrid columns="1" cellpadding="10" style=" width : 100px;">
-							<p:outputLabel value="Complemento:" />
-							<p:inputText id="complementooAnalista" navigator="true"
-								value="#{manterAnaliseMB.analistaProcesso.complemento}"
-								maxlength="100" size="100" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="1" cellpadding="10" style=" width : 50px;">
-							<p:outputLabel value="Ações" />
-							<p:inputText id="acoesAnalista" navigator="true"
-								value="#{manterAnaliseMB.analistaProcesso.acoes}" maxlength="50"
-								size="50" />
-						</h:panelGrid>
-
-					</h:panelGrid>
-
-					<p:dataTable var="pessoaLista"
-						value="#{manterAnaliseMB.listarPessoa}" paginator="true" rows="5">
-
-						<p:column headerText="CPF">
-							<h:outputText value="#{pessoaLista.numCpfCnpj}" />
-						</p:column>
-
-						<p:column headerText="Nome">
-							<h:outputText value="#{pessoaLista.nomePessoa}" />
-						</p:column>
-
-						<p:column headerText="Data Nascimento">
-							<h:outputText value="#{pessoaLista.dataNascimento}">
-								<f:convertDateTime locale="pt_BR" dateStyle="long"
-									pattern="dd/MM/yyyy" />
-							</h:outputText>
-						</p:column>
-
-
-						<p:column headerText="Nome Mãe">
-							<h:outputText value="#{pessoaLista.nomeMae}" />
-						</p:column>
-
-						<p:column headerText="Email">
-							<h:outputText value="#{pessoaLista.emailPessoa}" />
-						</p:column>
-
-
-						<p:column style="width:32px;text-align: center">
-							<p:commandButton value="Incluir"
-								action="#{manterAnaliseMB.incluirNaAnalise}"
-								icon="ui-icon-search" title="Incluir no Processo" ajax="true"
-								update=":tabView:formManterAnalise:tabView_analise:formAnalise:">
-								<f:setPropertyActionListener value="#{pessoaLista}"
-									target="#{manterAnaliseMB.pessoaAnalista}" />
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-
-					<h:panelGrid columns="1" cellpadding="10"
-						style="margin-bottom:20px;text-align:center; width : 100%;">
-						<p:commandButton value="Fechar" id="FecharAnalistaResp"
-							style="horizontal-align:center" type="button"
-							icon="ui-icon-closethick" onclick="PF('dlg_responsavel').hide();" />
-					</h:panelGrid>
-
-				</p:outputPanel>
-			</p:dialog>
 
 			<!-- DIALOG PERSEGUICAO -->
 
@@ -517,6 +473,77 @@
 						<p:commandButton value="Fechar" id="FecharPerseguicao"
 							style="horizontal-align:center" type="button"
 							icon="ui-icon-closethick" onclick="PF('dlg_perseguicao').hide();" />
+
+					</h:panelGrid>
+
+
+				</p:outputPanel>
+			</p:dialog>
+
+
+			<p:dialog header="Manter Provas" resizable="false" showEffect="clip"
+				hideEffect="clip" style="margin-bottom:20px;" widgetVar="dlg_prova"
+				modal="true" height="100%" width="60%">
+				<p:outputPanel id="mtndgprova">
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:20px; width : 100%;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+							<p:outputLabel value="Tipo Prova:" />
+							<p:inputText id="intpTipoProva" navigator="true"
+								value="#{manterAnaliseMB.provasAnalise.tipo}" maxlength="100"
+								size="50" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+							<p:outputLabel value="Prova:" />
+							<p:inputText id="ipt_Prova" navigator="true"
+								value="#{manterAnaliseMB.provasAnalise.prova}" maxlength="100"
+								size="50" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="3" cellpadding="10"
+						style="margin-bottom:20px; width : 100%;">
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 100%;">
+							<p:outputLabel value="Folhas do Processo:" />
+							<p:inputText id="ipt_folhas" navigator="true"
+								value="#{manterAnaliseMB.provasAnalise.folhaProcesso}"
+								maxlength="100" size="50" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<p:outputLabel value="Data Inicio:" />
+							<p:calendar id="dataInicioProva" navigator="true"
+								value="#{manterAnaliseMB.provasAnalise.dataInicio}"
+								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="10" style=" width : 120px;">
+							<p:outputLabel value="Data Fim:" />
+							<p:calendar id="dataFimProvas" navigator="true"
+								value="#{manterAnaliseMB.provasAnalise.dataFim}" showOn="button"
+								locale="pt" pattern="dd/MM/yyyy" size="10" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" cellpadding="30"
+						style="margin-bottom:30px; width : 100%">
+						<h:outputLabel value="Complemento:" />
+						<p:inputTextarea id="txtAreaProvaComplemento" maxlength="400"
+							rows="4" cols="100" autoResize="false"
+							value="#{manterAnaliseMB.provasAnalise.conteudo}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 70%;">
+						<p:commandButton value="Incluir" id="bt_incluir_prova"
+							style="horizontal-align:center" icon="ui-icon-disk"
+							update=":tabView:formManterAnalise:tabView_analise:formAnalise:dataTbprovasLista"
+							action="#{manterAnaliseMB.incluirProvaLista}">
+						</p:commandButton>
+
+						<p:commandButton value="Fechar" id="FecharProva"
+							style="horizontal-align:center" type="button"
+							icon="ui-icon-closethick" onclick="PF('dlg_prova').hide();" />
 
 					</h:panelGrid>
 

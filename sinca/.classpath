@@ -9,6 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Aplicativos/Java/jboss-4.2.3_MJ/server/default/deploy/mj/03comp/MJ_Corporativo.jar"/>
-	<classpathentry kind="lib" path="D:/Aplicativos/Java/jboss-4.2.3_MJ/server/default/deploy/mj/03comp/MJSeguranca2.jar"/>
+	<classpathentry kind="lib" path="D:/Aplicativos/Java/jboss-4.2.3_MJ/server/default/deploy/mj/03comp/MJSeguranca2.jar" sourcepath="/CompSeguranca2"/>
 	<classpathentry kind="output" path="WebApp/WEB-INF/classes"/>
 </classpath>

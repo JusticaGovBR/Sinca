@@ -1,12 +1,22 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import java.math.BigInteger;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -112,10 +122,6 @@ public class AnaliseProcesso implements Serializable {
 	//bi-directional many-to-one association to ProvasAnalise
 	@OneToMany(mappedBy="analiseProcesso")
 	private List<ProvasAnalise> provasAnalises;
-
-	//bi-directional many-to-one association to RecomendacaoAnalise
-	@OneToMany(mappedBy="analiseProcesso")
-	private List<RecomendacaoAnalise> recomendacaoAnalises;
 
 	public AnaliseProcesso() {
 	}
@@ -398,28 +404,6 @@ public class AnaliseProcesso implements Serializable {
 		provasAnalis.setAnaliseProcesso(null);
 
 		return provasAnalis;
-	}
-
-	public List<RecomendacaoAnalise> getRecomendacaoAnalises() {
-		return this.recomendacaoAnalises;
-	}
-
-	public void setRecomendacaoAnalises(List<RecomendacaoAnalise> recomendacaoAnalises) {
-		this.recomendacaoAnalises = recomendacaoAnalises;
-	}
-
-	public RecomendacaoAnalise addRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
-		getRecomendacaoAnalises().add(recomendacaoAnalis);
-		recomendacaoAnalis.setAnaliseProcesso(this);
-
-		return recomendacaoAnalis;
-	}
-
-	public RecomendacaoAnalise removeRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
-		getRecomendacaoAnalises().remove(recomendacaoAnalis);
-		recomendacaoAnalis.setAnaliseProcesso(null);
-
-		return recomendacaoAnalis;
 	}
 
 }

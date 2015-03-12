@@ -25,39 +25,45 @@
 
 		<h:form id="formManterAnalise">
 
-			<h:panelGrid columns="1" cellpadding="10"
-				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}"
-				style="margin-bottom:20px;text-align:center; width : 100%;">
-				<p:commandButton id="brnsalvarAnálise"
-					value="Salvar Análise"
-					actionListener="#{manterAnaliseMB.salvarAnalise}"
-					icon="ui-icon-disk" title="Atualizar">
-					<p:confirm header="Comfirmação"
-						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
-				</p:commandButton>
-				<p:confirmDialog global="true" showEffect="fade"
-					hideEffect="explode">
-					<p:commandButton value="Comfirma" type="button"
-						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-					<p:commandButton value="Cancelar" type="button"
-						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				</p:confirmDialog>
+			<div id="divMess" align="center" style="width: 100%; height: 10%">
 
-			</h:panelGrid>
+				<p:messages id="messages_processo" showSummary="true"
+					showDetail="true" autoUpdate="true" closable="true" />
+
+			</div>
+
 
 			<h:panelGrid columns="1" cellpadding="10"
 				rendered="#{!manterAnaliseMB.habilitaAnailiseIniciada}"
 				style="margin-bottom:20px;text-align:center; width : 100%;">
 				<p:commandButton id="btnIniciarAnalise" value="Iniciar Análise"
-					icon="ui-icon-disk" title="Iniciar Análise"  ajax="true" 
+					icon="ui-icon-disk" title="Iniciar Análise" ajax="true"
 					update=":tabView:formManterAnalise:"
 					action="#{manterAnaliseMB.iniciarAnalise}">
-					
+
 				</p:commandButton>
+
 			</h:panelGrid>
 
+			<p:tabView id="tabView_analise" effect="clip"  cache="false"
+				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}">
 
-			<p:tabView id="tabView_analise" effect="clip"
+				<p:tab id="tab_dados_analise" title="Dados da Análise">
+					<ui:insert name="analise">
+						<ui:include src="/pages/analise_processo/formularioAnalise.xhtml" />
+					</ui:insert>
+				</p:tab>
+
+				<p:tab id="tab_recomendacoes" title="Recomendações">
+					<ui:insert name="recomendacoes">
+						<ui:include
+							src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
+					</ui:insert>
+				</p:tab>
+
+			</p:tabView>
+			<!-- 
+			<p:accordionPanel id="tabView_analise" effect="clip"
 				rendered="#{manterAnaliseMB.habilitaAnailiseIniciada}">
 				<p:tab id="tab_dados_analise" title="Dados da Análise">
 					<ui:insert name="analise">
@@ -71,9 +77,11 @@
 							src="/pages/analise_processo/formularioRecomendacoes.xhtml" />
 					</ui:insert>
 				</p:tab>
-			</p:tabView>
 
+			</p:accordionPanel>
+ 			-->
 		</h:form>
+
 
 	</h:body>
 </ui:composition>

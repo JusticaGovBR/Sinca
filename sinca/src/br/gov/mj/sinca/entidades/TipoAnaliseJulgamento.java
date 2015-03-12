@@ -1,8 +1,14 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -18,22 +24,18 @@ public class TipoAnaliseJulgamento implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="COD_TIPO")
-	private int codTipo;
+	private Integer codTipo;
 
 	private String descricao;
-
-	//bi-directional many-to-one association to RecomendacaoAnalise
-	@OneToMany(mappedBy="tipoAnaliseJulgamento")
-	private List<RecomendacaoAnalise> recomendacaoAnalises;
-
+	
 	public TipoAnaliseJulgamento() {
 	}
 
-	public int getCodTipo() {
+	public Integer getCodTipo() {
 		return this.codTipo;
 	}
 
-	public void setCodTipo(int codTipo) {
+	public void setCodTipo(Integer codTipo) {
 		this.codTipo = codTipo;
 	}
 
@@ -43,28 +45,6 @@ public class TipoAnaliseJulgamento implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public List<RecomendacaoAnalise> getRecomendacaoAnalises() {
-		return this.recomendacaoAnalises;
-	}
-
-	public void setRecomendacaoAnalises(List<RecomendacaoAnalise> recomendacaoAnalises) {
-		this.recomendacaoAnalises = recomendacaoAnalises;
-	}
-
-	public RecomendacaoAnalise addRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
-		getRecomendacaoAnalises().add(recomendacaoAnalis);
-		recomendacaoAnalis.setTipoAnaliseJulgamento(this);
-
-		return recomendacaoAnalis;
-	}
-
-	public RecomendacaoAnalise removeRecomendacaoAnalis(RecomendacaoAnalise recomendacaoAnalis) {
-		getRecomendacaoAnalises().remove(recomendacaoAnalis);
-		recomendacaoAnalis.setTipoAnaliseJulgamento(null);
-
-		return recomendacaoAnalis;
 	}
 
 }

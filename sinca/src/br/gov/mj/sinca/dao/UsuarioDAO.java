@@ -1,9 +1,12 @@
 package br.gov.mj.sinca.dao;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 
+import br.gov.mj.sinca.entidades.PessoaFisica;
 import br.gov.mj.sinca.entidades.Usuario;
 
 public class UsuarioDAO extends SincaAbastractDAO<Usuario> {
@@ -15,6 +18,13 @@ public class UsuarioDAO extends SincaAbastractDAO<Usuario> {
     public UsuarioDAO(EntityManager manager) {
 	super(manager);
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Usuario> listaUsuarioPorNomeLk(String nome) {
+	Query query = getEntityManager().createQuery("SELECT u FROM Usuario u where u.descUsuario like '" + nome + "%'");
+	return query.getResultList();
+    }
+
 
     public Usuario buscarUsuario(String sigla) {
 	try {
@@ -29,7 +39,7 @@ public class UsuarioDAO extends SincaAbastractDAO<Usuario> {
 
     public static void main(String[] args) {
 	UsuarioDAO dao = new UsuarioDAO();
-	dao.buscarUsuario("sebastiao.costa");
+	dao.listaUsuarioPorNomeLk("sebastiao");
     }
 
 }

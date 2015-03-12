@@ -49,8 +49,9 @@
 						style=" margin-bottom:5px ;width : 70%; height : 40px; ">
 						<h:outputLabel for="inpt_numProtocoloCa"
 							value="Nº Requerimento CA:" style=" width : 100%" />
-						<p:inputMask mask="?9999999999" id="inpt_numProtocoloCa" size="20"
-							maxlength="20" value="#{consultarProcessoMB.numProcessoCA}" />
+						<p:inputMask id="inpt_numProtocoloCa" size="20"
+						
+							maxlength="10" value="#{consultarProcessoMB.numProcessoCA}" />
 						<h:outputLabel for="dataProtocoloCA" value="Data Requerimento CA:"
 							style=" width : 100%" />
 						<p:autoComplete id="dataProtocoloCA" style="width : 100%"

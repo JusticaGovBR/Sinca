@@ -49,24 +49,19 @@ public class RecomendacaoAnalise implements Serializable {
 	@JoinColumn(name="ID_TIPO_JULGAMENTO")
 	private TipoAnaliseJulgamento tipoAnaliseJulgamento;
 
-	//bi-directional many-to-one association to AnaliseProcesso
 	@ManyToOne
 	@JoinColumn(name="ID_ANALISE_PROCESSO")
 	private AnaliseProcesso analiseProcesso;
 
-	//bi-directional many-to-one association to RecomendacaoDiligencia
 	@OneToMany(mappedBy="recomendacaoAnalise")
 	private List<RecomendacaoDiligencia> recomendacaoDiligencias;
 
-	//bi-directional many-to-one association to ReparacaoDireitoAnalise
 	@OneToMany(mappedBy="recomendacaoAnalise")
 	private List<ReparacaoDireitoAnalise> reparacaoDireitoAnalises;
 
-	//bi-directional many-to-one association to ReparacaoEconomicaAnalise
 	@OneToMany(mappedBy="recomendacaoAnalise")
 	private List<ReparacaoEconomicaAnalise> reparacaoEconomicaAnalises;
 
-	//bi-directional many-to-one association to ReparacaoMoralAnalise
 	@OneToMany(mappedBy="recomendacaoAnalise")
 	private List<ReparacaoMoralAnalise> reparacaoMoralAnalises;
 

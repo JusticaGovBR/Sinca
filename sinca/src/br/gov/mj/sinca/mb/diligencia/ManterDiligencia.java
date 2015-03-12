@@ -93,6 +93,10 @@ public class ManterDiligencia implements Serializable {
 
     public void salvarDiligencia() {
 	try {
+	    PessoaProcesso pessoaProcesso = (PessoaProcesso) JSFUtil.getSessionMap().get("pessoaProcessoDiligenica");
+	    if (pessoaProcesso != null && pessoaProcesso.getIdPessoaProcesso() > 0) {
+		this.processo = pessoaProcesso.getProcesso();
+	    }
 	    if (pessoaJuridica == null || pessoaJuridica.getIdPessoaJuridica() == null
 		    || pessoaJuridica.getIdPessoaJuridica() == 0) {
 		JSFUtil.retornarMensagemModal("", "Orgão não Selecionado!");
@@ -122,8 +126,7 @@ public class ManterDiligencia implements Serializable {
 		em.flush();
 	    }
 	    em.getTransaction().commit();
-	    this.listaDiligencias = new DiligenciaDAO().listarDiligenciaPorProcesso(
-		    pessoaProcesso.getProcesso().getIdProcesso());
+	    this.listaDiligencias = new DiligenciaDAO().listarDiligenciaPorProcesso(processo.getIdProcesso());
 
 	    JSFUtil.retornarMensagemModal("", "Dados Salvos com Sucesso!");
 
@@ -160,7 +163,7 @@ public class ManterDiligencia implements Serializable {
 	try {
 	    DiligenciaDAO dao = new DiligenciaDAO();
 	    diligencia = (Diligencia) JSFUtil.getRequestMap().get("diligenciasP");
-	    diligencia  = dao.lerPorId(diligencia.getIdDiligencia());
+	    diligencia = dao.lerPorId(diligencia.getIdDiligencia());
 	    dao.excluir(diligencia);
 	    instanciaAtributos();
 	    JSFUtil.getRequestContext().execute("PF('dlg_diligencia').hide()");

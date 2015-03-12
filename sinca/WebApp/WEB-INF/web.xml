@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>SINCA</display-name>
-	
+
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
@@ -44,7 +44,9 @@
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Development</param-value>
+		<!-- <param-value>Production</param-value> -->
 	</context-param>
+
 	<!-- alteracao necessaria para o uso do viewscope do JSF -->
 	<context-param>
 		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
@@ -82,11 +84,11 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-
+<!--  
 	<listener>
 		<listener-class>br.gov.mj.sinca.listener.SincaServletContextListener</listener-class>
 	</listener>
-
+-->
 
 	<session-config>
 		<session-timeout>30</session-timeout>

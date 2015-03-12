@@ -57,7 +57,8 @@
 			<h:panelGrid columns="1" cellpadding="10"
 				style="margin-bottom:20px;text-align:center; width : 100%;">
 				<p:commandButton id="salvarInteressadoProcesso"
-					value="Salvar Interessados" actionListener="#{manterProcessoMB.salvarInteressadoProcesso}"
+					value="Salvar Interessados"
+					actionListener="#{manterProcessoMB.salvarInteressadoProcesso}"
 					icon="ui-icon-disk" title="Atualizar">
 					<p:confirm header="Comfirmação"
 						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
@@ -206,27 +207,26 @@
 						<h:outputText value="#{processoLista.pessoa.nomePessoa}" />
 					</p:column>
 
-					<p:column style="width:32px;align: center" rendered="#{!processoLista.pessoa eq null}">
-						<p:commandButton value="Editar" id="Editar_Pessoa"
-							actionListener="#{manterProcessoMB.editarPessoaProcesso}"
-							update=":tabView:formInteressados:" icon="ui-icon-search"
-							title="Detalhar Endereço" ajax="true">
-							<f:setPropertyActionListener value="#{processoLista.pessoa}"
-								target="#{manterProcessoMB.pessoaCadastro}" />
-
-						</p:commandButton>
+					<p:column resizable="true" headerText="Ações" style="width:32px;align: center">
+						<h:panelGrid columns="2" cellpadding="10"
+							style="text-align:center; width : 100%;">
+							<p:commandButton value="Editar" id="Editar_Pessoa"
+								actionListener="#{manterProcessoMB.editarPessoaProcesso}"
+								update=":tabView:formInteressados:" icon="ui-icon-search"
+								title="Detalhar Endereço" ajax="true">
+								<f:setPropertyActionListener value="#{processoLista.pessoa}"
+									target="#{manterProcessoMB.pessoaCadastro}" />
+							</p:commandButton>
+							<p:commandButton value="Remover" id="remover_pessoa_processo"
+								actionListener="#{manterProcessoMB.removerPessoaProcesso}"
+								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
+								update="dtbl_processoList">
+								<f:setPropertyActionListener value="#{processoLista.pessoa}"
+									target="#{manterProcessoMB.pessoaCadastro}" />
+							</p:commandButton>
+						</h:panelGrid>	
 					</p:column>
-
-					<p:column style="width:32px;align: center" rendered="#{!processoLista.pessoa eq null}">
-						<p:commandButton value="Remover" id="remover_pessoa_processo"
-							actionListener="#{manterProcessoMB.removerPessoaProcesso}"
-							icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
-							update="dtbl_processoList">
-							<f:setPropertyActionListener value="#{processoLista.pessoa}"
-								target="#{manterProcessoMB.pessoaCadastro}" />
-
-						</p:commandButton>
-					</p:column>
+					
 				</p:dataTable>
 			</p:panel>
 

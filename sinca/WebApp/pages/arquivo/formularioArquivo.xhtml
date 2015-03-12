@@ -30,6 +30,24 @@
 					showDetail="true" autoUpdate="true" closable="true" />
 
 			</div>
+			<h:panelGrid columns="1" cellpadding="10"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="salvarAruivo"
+					value="Salvar Arquivo" 
+					icon="ui-icon-disk" title="Atualizar">
+					<p:confirm header="Comfirmação"
+						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Comfirma" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:panelGrid>
+
 
 			<p:panel id="pnDadocLocalizacao" header="Localização"
 				toggleSpeed="500" closeSpeed="500"
@@ -87,7 +105,7 @@
 					<p:outputLabel for="prossuiErro" value="Possui Erro(s)?"
 						style=" width : 300px;" />
 					<h:selectOneRadio id="prossuiErro"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -104,7 +122,7 @@
 					<p:outputLabel for="existependencia"
 						value="Existe Pendência no Processo:" style=" width : 300px;" />
 					<h:selectOneRadio id="existependencia"
-						value="#{manterAnaliseMB.analiseProcesso.reqAnistiado}">
+						value="">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>

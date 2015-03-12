@@ -12,4 +12,8 @@ public class TipoAnaliseJulgamentoDAO extends SincaAbastractDAO<TipoAnaliseJulga
 	public TipoAnaliseJulgamentoDAO(EntityManager manager) {
 		super(manager);
 	}
+	
+	public static void main(String[] args) {
+	    new TipoAnaliseJulgamentoDAO().lerPorId(1);
+	}
 }

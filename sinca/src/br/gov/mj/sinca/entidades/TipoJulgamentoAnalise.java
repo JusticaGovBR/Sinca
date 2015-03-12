@@ -17,18 +17,18 @@ public class TipoJulgamentoAnalise implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_TIPO_JULGAMENTO")
-	private String idTipoJulgamento;
+	private Long idTipoJulgamento;
 
 	private String decricao;
 
 	public TipoJulgamentoAnalise() {
 	}
 
-	public String getIdTipoJulgamento() {
+	public Long getIdTipoJulgamento() {
 		return this.idTipoJulgamento;
 	}
 
-	public void setIdTipoJulgamento(String idTipoJulgamento) {
+	public void setIdTipoJulgamento(Long idTipoJulgamento) {
 		this.idTipoJulgamento = idTipoJulgamento;
 	}
 

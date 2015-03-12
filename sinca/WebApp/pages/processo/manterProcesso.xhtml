@@ -37,187 +37,166 @@
 				</h:panelGrid>
 			</p:dialog>
 
-			<h:form id="formP">
+			<p:panel id="PnProcesso" header="Dados do Requerimento de Anistia"
+				style="margin-bottom:10px;width : 100%" toggleable="false"
+				rendered="#{manterProcessoMB.processo.idProcesso>0}">
 
-				<p:panel id="PnProcesso" header="Dados do Requerimento de Anistia"
-					style="margin-bottom:10px;width : 100%" toggleable="true"
-					rendered="#{manterProcessoMB.processo.idProcesso>0}">
-
-					<h:panelGrid columns="2" cellpadding="10"
-						style="margin-bottom:5px;width :100%;">
-						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-							<h:outputLabel value="Número Processo SEI:" />
-							<h:outputLabel
-								value="#{manterProcessoMB.processo.numProtocoloMj}" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
-							<h:outputLabel value="Data Cadastro SEI:" />
-							<h:outputLabel
-								value="#{manterProcessoMB.processo.dataProtocoloMJ}">
-								<f:convertDateTime locale="pt_BR" dateStyle="long"
-									pattern="dd/MM/yyyy" />
-
-							</h:outputLabel>
-						</h:panelGrid>
-					</h:panelGrid>
-					<h:panelGrid columns="2" cellpadding="10"
-						style="margin-bottom:5px;width :100%;">
-						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-							<h:outputLabel value="Número Requerimento:" />
-							<h:outputLabel
-								value="#{manterProcessoMB.processo.numProtocoloCa}" />
-						</h:panelGrid>
-
-						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
-							<h:outputLabel value="Data Requerimento:" />
-							<h:outputLabel
-								value="#{manterProcessoMB.processo.dataProtocoloCa}">
-								<f:convertDateTime locale="pt_BR" dateStyle="long"
-									pattern="dd/MM/yyyy" />
-
-							</h:outputLabel>
-						</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:5px;width :100%;">
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Número Processo SEI:" />
+						<h:outputLabel value="#{manterProcessoMB.processo.numProtocoloMj}" />
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" cellpadding="10"
-						style="margin-bottom:15px;width :100%;">
-						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-							<h:outputLabel value="Nome do Requerente:" />
-							<h:outputLabel value="Pedro ...." />
-						</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Data Cadastro SEI:" />
+						<h:outputLabel
+							value="#{manterProcessoMB.processo.dataProtocoloMJ}">
+							<f:convertDateTime locale="pt_BR" dateStyle="long"
+								pattern="dd/MM/yyyy" />
 
-						<h:panelGrid columns="2" cellpadding="10" style="width :180px;">
-							<h:outputLabel value="Localização:" />
-							<h:outputLabel value="Pedro ...." />
-						</h:panelGrid>
+						</h:outputLabel>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:5px;width :100%;">
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Número Requerimento:" />
+						<h:outputLabel value="#{manterProcessoMB.processo.numProtocoloCa}" />
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" cellpadding="10"
-						style="margin-bottom:5px;width :100%;">
-						<h:panelGrid columns="2" cellpadding="10" style="width :200px;">
-							<h:outputLabel value="Situação do RA:" />
-							<h:outputLabel value="Em Análise ...." />
-						</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Data Requerimento:" />
+						<h:outputLabel
+							value="#{manterProcessoMB.processo.dataProtocoloCa}">
+							<f:convertDateTime locale="pt_BR" dateStyle="long"
+								pattern="dd/MM/yyyy" />
 
-						<h:panelGrid columns="2" cellpadding="10" style="width :380px;">
-							<h:outputLabel value="Detalhamento da Situação do RA:" />
-							<h:outputLabel value="Em Análise" />
-						</h:panelGrid>
+						</h:outputLabel>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" cellpadding="10"
+					style="margin-bottom:8px;width :100%;">
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Nome do Requerente:" />
+						<h:outputLabel value="#{manterProcessoMB.nomeRequerenteP}" />
 					</h:panelGrid>
 
+					<h:panelGrid columns="2" cellpadding="10" style="width :400px;">
+						<h:outputLabel value="Localização:" />
+						<h:outputLabel value="#{manterProcessoMB.descLocalizacao}" />
+					</h:panelGrid>
+				</h:panelGrid>
 
-				</p:panel>
+				<h:panelGrid columns="2" cellpadding="10"
+					style="width :100%;">
+					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
+						<h:outputLabel value="Situação do RA:" />
+						<h:outputLabel value="#{manterProcessoMB.descSituacao}" />
+					</h:panelGrid>
 
-				<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
-					hideEffect="clip" style="margin-bottom:20px;"
-					widgetVar="dlg_comfirmacao" modal="true" height="100%" width="45%">
-					<p:outputPanel id="mtndgperseg">
-						<p:outputPanel deferred="true">
-							<h3
-								style="color: Brown; font-style: normal; font-size: x-large; text-decoration: none; font-weight: bold;">
-								Comfirma que os dados inseridos no processo estão corretos?</h3>
-						</p:outputPanel>
+					<h:panelGrid columns="2" cellpadding="10" style="width :400px;">
+						<h:outputLabel value="Detalhamento da Situação do RA:" />
+						<h:outputLabel value="#{manterProcessoMB.descDetalhamentoSituacao}" />
+					</h:panelGrid>
+				</h:panelGrid>
 
-						<h:panelGrid columns="2" cellpadding="10"
-							style="margin-bottom:20px;text-align:center; width : 100%;">
-							<p:commandButton value="Salvar" id="bt_incluir_processo"
-								style="horizontal-align:center" icon="ui-icon-disk"
-								update="@this" action="#{manterProcessoMB.salvarProcesso}">
-							</p:commandButton>
 
-							<p:commandButton value="Cancelar" id="FecharSalvarDados"
-								style="horizontal-align:center" type="button"
-								icon="ui-icon-closethick"
-								onclick="PF('dlg_comfirmacao').hide();" />
-						</h:panelGrid>
+			</p:panel>
+
+			<p:dialog header="Comfirmação!" resizable="false" showEffect="clip"
+				hideEffect="clip" style="margin-bottom:20px;"
+				widgetVar="dlg_comfirmacao" modal="true" height="100%" width="45%">
+				<p:outputPanel id="mtndgperseg">
+					<p:outputPanel deferred="true">
+						<h3
+							style="color: Brown; font-style: normal; font-size: x-large; text-decoration: none; font-weight: bold;">
+							Comfirma que os dados inseridos no processo estão corretos?</h3>
 					</p:outputPanel>
-				</p:dialog>
 
-				<p:panel id="pnlHistorico" header="Histórico do Requerimento de Anistia:"
-					rendered="true" style="margin-bottom:5px;width : 100%"
-					toggleable="true">
+					<h:panelGrid columns="2" cellpadding="10"
+						style="margin-bottom:20px;text-align:center; width : 100%;">
+						<p:commandButton value="Salvar" id="bt_incluir_processo"
+							style="horizontal-align:center" icon="ui-icon-disk"
+							update="@this" action="#{manterProcessoMB.salvarProcesso}">
+						</p:commandButton>
 
-
-					<h:panelGrid columns="4" style="margin-bottom:20px;width : 80%">
-
-						<h:outputLabel value="Data Recebimento:"
-							style="text-align:left;font-weight:bold;" />
-
-						<h:outputLabel value="#{manterAnaliseMB.dataRecebimento}"
-							style="text-align:left;font-weight:bold;" />
-
-						<h:outputLabel value="Analistas(Responsável Técnico):"
-							style="text-align:left;font-weight:bold;" />
-
-						<p:outputLabel id="idAnalistaTecnico"
-							title="Analistas(Responsável Técnico)"
-							value="#{manterAnaliseMB.usuario.descUsuario}"
-							style="text-align:left;font-size:22px;font-weight:bold;" />
-
+						<p:commandButton value="Cancelar" id="FecharSalvarDados"
+							style="horizontal-align:center" type="button"
+							icon="ui-icon-closethick" onclick="PF('dlg_comfirmacao').hide();" />
 					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
 
-					<p:dataTable var="pessoaLista" value="#" paginator="true" rows="5"
+
+			<h:form>
+				<p:panel id="pnlHistorico"
+					header="Histórico do Requerimento de Anistia:" rendered="true"
+					style="margin-bottom:5px;width : 100%" toggleable="true">
+
+
+
+					<p:dataTable var="historicoLista" value="#{manterProcessoMB.listarHitorico}" paginator="true" rows="5"
 						style="margin-bottom:10px;width : 100%"
-						emptyMessage="Não incluido dados do analista responsável...">
+						emptyMessage="Não incluido histórico do Requerimento">
 
 						<p:column headerText="Data Recebimento">
-							<h:outputText id="dataRecebimento" value="#">
-								<!--  
-							<f:convertDateTime for="" locale="pt_BR" dateStyle="default"
-								pattern="dd/MM/yyyy" />
-							-->
+							<h:outputText id="dataRecebimento" value="#{historicoLista.dataRecebimento}">
+								<f:convertDateTime for="dataRecebimento" locale="pt_BR" dateStyle="default"
+									pattern="dd/MM/yyyy HH:mm:ss" />
 							</h:outputText>
 						</p:column>
 
 						<p:column headerText="Analista">
-							<h:outputText value="#" />
+							<h:outputText value="#{historicoLista.usuarioAnalista.descUsuario}"/>
 						</p:column>
 
 						<p:column headerText="Data Conclusão">
-							<h:outputText id="dataConclusao" value="#">
+							<h:outputText id="dataConclusao"  value="#{historicoLista.dataConclusao}">
+								<f:convertDateTime for="dataConclusao" locale="pt_BR" dateStyle="default"
+									pattern="dd/MM/yyyy" />
 
 							</h:outputText>
 						</p:column>
 
 						<p:column headerText="Julgamento Proposto">
-							<h:outputText value="#" />
+							<h:outputText value="#{historicoLista.julgamentoProcesso.tipoDesicaoJulgamento.decricao}"/>
 						</p:column>
 
 						<p:column headerText="Total Analise">
-							<h:outputText value="#" />
+							<h:outputText />
 						</p:column>
 
 						<p:column headerText="Ações" style="text-align: center">
-							<p:commandButton value="Editar" action="#" icon="ui-icon-aply"
-								title="Editar a Analise" ajax="true">
-								<!--  
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-							-->
+							<p:commandButton value="Editar" action="#{manterProcessoMB.editarHistorico}" 
+								update=":pnl_tabs:" icon="ui-icon-aply"
+								title="Editar a Analise" ajax="false" >
+								<f:setPropertyActionListener value="#{historicoLista}"
+									target="#{manterProcessoMB.hitoricoRequerimento}" />
 							</p:commandButton>
 
-							<p:commandButton value="Copiar" action="#" icon="ui-icon-copy"
-								title="Gerar Copia da Analise" ajax="true">
-								<!--  
-							<f:setPropertyActionListener value="#{reparacaoLista}" target="#" />
-							-->
+							<p:commandButton value="Copiar" action="#{manterProcessoMB.editarHistorico}" icon="ui-icon-copy"
+								title="Gerar Copia da Analise" ajax="false" update=":pnl_tabs:">
+								<f:setPropertyActionListener value="#{historicoLista}"
+									target="#{manterProcessoMB.hitoricoRequerimento}" />
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
 
+
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:20px;text-align:center; width : 100%;">
-						<p:commandButton id="Novo" value="Novo" ajax="false" update="@all"
-							action="#{manterProcessoMB.habilitaNovo}" icon="ui-icon-disk"
-							title="Novo" />
+						<p:commandButton id="Novo" value="Novo" ajax="false"
+							update=":pnl_tabs:" action="#{manterProcessoMB.habilitaNovo}"
+							icon="ui-icon-disk" title="Novo" />
 					</h:panelGrid>
-
 				</p:panel>
-
 			</h:form>
 
 
-			<p:tabView id="tabView" style="width: 100%" effect="scale">
+			<p:tabView id="tabView" style="width: 100%" effect="scale"
+				rendered="#{manterProcessoMB.novo}">
 
 
 				<p:tab id="tab_processo" title="Requerimento">
@@ -263,9 +242,7 @@
 							src='#{manterProcessoMB.linkDocSel}' height="600" width="970"></iframe>
 					</ui:insert>
 				</p:tab>
-
 			</p:tabView>
-
 
 
 		</h:body>

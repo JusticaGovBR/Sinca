@@ -32,7 +32,7 @@ public class ReparacaoMoralAnalise implements Serializable {
 	private String declaracaoRetificacao;
 
 	@Column(name="ID_USUARIO")
-	private int idUsuario;
+	private Integer idUsuario;
 
 	@Column(name="OUTRAS_REPARACOES")
 	private String outrasReparacoes;
@@ -77,11 +77,11 @@ public class ReparacaoMoralAnalise implements Serializable {
 		this.declaracaoRetificacao = declaracaoRetificacao;
 	}
 
-	public int getIdUsuario() {
+	public Integer getIdUsuario() {
 		return this.idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 

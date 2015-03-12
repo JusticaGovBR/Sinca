@@ -28,6 +28,7 @@ import br.gov.mj.sinca.dao.EstadoCivilDAO;
 import br.gov.mj.sinca.dao.EstadoUfDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
+import br.gov.mj.sinca.dao.HistoricoRequerimentoDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
 import br.gov.mj.sinca.dao.LoteProcessoDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
@@ -53,6 +54,7 @@ import br.gov.mj.sinca.entidades.Estado;
 import br.gov.mj.sinca.entidades.EstadoCivil;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
 import br.gov.mj.sinca.entidades.GrupoSocial;
+import br.gov.mj.sinca.entidades.HitoricoRequerimento;
 import br.gov.mj.sinca.entidades.Localizacao;
 import br.gov.mj.sinca.entidades.LoteProcesso;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
@@ -92,7 +94,7 @@ public class ManterProcessoMB implements Serializable {
 
     private String mensagem;
 
-    private Long idLocalizacao;
+    private Integer idLocalizacao;
     private Integer idStatusProcesso;
     private Integer idSubStatusProcesso;
     private Integer idGrupoProcessual;
@@ -158,19 +160,29 @@ public class ManterProcessoMB implements Serializable {
     private LoteProcesso loteProcesso = new LoteProcesso();
     private List<LoteProcesso> listaLoteProcesso = new ArrayList<LoteProcesso>();
 
+    private List<HitoricoRequerimento> listarHitorico = new ArrayList<HitoricoRequerimento>();
+    
+    private HitoricoRequerimento hitoricoRequerimento;
+ 
     private Integer[] idTipoPessoaProcesso;
     private boolean habilitaEdicaoPessoa;
     private boolean habilitaTabePessoa;
     private boolean comunicadoObito = false;
     private boolean comfirmaDadosCorretos = false;
 
-    private boolean novo = true;
+    private boolean novo = false;
 
     private String linkDocSel;
 
     private Usuario usuario;
 
     private boolean proximo;
+    
+    private String nomeRequerenteP;
+    private String descLocalizacao;
+    private String descSituacao;
+    private String descDetalhamentoSituacao;
+    
 
     public boolean isProximo() {
 	return proximo;
@@ -237,7 +249,9 @@ public class ManterProcessoMB implements Serializable {
 	    }
 	    
 	    JSFUtil.getSessionMap().put("PROCESSO_EDITADO_SESSAO", processoSalvo);
-
+	    
+	    salvarHistoricoRequerimento(processoSalvo);
+	    
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
 	    JSFUtil.retornarMensagemModal("Processo", "Processo Salvo....");
 	} catch (Exception e) {
@@ -276,13 +290,31 @@ public class ManterProcessoMB implements Serializable {
 	}
 
     }
+    
+    public void editarHistorico(){
+	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
+	JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
+	this.novo = true;
+    }
+
+    public void criarCopiaHistorico(){
+	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
+	hitoricoRequerimento.setIdHistorico(null);
+	hitoricoRequerimento = new HistoricoRequerimentoDAO().salvar(hitoricoRequerimento);
+	JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
+	this.novo = true;
+    }
 
     public void habilitaNovo() {
 	System.out.println("Habilita NOVO: " + novo);
-	if (novo) {
-	    novo = false;
+	if (this.novo) {
+	    this.novo = false;
+	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, null);
 	} else {
-	    novo = true;
+	    HitoricoRequerimento hitorico = new HitoricoRequerimento();
+	    hitorico.setProcesso(this.processo);
+	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitorico);
+	    this.novo = true;
 	}
     }
 
@@ -314,11 +346,32 @@ public class ManterProcessoMB implements Serializable {
 	if (pessoaProcessoP != null) {
 	    // pessoa = pessoaProcessoP.getPessoa();
 	    processo = pessoaProcessoP.getProcesso();
+	    
+	    carregarListahistoricoRA();
+	    
 	    this.idLocalizacao = processo.getIdLocalizacao();
+	    
+	    if(this.idLocalizacao!=null && this.idLocalizacao.intValue()>0){
+		Localizacao localizacao = new LocalizacaoDAO().lerPorId(this.idLocalizacao);
+		this.descLocalizacao = localizacao.getDescLocalizacao();
+	    }
+	    	    
 	    this.idStatusProcesso = (processo.getStatusProcesso() != null ? processo.getStatusProcesso()
 		    .getIdStatusProcesso() : null);
+
+	    if(this.idStatusProcesso!=null && this.idStatusProcesso.intValue()>0){
+		StatusProcesso statusProcesso = new StatusProcessoDAO().lerPorId(this.idStatusProcesso);
+		this.descSituacao = statusProcesso.getDescStatusProcesso();
+	    }
+	    
 	    this.idSubStatusProcesso = (processo.getSubStatusProcesso() != null ? processo.getSubStatusProcesso()
 		    .getIdSubStatusProcesso() : null);
+
+	    if(this.idSubStatusProcesso!=null && this.idSubStatusProcesso.intValue()>0){
+		SubStatusProcesso statusProcesso = new SubStatusProcessoDAO().lerPorId(this.idSubStatusProcesso);
+		this.descDetalhamentoSituacao = statusProcesso.getDescSubStatusProcesso();
+	    }
+	    	    
 	    this.idGrupoProcessual = (processo.getGrupoProcessual() != null ? processo.getGrupoProcessual()
 		    .getIdGrupoProcessual() : null);
 	    this.idGrupoSocial = (processo.getGrupoSocial() != null ? processo.getGrupoSocial().getIdGrupoSocial()
@@ -338,6 +391,14 @@ public class ManterProcessoMB implements Serializable {
 	    pessoaProcesso = pessoaProcessoP;
 	    numProcessoMJ = pessoaProcessoP.getProcesso().getNumProtocoloMj();
 	    listarPessoaProcesso = new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso());
+	    
+	    for (PessoaProcesso pessoa : listarPessoaProcesso) {
+		 if(pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue()==2 
+			 || pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue()==4){
+		     nomeRequerenteP = pessoa.getPessoa().getNomePessoa();
+		 }
+	    }
+	    
 	    if (processo.getSituacaoCadastro() != null && processo.getSituacaoCadastro().getCodSituacaoCadastro() == 2) {
 		comfirmaDadosCorretos = true;
 	    }
@@ -354,6 +415,14 @@ public class ManterProcessoMB implements Serializable {
 	    this.mensagem = "Atualizando os Dados....";
 	}
 	JSFUtil.getSessionMap().put("PROCESSO_EDITADO_SESSAO", processo);
+    }
+
+    private void carregarListahistoricoRA() {
+	try {
+	    this.listarHitorico = new HistoricoRequerimentoDAO().listaHistorico(processo.getIdProcesso());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
     }
 
     public String consultarProcesso() {
@@ -456,7 +525,7 @@ public class ManterProcessoMB implements Serializable {
 			if (pessoaProc.getPessoa() != null && pessoa != null
 				&& pessoaProc.getTipoPessoaProcesso() != null) {
 			    if ((pessoaProc.getPessoa().getIdPessoa().longValue() == pessoa.getIdPessoa().longValue())
-				    && pessoaProc.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue() == idTipo
+				    || pessoaProc.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue() == idTipo
 					    .intValue()) {
 				adiciona = false;
 			    }
@@ -547,11 +616,16 @@ public class ManterProcessoMB implements Serializable {
 		for (PessoaProcesso pessoaProcesso : lista) {
 		    new PessoaProcessoDAO().excluir(pessoaProcesso);
 		}
+		processoAtual = new ProcessoDAO().lerPorId(processoAtual.getIdProcesso());
 		for (PessoaProcesso pessoaProcesso : listarPessoaProcesso) {
 		    if(pessoaProcesso.getPessoa()!=null || pessoaProcesso.getPessoa().getIdPessoa()>0){
-			new PessoaProcessoDAO().salvar(pessoaProcesso);
+			pessoaProcesso.setProcesso(processoAtual);
+			this.pessoaProcesso = new PessoaProcessoDAO().salvar(pessoaProcesso);
+			System.out.println("Salvando pessoas no processo ::IdProcesso:: "+pessoaProcesso.getProcesso().getIdProcesso());
 		    }
 		}
+		salvarHistoricoRequerimento(processoAtual);
+		    
 		JSFUtil.retornarMensagemModal("Interessados",
 			"Interssados no Requerimento de Anistia atualizados com Sucesso!");
 
@@ -561,6 +635,21 @@ public class ManterProcessoMB implements Serializable {
 	    }
 	}
 
+    }
+
+    private void salvarHistoricoRequerimento(Processo processoAtual) {
+	hitoricoRequerimento = (HitoricoRequerimento)JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
+	if(hitoricoRequerimento!=null && processoAtual!=null && processoAtual.getIdProcesso().longValue()>0){
+	    if(hitoricoRequerimento.getIdHistorico()==null || hitoricoRequerimento.getIdHistorico().intValue()==0){
+		hitoricoRequerimento.setDataCadastro(new Date());
+	    }
+	    hitoricoRequerimento.setUsuario(usuario);
+	    hitoricoRequerimento.setProcesso(processoAtual);
+	    hitoricoRequerimento.setDataAtualizacao(new Date());
+	    hitoricoRequerimento = new HistoricoRequerimentoDAO().salvar(hitoricoRequerimento);
+	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA,hitoricoRequerimento);
+	}
+	
     }
 
     public void salvarInteressado() {
@@ -1243,11 +1332,11 @@ public class ManterProcessoMB implements Serializable {
 	this.telefonePessoa = telefonePessoa;
     }
 
-    public Long getIdLocalizacao() {
+    public Integer getIdLocalizacao() {
 	return idLocalizacao;
     }
 
-    public void setIdLocalizacao(Long idLocalizacao) {
+    public void setIdLocalizacao(Integer idLocalizacao) {
 	this.idLocalizacao = idLocalizacao;
     }
 
@@ -1553,6 +1642,54 @@ public class ManterProcessoMB implements Serializable {
 
     public void setNovo(boolean novo) {
 	this.novo = novo;
+    }
+
+    public String getNomeRequerenteP() {
+        return nomeRequerenteP;
+    }
+
+    public String getDescLocalizacao() {
+        return descLocalizacao;
+    }
+
+    public void setNomeRequerenteP(String nomeRequerenteP) {
+        this.nomeRequerenteP = nomeRequerenteP;
+    }
+
+    public void setDescLocalizacao(String descLocalizacao) {
+        this.descLocalizacao = descLocalizacao;
+    }
+
+    public String getDescSituacao() {
+        return descSituacao;
+    }
+
+    public String getDescDetalhamentoSituacao() {
+        return descDetalhamentoSituacao;
+    }
+
+    public void setDescSituacao(String descSituacao) {
+        this.descSituacao = descSituacao;
+    }
+
+    public void setDescDetalhamentoSituacao(String descDetalhamentoSituacao) {
+        this.descDetalhamentoSituacao = descDetalhamentoSituacao;
+    }
+
+    public List<HitoricoRequerimento> getListarHitorico() {
+        return listarHitorico;
+    }
+
+    public HitoricoRequerimento getHitoricoRequerimento() {
+        return hitoricoRequerimento;
+    }
+
+    public void setListarHitorico(List<HitoricoRequerimento> listarHitorico) {
+        this.listarHitorico = listarHitorico;
+    }
+
+    public void setHitoricoRequerimento(HitoricoRequerimento hitoricoRequerimento) {
+        this.hitoricoRequerimento = hitoricoRequerimento;
     }
 
 }

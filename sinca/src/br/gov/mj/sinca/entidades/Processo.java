@@ -57,7 +57,7 @@ public class Processo implements Serializable {
     private String descComplementoStatus;
 
     @Column(name = "ID_LOCALIZACAO")
-    private Long idLocalizacao;
+    private Integer idLocalizacao;
 
     @Column(name = "NUM_PROTOCOLO_CA")
     private Integer numProtocoloCa;
@@ -180,11 +180,11 @@ public class Processo implements Serializable {
 	this.descComplementoStatus = descComplementoStatus;
     }
 
-    public Long getIdLocalizacao() {
+    public Integer getIdLocalizacao() {
 	return this.idLocalizacao;
     }
 
-    public void setIdLocalizacao(Long idLocalizacao) {
+    public void setIdLocalizacao(Integer idLocalizacao) {
 	this.idLocalizacao = idLocalizacao;
     }
 

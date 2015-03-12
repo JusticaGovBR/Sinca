@@ -57,7 +57,7 @@ public class ReparacaoEconomicaAnalise implements Serializable {
 	private Date dataReotravidade;
 
 	@Column(name="ID_USUARIO")
-	private int idUsuario;
+	private Integer idUsuario;
 
 	@Column(name="ID_USUARIO_ANALISTA")
 	private BigInteger idUsuarioAnalista;
@@ -156,11 +156,11 @@ public class ReparacaoEconomicaAnalise implements Serializable {
 		this.dataReotravidade = dataReotravidade;
 	}
 
-	public int getIdUsuario() {
+	public Integer getIdUsuario() {
 		return this.idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 

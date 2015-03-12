@@ -144,7 +144,7 @@
 								update=":formJuridica_Cadastro:enderecoDetalhe"
 								icon="ui-icon-search" title="Detalhar Endereço" ajax="true">
 								<f:setPropertyActionListener value="#{enderecos}"
-									target="#{manterPessoaJuridicaMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaJuridicaMB.enderecoCadastro}" />
 
 							</p:commandButton>
 						</p:column>
@@ -155,7 +155,7 @@
 								icon="ui-icon ui-icon-trash" title="Remover" ajax="true"
 								update="listaEnderecos">
 								<f:setPropertyActionListener value="#{enderecos}"
-									target="#{manterPessoaJuridicaMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaJuridicaMB.enderecoCadastro}" />
 
 							</p:commandButton>
 						</p:column>
@@ -192,7 +192,7 @@
 								update=":formJuridica_Cadastro:detalheTelefone"
 								icon="ui-icon-search" title="Detalhar" ajax="true">
 								<f:setPropertyActionListener value="#{enderecos}"
-									target="#{manterPessoaJuridicaMB.enderecoAnistCadastro}" />
+									target="#{manterPessoaJuridicaMB.enderecoCadastro}" />
 
 							</p:commandButton>
 						</p:column>
@@ -216,10 +216,10 @@
 						style="margin-bottom:20px;width : 100%" toggleable="false">
 
 						<p:dataTable var="pessoaLista"
-							value="#{manterPessoaJuridicaMB.listarPessoa}"
+							value="#{manterPessoaJuridicaMB.listaPessoa}"
 							paginator="true" rows="5">
 							<p:column headerText="CPF">
-								<h:outputText value="#{pessoaLista.numCpfCnpj}" />
+								<h:outputText value="#{pessoaLista.numCnpj}" />
 							</p:column>
 
 							<p:column headerText="Nome">
@@ -292,13 +292,13 @@
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="Rua/Quadra:*" style=" width : 100px;" />
 								<p:inputText id="inpt_endereo_Logradouro"
-									value="#{manterPessoaJuridicaMB.enderecoAnistCadastro.logradouro}"
+									value="#{manterPessoaJuridicaMB.enderecoCadastro.logradouro}"
 									size="70" maxlength="150" />
 							</h:panelGrid>
 							<h:panelGrid columns="1" style=" width : 150px;">
 								<h:outputLabel value="Bairro:" />
 								<p:inputText id="inpt_cadastro_bairro_anist"
-									value="#{manterPessoaJuridicaMB.enderecoAnistCadastro.bairro}"
+									value="#{manterPessoaJuridicaMB.enderecoCadastro.bairro}"
 									size="50" maxlength="100" />
 							</h:panelGrid>
 
@@ -309,21 +309,21 @@
 							<h:panelGrid columns="1" style=" width : 20px;">
 								<h:outputLabel value="Número:" />
 								<p:inputText id="inpt_cadastro_numero_anist"
-									value="#{manterPessoaJuridicaMB.enderecoAnistCadastro.numero}"
+									value="#{manterPessoaJuridicaMB.enderecoCadastro.numero}"
 									size="20" maxlength="20" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style=" width : 50px;">
 								<h:outputLabel value="Complemento:" />
 								<p:inputText id="inpt_cadastro_complemento_anist"
-									value="#{manterPessoaJuridicaMB.enderecoAnistCadastro.complemento}"
+									value="#{manterPessoaJuridicaMB.enderecoCadastro.complemento}"
 									size="80" maxlength="80" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style=" width : 40px;">
 								<h:outputLabel value="Cep:" />
 								<p:inputMask mask="99.999-999" id="inpt_cadastro_cep_anist"
-									value="#{manterPessoaJuridicaMB.enderecoAnistCadastro.cep}"
+									value="#{manterPessoaJuridicaMB.enderecoCadastro.cep}"
 									size="20" maxlength="20" />
 							</h:panelGrid>
 						</h:panelGrid>

@@ -37,7 +37,7 @@ public class HitoricoRequerimento implements Serializable {
 	private Date dataRecebimento;
 
 	@Column(name="ID_TIPO_JULGAMENTO_PREPOSTO")
-	private int idTipoJulgamentoPreposto;
+	private Integer idTipoJulgamentoPreposto;
 
 	@Column(name="TOTAL_ANALISE")
 	private String totalAnalise;
@@ -116,11 +116,11 @@ public class HitoricoRequerimento implements Serializable {
 		this.dataRecebimento = dataRecebimento;
 	}
 
-	public int getIdTipoJulgamentoPreposto() {
+	public Integer getIdTipoJulgamentoPreposto() {
 		return this.idTipoJulgamentoPreposto;
 	}
 
-	public void setIdTipoJulgamentoPreposto(int idTipoJulgamentoPreposto) {
+	public void setIdTipoJulgamentoPreposto(Integer idTipoJulgamentoPreposto) {
 		this.idTipoJulgamentoPreposto = idTipoJulgamentoPreposto;
 	}
 

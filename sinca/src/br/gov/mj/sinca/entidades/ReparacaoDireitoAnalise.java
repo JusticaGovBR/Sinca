@@ -44,7 +44,7 @@ public class ReparacaoDireitoAnalise implements Serializable {
 	private Date dataInicio;
 
 	@Column(name="ID_USUARIO")
-	private int idUsuario;
+	private Integer idUsuario;
 
 	private String instituicao;
 
@@ -125,11 +125,11 @@ public class ReparacaoDireitoAnalise implements Serializable {
 		this.dataInicio = dataInicio;
 	}
 
-	public int getIdUsuario() {
+	public Integer getIdUsuario() {
 		return this.idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 

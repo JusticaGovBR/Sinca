@@ -82,6 +82,8 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     private void instanciaAtributos() {
+	JSFUtil.limparObjetosSessao("LISTA_SESSAO");
+	JSFUtil.limparObjetosSessao("processoLista");
 	listarPessoa = new ArrayList<PessoaFisica>();
 	listarPessoaProcesso = new ArrayList<PessoaProcesso>();
 	JSFUtil.getSessionMap().put(LISTA_SESSAO, listarPessoaProcesso);
@@ -98,10 +100,13 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     public String acaoNovoProcesso() throws IOException {
+	JSFUtil.getSessionMap().put("pessoaProcesso", null);
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
 
     public String detalharProcesso() {
+	JSFUtil.limparObjetosSessao("historico");
+	JSFUtil.limparObjetosSessao("NOVO");
 	JSFUtil.getSessionMap().put("pessoaProcesso", JSFUtil.getRequestMap().get("processoLista"));
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }

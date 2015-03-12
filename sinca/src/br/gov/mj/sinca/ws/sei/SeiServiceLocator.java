@@ -7,6 +7,8 @@
 
 package br.gov.mj.sinca.ws.sei;
 
+import br.gov.mj.sinca.dao.ParametroDAO;
+
 public class SeiServiceLocator extends org.apache.axis.client.Service implements br.gov.mj.sinca.ws.sei.SeiService {
 
     public SeiServiceLocator() {
@@ -22,11 +24,19 @@ public class SeiServiceLocator extends org.apache.axis.client.Service implements
     }
 
     // Use to get a proxy class for SeiPortService
-    private java.lang.String SeiPortService_address = "http://sei.mj.gov.br/sei/ws/SeiWS.php";
+    private java.lang.String SeiPortService_address = obtemURL();
+
+    
+    //private java.lang.String SeiPortService_address = "http://sei.mj.gov.br/sei/ws/SeiWS.php";
     
     //private java.lang.String SeiPortService_address = "http://seipreprod.mj.gov.br/sei/ws/SeiWS.php";
     //private java.lang.String SeiPortService_address = "http://seimpog.trf4.jus.br/seimpog//ws/SeiWS.php";
 
+    private String obtemURL() {
+	return new ParametroDAO().buscarParamentro().get("SINCA_URL_WEB_SERVICE_SEI").getValorParametro();
+    }
+
+    
     public java.lang.String getSeiPortServiceAddress() {
         return SeiPortService_address;
     }

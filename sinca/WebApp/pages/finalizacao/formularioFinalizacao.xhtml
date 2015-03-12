@@ -30,6 +30,25 @@
 					showDetail="true" autoUpdate="true" closable="true" />
 
 			</div>
+			
+			<h:panelGrid columns="1" cellpadding="10"
+				style="margin-bottom:20px;text-align:center; width : 100%;">
+				<p:commandButton id="salvarFinalizacao" value="Salvar Finalização"
+					icon="ui-icon-disk" title="Atualizar">
+					<p:confirm header="Comfirmação"
+						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Comfirma" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:panelGrid>
+
+
 
 			<p:panel id="pnDadocComunicacao" header="Dados da Comunicação"
 				toggleSpeed="500" closeSpeed="500"
@@ -40,19 +59,19 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataEnvio}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data da Ciência:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataCiencia}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Numero do AR / Edital DOU:" />
-						<p:inputText size="50" maxlength="50" value="" />
+						<p:inputText size="50" maxlength="50" value="#{manterFinalizacaoMB.finalizacaoProcesso.numeroArEdital}" />
 					</h:panelGrid>
 				</h:panelGrid>
 
@@ -61,13 +80,13 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Recurso:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataRecurso}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data da Autuação do Recurso:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataAutuacaoRecurso}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -77,13 +96,13 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data da Certidão de Fim de Prazo:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataCertidao}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data da Nota Técnica de Intempestividade:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataNotaTecnica}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -113,10 +132,11 @@
 							<h:outputText id="dataEnvio" value="" />
 						</p:column>
 
-						<p:column headerText="Ações" style="width:32px;text-align: center" value="Ações">
+						<p:column headerText="Ações" style="width:32px;text-align: center"
+							value="Ações">
 							<p:commandButton value="Remover" action="#"
 								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-								ajax="true" update=":tabView:">
+								ajax="true" update=":tabView:formFinalizacao:">
 								<f:setPropertyActionListener value="#{reparacaoLista}"
 									target="#" />
 							</p:commandButton>
@@ -248,10 +268,11 @@
 							<h:outputText id="dataEnvio" value="" />
 						</p:column>
 
-						<p:column headerText="Ações" style="width:32px;text-align: center" value="Ações">
+						<p:column headerText="Ações" style="width:32px;text-align: center"
+							value="Ações">
 							<p:commandButton value="Remover" action="#"
 								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-								ajax="true" update=":tabView:">
+								ajax="true" update=":tabView:formFinalizacao:">
 								<f:setPropertyActionListener value="#{reparacaoLista}"
 									target="#" />
 							</p:commandButton>

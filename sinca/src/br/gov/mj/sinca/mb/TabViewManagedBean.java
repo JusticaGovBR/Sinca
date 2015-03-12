@@ -1,5 +1,7 @@
 package br.gov.mj.sinca.mb;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -10,7 +12,12 @@ import org.primefaces.event.TabCloseEvent;
  
 @ManagedBean(name="tabViewManagedBean")
 @SessionScoped
-public class TabViewManagedBean {
+public class TabViewManagedBean implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1970352580973821371L;
+    
     private int index = 0;
     private String messageNum1 = "Tab#1 Content Is Loaded";
     private String messageNum2 = "Tab#2 Content Is Loaded";

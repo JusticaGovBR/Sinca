@@ -90,6 +90,7 @@ public class PessoaProcessoDAO extends SincaAbastractDAO<PessoaProcesso> {
 
     public static void main(String[] args) throws ParseException {
 	PessoaProcessoDAO dao = new PessoaProcessoDAO();
+	@SuppressWarnings("unused")
 	Date data = new SimpleDateFormat("dd/MM/yyyy").parse("28/09/2001");
 	List<PessoaFisica> lista = dao.listarPessoasProcesso(49l);
 	for (PessoaFisica pessoaFisica : lista) {
