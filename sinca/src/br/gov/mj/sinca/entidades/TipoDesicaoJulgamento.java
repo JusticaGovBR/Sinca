@@ -1,8 +1,14 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -18,22 +24,18 @@ public class TipoDesicaoJulgamento implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="COD_TIPO_DESICAO")
-	private int codTipoDesicao;
+	private Integer codTipoDesicao;
 
 	private String decricao;
-
-	//bi-directional many-to-one association to JulgamentoProcesso
-	@OneToMany(mappedBy="tipoDesicaoJulgamento")
-	private List<JulgamentoProcesso> julgamentoProcessos;
 
 	public TipoDesicaoJulgamento() {
 	}
 
-	public int getCodTipoDesicao() {
+	public Integer getCodTipoDesicao() {
 		return this.codTipoDesicao;
 	}
 
-	public void setCodTipoDesicao(int codTipoDesicao) {
+	public void setCodTipoDesicao(Integer codTipoDesicao) {
 		this.codTipoDesicao = codTipoDesicao;
 	}
 
@@ -43,28 +45,6 @@ public class TipoDesicaoJulgamento implements Serializable {
 
 	public void setDecricao(String decricao) {
 		this.decricao = decricao;
-	}
-
-	public List<JulgamentoProcesso> getJulgamentoProcessos() {
-		return this.julgamentoProcessos;
-	}
-
-	public void setJulgamentoProcessos(List<JulgamentoProcesso> julgamentoProcessos) {
-		this.julgamentoProcessos = julgamentoProcessos;
-	}
-
-	public JulgamentoProcesso addJulgamentoProcesso(JulgamentoProcesso julgamentoProcesso) {
-		getJulgamentoProcessos().add(julgamentoProcesso);
-		julgamentoProcesso.setTipoDesicaoJulgamento(this);
-
-		return julgamentoProcesso;
-	}
-
-	public JulgamentoProcesso removeJulgamentoProcesso(JulgamentoProcesso julgamentoProcesso) {
-		getJulgamentoProcessos().remove(julgamentoProcesso);
-		julgamentoProcesso.setTipoDesicaoJulgamento(null);
-
-		return julgamentoProcesso;
 	}
 
 }

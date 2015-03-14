@@ -46,9 +46,6 @@ public class JulgamentoProcesso implements Serializable {
 	@Column(name="BOL_RESTITUICAO_DIREITOS")
 	private BigInteger bolRestituicaoDireitos;
 
-	@Column(name="CD_TIPO_JULGAMENTO")
-	private int cdTipoJulgamento;
-
 	@Column(name="COMPLEMENTO_ALTERACAO_PROPOSTA")
 	private String complementoAlteracaoProposta;
 
@@ -97,12 +94,14 @@ public class JulgamentoProcesso implements Serializable {
 	@OneToMany(mappedBy="julgamentoProcesso")
 	private List<ConselheirosJulgamento> conselheirosJulgamentos;
 
-	//bi-directional many-to-one association to TipoDesicaoJulgamento
 	@ManyToOne
 	@JoinColumn(name="COD_TIPO_DESICAO")
 	private TipoDesicaoJulgamento tipoDesicaoJulgamento;
+	
+	@ManyToOne
+	@JoinColumn(name="CD_TIPO_JULGAMENTO")
+	private TipoJulgamentoAnalise tipoJulgamentoAnalise;
 
-	//bi-directional many-to-one association to Processo
 	@ManyToOne
 	@JoinColumn(name="ID_PROCESSO")
 	private Processo processo;
@@ -192,14 +191,6 @@ public class JulgamentoProcesso implements Serializable {
 
 	public void setBolRestituicaoDireitos(BigInteger bolRestituicaoDireitos) {
 		this.bolRestituicaoDireitos = bolRestituicaoDireitos;
-	}
-
-	public int getCdTipoJulgamento() {
-		return this.cdTipoJulgamento;
-	}
-
-	public void setCdTipoJulgamento(int cdTipoJulgamento) {
-		this.cdTipoJulgamento = cdTipoJulgamento;
 	}
 
 	public String getComplementoAlteracaoProposta() {
@@ -408,6 +399,14 @@ public class JulgamentoProcesso implements Serializable {
 		reparacaoMoralJulgamento.setJulgamentoProcesso(null);
 
 		return reparacaoMoralJulgamento;
+	}
+
+	public TipoJulgamentoAnalise getTipoJulgamentoAnalise() {
+	    return tipoJulgamentoAnalise;
+	}
+
+	public void setTipoJulgamentoAnalise(TipoJulgamentoAnalise tipoJulgamentoAnalise) {
+	    this.tipoJulgamentoAnalise = tipoJulgamentoAnalise;
 	}
 
 }

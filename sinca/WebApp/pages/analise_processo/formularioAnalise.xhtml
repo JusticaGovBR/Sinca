@@ -303,18 +303,17 @@
 			<p:panel id="pnlResumoPedido" header="Resumo do Pedido"
 				style="margin-bottom:10px;width : 100%" toggleable="true">
 
-				<!-- 
+				
 				<h:panelGrid columns="2" style="margin-bottom:20px;width :45%"
 					cellpadding="5">
 					<p:outputLabel value="Resumo do Pedido:"
 						style="text-align:left;color:Red;font-weight:bold;" />
 					<p:commandButton
-						update=":tabView:formManterAnalise:tabView_analise:formAnalise:"
-						action="#" label="Carrega Informações" value="Carrega Informações"
+						update=":tabView:formManterAnalise:tabView_analise:formAnalise:txtResulmoPedido:"
+						action="#{manterAnaliseMB.carregarResulmo}" label="Copiar Dados Resumo" value="Carrega Informações"
 						ajax="true" icon="ui-icon-plusthick">
 					</p:commandButton>
 				</h:panelGrid>
-				 -->
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:30px; width : 200px;">

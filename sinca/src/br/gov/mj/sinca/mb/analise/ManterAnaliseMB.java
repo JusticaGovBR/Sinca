@@ -17,6 +17,7 @@ import br.gov.mj.sinca.dao.DiligenciaDAO;
 import br.gov.mj.sinca.dao.HistoricoRequerimentoDAO;
 import br.gov.mj.sinca.dao.PerseguicaoAnaliseDAO;
 import br.gov.mj.sinca.dao.PessoaFisicaDAO;
+import br.gov.mj.sinca.dao.PessoaProcessoDAO;
 import br.gov.mj.sinca.dao.ProvasAnaliseDAO;
 import br.gov.mj.sinca.dao.RecomendacaoAnaliseDAO;
 import br.gov.mj.sinca.dao.ReparacaoDireitoAnaliseDAO;
@@ -143,7 +144,62 @@ public class ManterAnaliseMB implements Serializable {
 		&& hitoricoRequerimento.getIdHistorico().longValue() > 0) {
 	    hitoricoRequerimento = new HistoricoRequerimentoDAO().lerPorId(hitoricoRequerimento.getIdHistorico());
 	    this.analiseProcesso = hitoricoRequerimento.getAnaliseProcesso1();
+	    carregaDadosAnaliseHistorico();
+	}
 
+    }
+
+    public void carregarResulmo() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("--------------------------------\n");
+	buffer.append("Dados Copiados para o Resumo\n");
+	buffer.append("--------------------------------\n");
+	buffer.append("            *Interessados no Requerimento \n");
+	PessoaProcesso pessoaProcesso = (PessoaProcesso) JSFUtil.getSessionMap().get("pessoaProcesso");
+	if (pessoaProcesso != null && pessoaProcesso.getIdPessoaProcesso() > 0) {
+	    List<PessoaProcesso> lista = new PessoaProcessoDAO().listarProcesso(pessoaProcesso.getProcesso().getIdProcesso());
+	    for (PessoaProcesso pessoa : lista) {
+		buffer.append(pessoa.getTipoPessoaProcesso().getDescTipo()+" = "+pessoa.getPessoa().getNomePessoa()+"\n");
+	    }
+	}
+	buffer.append("             *Atos de Exceção \n");
+	for (PerseguicaoAnalise perseguicaoAnalise : listarPerseguicaoAnalise) {
+	    buffer.append(perseguicaoAnalise.getTipoPerseguicao().getDescricao()
+            +" Data Início : "+ DateUtil.formataDate(perseguicaoAnalise.getDataInicio(), DateUtil.DD_MM_YYYY)
+            +" Data Fim : " + DateUtil.formataDate(perseguicaoAnalise.getDataFim(), DateUtil.DD_MM_YYYY)
+            +" Local :"+perseguicaoAnalise.getLocal()
+            +" Complemento :"+perseguicaoAnalise.getComplemento()+"\n");
+	}
+	buffer.append("\n");
+	buffer.append("Anistias Anteriores \n");
+	buffer.append("\n");
+	buffer.append("Data 1º Protocolo: "+DateUtil.formataDate(analiseProcesso.getDataPrimeiroProtocolo(), DateUtil.DD_MM_YYYY)+"\n");
+	buffer.append("Complemento: "+analiseProcesso.getComplemento()+"\n");
+	if(analiseProcesso.getBolReqAnistiado()==1){
+	    buffer.append("Requerente já foi anistiado? Sim"+"\n");
+	}else{
+	    buffer.append("Requerente já foi anistiado? Não"+"\n");
+	}
+	buffer.append("Data da Anistia: "+DateUtil.formataDate(analiseProcesso.getDataAnistia(), DateUtil.DD_MM_YYYY)+"\n");
+	buffer.append("Orgão da Anistia: "+analiseProcesso.getOrgaoAnistia()+"\n");
+	buffer.append("Ato Reparatório: "+analiseProcesso.getAtoReparatorio()+"\n");
+	buffer.append("Ato Reparatório: "+analiseProcesso.getAtoReparatorio()+"\n");
+	
+	if(analiseProcesso.getBolDecisaoAnterior()==1){
+	    buffer.append("Houve Decisão Anterior da Comissão de Anistia? Sim"+"\n");
+	}else{
+	    buffer.append("Houve Decisão Anterior da Comissão de Anistia? Não"+"\n");
+	}
+	
+	
+	String resumo =  buffer.toString()+analiseProcesso.getResulmoPedido();
+	analiseProcesso.setResulmoPedido(resumo);
+	
+    }
+
+    private void carregaDadosAnaliseHistorico() {
+	if (analiseProcesso != null && analiseProcesso.getIdAnalise() != null
+		&& analiseProcesso.getIdAnalise().longValue() > 0) {
 	    bolReparacaoEconomica = this.analiseProcesso.getBolReparacaoEconomica() == 1 ? true : false;
 	    bolReparacaoMoral = this.analiseProcesso.getBolReparacaoMoral() == 1 ? true : false;
 	    bolReparacaoDireito = this.analiseProcesso.getBolRestituicaoDireitos() == 1 ? true : false;
@@ -160,8 +216,8 @@ public class ManterAnaliseMB implements Serializable {
 		this.recomendacaoAnalise.getReparacaoEconomicaAnalises().size();
 		this.recomendacaoAnalise.getReparacaoMoralAnalises().size();
 		this.recomendacaoAnalise.getReparacaoDireitoAnalises().size();
-		
-		if(recomendacaoAnalise.getTipoAnaliseJulgamento()!=null){
+
+		if (recomendacaoAnalise.getTipoAnaliseJulgamento() != null) {
 		    idTipoAnaliseJulgamento = recomendacaoAnalise.getTipoAnaliseJulgamento().getCodTipo();
 		}
 
@@ -179,7 +235,6 @@ public class ManterAnaliseMB implements Serializable {
 
 	    }
 	}
-
     }
 
     public void iniciarAnalise() {
@@ -200,9 +255,12 @@ public class ManterAnaliseMB implements Serializable {
 	    }
 	    analiseProcesso.setIdUsuario(usuario.getIdUsuario());
 
-	    analiseProcesso.setBolReparacaoEconomica(bolReparacaoEconomica ? Byte.parseByte("1") : Byte.parseByte("0"));
-	    analiseProcesso.setBolReparacaoMoral(bolReparacaoMoral ? Byte.parseByte("1") : Byte.parseByte("0"));
-	    analiseProcesso.setBolRestituicaoDireitos(bolReparacaoDireito ? Byte.parseByte("1") : Byte.parseByte("0"));
+	    // analiseProcesso.setBolReparacaoEconomica(bolReparacaoEconomica ?
+	    // Byte.parseByte("1") : Byte.parseByte("0"));
+	    // analiseProcesso.setBolReparacaoMoral(bolReparacaoMoral ?
+	    // Byte.parseByte("1") : Byte.parseByte("0"));
+	    // analiseProcesso.setBolRestituicaoDireitos(bolReparacaoDireito ?
+	    // Byte.parseByte("1") : Byte.parseByte("0"));
 
 	    AnaliseProcesso analiseSalva = new AnaliseProcessoDAO().salvar(this.analiseProcesso);
 
@@ -255,7 +313,8 @@ public class ManterAnaliseMB implements Serializable {
 	    this.recomendacaoAnalise.setBolRestituicaoDireitos(new BigInteger(bolReparacaoDireito ? "1" : "0"));
 
 	    if (idTipoAnaliseJulgamento != null && idTipoAnaliseJulgamento.intValue() > 0) {
-		recomendacaoAnalise.setTipoAnaliseJulgamento(new TipoAnaliseJulgamentoDAO().lerPorId(idTipoAnaliseJulgamento.intValue()));
+		recomendacaoAnalise.setTipoAnaliseJulgamento(new TipoAnaliseJulgamentoDAO()
+			.lerPorId(idTipoAnaliseJulgamento.intValue()));
 	    }
 	    recomendacaoAnalise.setAnaliseProcesso(analiseProcesso);
 	    RecomendacaoAnalise recomendacaoSalva = new RecomendacaoAnaliseDAO().salvar(recomendacaoAnalise);
@@ -264,12 +323,26 @@ public class ManterAnaliseMB implements Serializable {
 	    reparacaoMoralAnalise.setRecomendacaoAnalise(recomendacaoSalva);
 
 	    if (bolReparacaoDireito) {
+		reparacaoDireitoAnalise.setIdUsuario(usuario.getIdUsuario());
+		reparacaoDireitoAnalise.setDataCadastro(reparacaoDireitoAnalise.getDataCadastro() == null ? new Date()
+			: reparacaoDireitoAnalise.getDataCadastro());
+		reparacaoDireitoAnalise.setDataAtualizacao(new Date());
 		reparacaoDireitoAnalise = new ReparacaoDireitoAnaliseDAO().salvar(reparacaoDireitoAnalise);
 	    }
 	    if (bolReparacaoEconomica) {
+		reparacaoEconomicaAnalise.setIdUsuario(usuario.getIdUsuario());
+		reparacaoEconomicaAnalise
+			.setDataCadastro(reparacaoEconomicaAnalise.getDataCadastro() == null ? new Date()
+				: reparacaoEconomicaAnalise.getDataCadastro());
+		reparacaoDireitoAnalise.setDataAtualizacao(new Date());
 		reparacaoEconomicaAnalise = new ReparacaoEconomicaAnaliseDAO().salvar(reparacaoEconomicaAnalise);
 	    }
 	    if (bolReparacaoMoral) {
+		reparacaoMoralAnalise.setIdUsuario(usuario.getIdUsuario());
+		reparacaoMoralAnalise.setDataCadastro(reparacaoMoralAnalise.getDataCadastro() == null ? new Date()
+			: reparacaoMoralAnalise.getDataCadastro());
+		reparacaoMoralAnalise.setDataAtualizacao(new Date());
+
 		reparacaoMoralAnalise = new ReparacaoMoralAnaliseDAO().salvar(reparacaoMoralAnalise);
 	    }
 	    JSFUtil.retornarMensagemModal("Recomendações", "Recomendações Salva....");
@@ -289,6 +362,8 @@ public class ManterAnaliseMB implements Serializable {
 	    if (hitoricoRequerimento.getIdHistorico() == null || hitoricoRequerimento.getIdHistorico().intValue() == 0) {
 		hitoricoRequerimento.setDataCadastro(new Date());
 		hitoricoRequerimento.setUsuario(usuario);
+	    }else if(hitoricoRequerimento.getIdHistorico() != null && hitoricoRequerimento.getIdHistorico().intValue() != 0){
+		hitoricoRequerimento = new HistoricoRequerimentoDAO().lerPorId(hitoricoRequerimento.getIdHistorico());
 	    }
 	    hitoricoRequerimento.setProcesso(analiseProcesso.getProcesso());
 	    hitoricoRequerimento.setAnaliseProcesso1(analiseProcesso);
@@ -298,10 +373,6 @@ public class ManterAnaliseMB implements Serializable {
 	    hitoricoRequerimento.setDataAtualizacao(new Date());
 	    recomendacaoAnalise = new RecomendacaoAnaliseDAO()
 		    .buscarRecomendacaoAnalise(analiseProcesso.getIdAnalise());
-	    if (recomendacaoAnalise != null && recomendacaoAnalise.getTipoAnaliseJulgamento() != null) {
-		hitoricoRequerimento.setIdTipoJulgamentoPreposto(recomendacaoAnalise.getTipoAnaliseJulgamento()
-			.getCodTipo());
-	    }
 	    hitoricoRequerimento = new HistoricoRequerimentoDAO().salvar(hitoricoRequerimento);
 	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
 	}
@@ -724,11 +795,11 @@ public class ManterAnaliseMB implements Serializable {
     }
 
     public Integer getIdTipoAnaliseJulgamento() {
-        return idTipoAnaliseJulgamento;
+	return idTipoAnaliseJulgamento;
     }
 
     public void setIdTipoAnaliseJulgamento(Integer idTipoAnaliseJulgamento) {
-        this.idTipoAnaliseJulgamento = idTipoAnaliseJulgamento;
+	this.idTipoAnaliseJulgamento = idTipoAnaliseJulgamento;
     }
 
 }

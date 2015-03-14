@@ -22,7 +22,7 @@ public class DateUtil {
 	try {
 	    return new SimpleDateFormat(formato).format(data);
 	} catch (Exception e) {
-	    return null;
+	    return "";
 	}
     }
 

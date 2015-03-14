@@ -642,6 +642,8 @@ public class ManterProcessoMB implements Serializable {
 	if(hitoricoRequerimento!=null && processoAtual!=null && processoAtual.getIdProcesso().longValue()>0){
 	    if(hitoricoRequerimento.getIdHistorico()==null || hitoricoRequerimento.getIdHistorico().intValue()==0){
 		hitoricoRequerimento.setDataCadastro(new Date());
+	    }else if(hitoricoRequerimento.getIdHistorico() != null && hitoricoRequerimento.getIdHistorico().intValue() != 0){
+		hitoricoRequerimento = new HistoricoRequerimentoDAO().lerPorId(hitoricoRequerimento.getIdHistorico());
 	    }
 	    hitoricoRequerimento.setUsuario(usuario);
 	    hitoricoRequerimento.setProcesso(processoAtual);

@@ -107,6 +107,7 @@ public class ConsultarProcessoMB implements Serializable {
     public String detalharProcesso() {
 	JSFUtil.limparObjetosSessao("historico");
 	JSFUtil.limparObjetosSessao("NOVO");
+	JSFUtil.limparObjetosSessao("L");
 	JSFUtil.getSessionMap().put("pessoaProcesso", JSFUtil.getRequestMap().get("processoLista"));
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }

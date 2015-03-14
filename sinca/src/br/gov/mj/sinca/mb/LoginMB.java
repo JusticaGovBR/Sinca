@@ -44,7 +44,7 @@ public class LoginMB implements Serializable {
 	logger.debug("Init :: " + LoginMB.class.getName());
     }
 
-    @SuppressWarnings({ "deprecation", "null" })
+    @SuppressWarnings({ "deprecation" })
     public void acaoAutenticar() {
 	Usuario usuario = null;
 	br.gov.mj.seguranca.pojo.Usuario usuarioMJ = null;

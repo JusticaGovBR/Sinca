@@ -22,6 +22,28 @@
 		!important;
 }
 </style>
+
+		<script type="text/javascript">
+		function mascara(o,f){ 
+			v_obj=o 
+			v_fun=f 
+			setTimeout("execmascara()",1) 
+		} 
+		
+		function execmascara(){ 
+			v_obj.value=v_fun(v_obj.value) 
+		} 
+		
+		function moeda(v){ 
+			v=v.replace(/\D/g,""); // permite digitar apenas numero 
+			v=v.replace(/(\d{1})(\d{15})$/,"$1.$2") // coloca ponto antes dos ultimos digitos 
+			v=v.replace(/(\d{1})(\d{11})$/,"$1.$2") // coloca ponto antes dos ultimos 11 digitos 
+			v=v.replace(/(\d{1})(\d{8})$/,"$1.$2") // coloca ponto antes dos ultimos 8 digitos 
+			v=v.replace(/(\d{1})(\d{5})$/,"$1.$2") // coloca ponto antes dos ultimos 5 digitos 
+			v=v.replace(/(\d{1})(\d{1,2})$/,"$1,$2") // coloca virgula antes dos ultimos 2 digitos 
+			return v; 
+		}
+</script>
 		<h:form id="formJulgamento">
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
@@ -30,6 +52,20 @@
 					showDetail="true" autoUpdate="true" closable="true" />
 
 			</div>
+
+
+			<p:dialog header="ALERTA!" resizable="false" showEffect="explode"
+				closable="false" hideEffect="explode"
+				widgetVar="dlg_mensagem_julgamento" modal="true" width="250px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Atualizando Informações..."
+						title="#{manterAnaliseMB.mensagem}"
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</h:panelGrid>
+			</p:dialog>
+
 
 			<h:panelGrid columns="1" cellpadding="10"
 				style="margin-bottom:20px;text-align:center; width : 100%;">
@@ -74,9 +110,9 @@
 						<f:selectItem itemLabel="Selecione o Tipo doJulgamento"
 							noSelectionOption="true" />
 						<f:selectItems
-							value="#{manterJulgamentoMB.listarTipoAnaliseJulgamento}"
-							var="item" itemLabel="#{item.descricao}"
-							itemValue="#{item.codTipo}" />
+							value="#{manterJulgamentoMB.listarTipoJulgamentoAnalise}"
+							var="item" itemLabel="#{item.decricao}"
+							itemValue="#{item.idTipoJulgamento}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 
@@ -143,9 +179,9 @@
 						cellpadding="5">
 						<p:outputLabel value="Julgamento foi adiado?"
 							style=" width : 100%;" />
-						<h:selectOneRadio value="">
-							<f:selectItem itemLabel="Sim..."
-								itemValue="#{manterJulgamentoMB.julgamentoProcesso.bolJulgamentoAdiado}" />
+						<h:selectOneRadio
+							value="#{manterJulgamentoMB.julgamentoProcesso.bolJulgamentoAdiado}">
+							<f:selectItem itemLabel="Sim..." itemValue="1" />
 							<f:selectItem itemLabel="Não" itemValue="0" />
 						</h:selectOneRadio>
 					</h:panelGrid>
@@ -229,9 +265,12 @@
 						<h:outputLabel value="Decisão Conselho:" />
 						<p:selectOneMenu value="#{manterJulgamentoMB.idDesicaoConselhero}"
 							effect="fade">
-							<f:selectItem itemValue="1" itemLabel="Deferido" />
-							<f:selectItem itemValue="2" itemLabel="Indeferido" />
-							<f:selectItem itemValue="3" itemLabel="Deferido Parcialmente" />
+							<f:selectItem itemLabel="Selecione uma Decisão"
+								noSelectionOption="true" />
+							<f:selectItems
+								value="#{manterJulgamentoMB.listarTipoDesicaoJulgamento}"
+								var="item" itemLabel="#{item.decricao}"
+								itemValue="#{item.codTipoDesicao}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
@@ -255,8 +294,7 @@
 						<p:selectBooleanCheckbox id="checkReparacaoEconomica"
 							value="#{manterJulgamentoMB.bolReparacaoEconomica}"
 							label="Reparação Econômica" />
-						<p:ajax event="click"
-							update=":tabView:formJulgamento:"
+						<p:ajax event="click" update=":tabView:formJulgamento:"
 							listener="#{manterJulgamentoMB.habilitaReparacaoEconomica}" />
 						<h:outputText value="Reparação Econômica" />
 					</h:panelGrid>
@@ -265,8 +303,7 @@
 						<p:selectBooleanCheckbox id="checkbolReparacaoMoral"
 							value="#{manterJulgamentoMB.bolReparacaoMoral}"
 							label="Reparação Moral" />
-						<p:ajax event="click"
-							update=":tabView:formJulgamento:"
+						<p:ajax event="click" update=":tabView:formJulgamento:"
 							listener="#{manterJulgamentoMB.habilitaReparacaoMoral}" />
 						<h:outputText value="Reparação Moral" />
 					</h:panelGrid>
@@ -275,8 +312,7 @@
 						<p:selectBooleanCheckbox id="checkbolReparacaoDireito"
 							value="#{manterJulgamentoMB.bolReparacaoDireito}"
 							label="Restituição de Direitos" />
-						<p:ajax event="click"
-							update=":tabView:formJulgamento:"
+						<p:ajax event="click" update=":tabView:formJulgamento:"
 							listener="#{manterJulgamentoMB.habilitaReparacaoDireito}" />
 						<h:outputText value="Restituição de Direitos" />
 					</h:panelGrid>
@@ -288,7 +324,8 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:30px;margin-bottom:20px; width : 200px;">
 					<h:outputLabel value="Observações:" />
-					<p:inputTextarea maxlength="400" rows="3" cols="100" value="#{manterJulgamentoMB.julgamentoProcesso.complementoReparacao}"/>
+					<p:inputTextarea maxlength="400" rows="3" cols="100"
+						value="#{manterJulgamentoMB.julgamentoProcesso.complementoReparacao}" />
 				</h:panelGrid>
 			</p:panel>
 
@@ -305,7 +342,8 @@
 					<h:outputLabel
 						value="Valor PMPC (Prestação Mensal Permante Continuada) R$:" />
 					<p:inputText onkeydown="mascara(this,moeda)" id="inpt_vr_pmpc"
-						size="15" maxlength="15" value="#{manterJulgamentoMB.reparacaoEconomicaJulgamento.valorPmpc}" />
+						size="15" maxlength="15"
+						value="#{manterJulgamentoMB.reparacaoEconomicaJulgamento.valorPmpc}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="3" cellpadding="10" style="width : 70%">
@@ -339,7 +377,8 @@
 					style="margin-bottom:10px; width : 50%;">
 					<h:outputLabel value="Valor Prestação Única (R$):" />
 					<p:inputText onkeydown="mascara(this,moeda)" size="15"
-						maxlength="15" value="#{manterJulgamentoMB.reparacaoEconomicaJulgamento.valorPu}" />
+						maxlength="15"
+						value="#{manterJulgamentoMB.reparacaoEconomicaJulgamento.valorPu}" />
 				</h:panelGrid>
 				<h:panelGrid columns="4" cellpadding="10"
 					style="margin-bottom:20px;width : 70%">
@@ -374,9 +413,9 @@
 					<h:panelGrid columns="2" cellpadding="10" style="width : 100%">
 						<h:outputLabel value="Analista Responsável pelo Cálculo*:"
 							style="text-align:left;color:Red;font-weight:bold;" />
-						<p:autoComplete title="Nome Pessoa" 
-							style="width : 100%" value="#{manterJulgamentoMB.usuarioCalculo}"
-							var="pessoaAnist" minQueryLength="4" size="100"
+						<p:autoComplete title="Nome Pessoa" style="width : 100%"
+							value="#{manterJulgamentoMB.usuarioCalculo}" var="pessoaAnist"
+							minQueryLength="4" size="100"
 							completeMethod="#{manterJulgamentoMB.listarUsuarioPorNomeLike}"
 							scrollHeight="500" itemLabel="#{pessoaAnist.descUsuario}"
 							converter="usuarioConverter" itemValue="#{pessoaAnist}"
@@ -397,13 +436,15 @@
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel
 						value="Declaração\ Ratificação de Anistiado Político:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="#{manterJulgamentoMB.reparacaoMoralJulgamento.declaracaoRetificacao}" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterJulgamentoMB.reparacaoMoralJulgamento.declaracaoRetificacao}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Outras reparações de cunho moral:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="#{manterJulgamentoMB.reparacaoMoralJulgamento.outrasReparacoes}" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterJulgamentoMB.reparacaoMoralJulgamento.outrasReparacoes}" />
 				</h:panelGrid>
 
 			</p:panel>
@@ -417,7 +458,9 @@
 
 					<h:panelGrid columns="1" style=" width : 120px;">
 						<p:outputLabel value="Tipo:*:" />
-						<p:selectOneMenu value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.tipoRestituicaoDireito.codTipoRestituicao}" effect="clip">
+						<p:selectOneMenu
+							value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.tipoRestituicaoDireito.codTipoRestituicao}"
+							effect="clip">
 							<f:selectItem itemValue="1" itemLabel="Contagem de Tempo" />
 							<f:selectItem itemValue="2"
 								itemLabel="Matricula em Curso Superior" />
@@ -443,25 +486,29 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Complemento:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.complemento}" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.complemento}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Instituição:" />
-					<p:inputText size="100" maxlength="150" value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.instituicao}" />
+					<p:inputText size="100" maxlength="150"
+						value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.instituicao}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Curso:" />
-					<p:inputText size="100" maxlength="150" value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.curso}" />
+					<p:inputText size="100" maxlength="150"
+						value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.curso}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Complemento Instituição:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.complementoInstituicao}" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterJulgamentoMB.reparacaoDireitoJulgamento.complementoInstituicao}" />
 				</h:panelGrid>
 			</p:panel>
 
