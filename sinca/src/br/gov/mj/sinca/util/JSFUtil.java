@@ -2,8 +2,11 @@ package br.gov.mj.sinca.util;
 
 import java.util.Map;
 
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -90,7 +93,6 @@ public class JSFUtil {
 	return valorInt;
     }
 
-
     /**
      * Método que pega o objeto HttpSession associado com a requisição atual.
      */
@@ -168,5 +170,12 @@ public class JSFUtil {
 	}
     }
 
-  
+    public static void refresh() {
+	FacesContext context = FacesContext.getCurrentInstance();
+	Application application = context.getApplication();
+	ViewHandler viewHandler = application.getViewHandler();
+	UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+	context.setViewRoot(viewRoot);
+	context.renderResponse(); // Optional
+    }
 }

@@ -22,7 +22,7 @@
 		!important;
 }
 </style>
-		<h:form id="formFinalizacao">
+		<h:form id="formFinalizacao" styleClass="semBorda">
 
 			<div id="divMess" align="center" style="width: 100%; height: 10%">
 
@@ -30,11 +30,25 @@
 					showDetail="true" autoUpdate="true" closable="true" />
 
 			</div>
-			
+
+			<p:dialog header="ALERTA!" resizable="false" showEffect="clip"
+				closable="false" hideEffect="clip"
+				widgetVar="dlg_mensagem_finalizacao" modal="true" width="250px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Atualizando Informações..."
+						title="Atualizando Dados..."
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</h:panelGrid>
+			</p:dialog>
+
 			<h:panelGrid columns="1" cellpadding="10"
 				style="margin-bottom:20px;text-align:center; width : 100%;">
 				<p:commandButton id="salvarFinalizacao" value="Salvar Finalização"
-					icon="ui-icon-disk" title="Atualizar">
+					actionListener="#{manterFinalizacaoMB.salvar}" ajax="true"
+					update=":tabView:formFinalizacao:" icon="ui-icon-disk"
+					title="Atualizar">
 					<p:confirm header="Comfirmação"
 						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
 				</p:commandButton>
@@ -71,7 +85,8 @@
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Numero do AR / Edital DOU:" />
-						<p:inputText size="50" maxlength="50" value="#{manterFinalizacaoMB.finalizacaoProcesso.numeroArEdital}" />
+						<p:inputText size="50" maxlength="50"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.numeroArEdital}" />
 					</h:panelGrid>
 				</h:panelGrid>
 
@@ -111,35 +126,59 @@
 					style="margin-bottom:5px;width : 20%">
 					<h:outputLabel value="Notificações:"
 						style="text-align:left;color:Red;font-weight:bold;" />
-					<p:commandButton onclick="PF('dlg_notificacao').show();"
-						icon="ui-icon-plusthick" />
+					<p:commandButton icon="ui-icon-plusthick"
+						action="#{manterFinalizacaoMB.addNotificacao}"
+						update=":tabView:formFinalizacao:" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="10">
-					<p:dataTable var="reparacaoLista" id="dataTbListaEnvio" value="#"
+					<p:dataTable var="notificacao" id="dataTbListaEnvio"
+						value="#{manterFinalizacaoMB.listaFinalizacaoNotificacaos}"
 						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
 						emptyMessage="Não incluido dados de Reparação...">
 
 						<p:column headerText="Tipo Envio">
-							<h:outputText id="tpEnvio" value="" />
+							<h:outputText id="tpEnvio" value="#{notificacao.tipo}" />
 						</p:column>
 
 						<p:column headerText="Enviado para">
-							<h:outputText id="tpEnvioPara" value="" />
+							<h:outputText id="tpEnvioPara" value="#{notificacao.envio}" />
 						</p:column>
 
 						<p:column headerText="Data Envio">
-							<h:outputText id="dataEnvio" value="" />
+							<h:outputText id="dataEnvio" value="#{notificacao.dataEnvio}" />
 						</p:column>
 
 						<p:column headerText="Ações" style="width:32px;text-align: center"
 							value="Ações">
-							<p:commandButton value="Remover" action="#"
-								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-								ajax="true" update=":tabView:formFinalizacao:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
-							</p:commandButton>
+							<h:panelGrid columns="2" cellpadding="10"
+								style="text-align:right; width : 10%;">
+								<p:commandButton value="Editar"
+									action="#{manterFinalizacaoMB.editarNotificacao}"
+									icon="ui-icon-disk" title="Editar do Reparação"
+									ajax="true" update=":tabView:formFinalizacao:">
+									<f:setPropertyActionListener value="#{notificacao}"
+										target="#{manterFinalizacaoMB.finalizacaoNotificacao}" />
+								</p:commandButton>
+								<p:commandButton value="Remover"
+									action="#{manterFinalizacaoMB.removerNotificacao}"
+									icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+									ajax="true" update=":tabView:formFinalizacao:">
+									<f:setPropertyActionListener value="#{notificacao}"
+										target="#{manterFinalizacaoMB.finalizacaoNotificacao}" />
+									<p:confirm header="Comfirmação"
+										message="Comfirma a Exclusão da Notificação?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="Comfirma" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="Cancelar" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+
+							</h:panelGrid>
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>
@@ -154,19 +193,19 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Elaboração Portaria:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataElaboracaoPortaria}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio Minuta Portaria:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataEnvioMinutaPortaria}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Recebimento Portaria:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataCiencia}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -176,25 +215,26 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio Publicação:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataEnvioPublicao}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Publicação no DOU:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataPublicaoDou}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px;width : 100%">
 						<h:outputLabel value="Nº Portaria DOU:" />
-						<p:inputText size="30" maxlength="30" value="" />
+						<p:inputText size="30" maxlength="30"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.numerPortariaDou}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data de Retorno da Portaria Publicada" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataRetornoPortaria}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -203,13 +243,14 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio para o Arquivo:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataEnvioArquivo}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="30"
 						style="margin-bottom:30px; width : 200px;">
 						<h:outputLabel value="Complemento:" />
-						<p:inputTextarea maxlength="400" rows="4" cols="100" value="" />
+						<p:inputTextarea maxlength="400" rows="4" cols="100"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.complementoComunicacao}" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</p:panel>
@@ -223,59 +264,90 @@
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px;width : 100%">
 						<h:outputLabel value="Nº do Aviso:" />
-						<p:inputText size="30" maxlength="30" value="" />
+						<p:inputText size="30" maxlength="30"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.numeroAviso}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio Aviso:" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoProcesso.dataEnvioAviso}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<h:panelGrid columns="3" style=" margin-bottom:10px; width : 50%;">
+				<h:panelGrid columns="3" style=" margin-bottom:10px; width :70%;">
 					<h:panelGrid columns="1" cellpadding="10">
 						<p:outputLabel value="Orgão:" />
-						<p:selectOneMenu value="#" effect="fade" style=" width: 300px;">
-							<f:selectItem itemValue="1" itemLabel="Selecione" />
-							<f:selectItem itemValue="2" itemLabel="Correios" />
-							<f:selectItem itemValue="3" itemLabel="Arquivo Nascional" />
-						</p:selectOneMenu>
+						<p:autoComplete id="pessoaAnistList" minQueryLength="2"
+							title="Razão Social"
+							value="#{manterFinalizacaoMB.pessoaJuridica}" var="pessoaAnist"
+							size="80" maxlength="120"
+							completeMethod="#{manterPessoaJuridicaMB.listaPessoaPorNomeLk}"
+							scrollHeight="100" itemLabel="#{pessoaAnist.nomePessoa}"
+							converter="pessoaJuridicaConverter" itemValue="#{pessoaAnist}"
+							effect="clip" />
 					</h:panelGrid>
+
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Data Envio" />
 						<p:calendar navigator="true"
-							value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+							value="#{manterFinalizacaoMB.finalizacaoOrgao.dataEnvio}"
 							showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="10">
 						<h:outputLabel value="Incluir:" />
-						<p:commandButton onclick="PF('dlg_notificacao').show();"
-							icon="ui-icon-plusthick" />
+						<p:commandButton action="#{manterFinalizacaoMB.incluirOrgao}"
+							update=":tabView:formFinalizacao:" icon="ui-icon-plusthick" />
 					</h:panelGrid>
 				</h:panelGrid>
 
 				<h:panelGrid columns="1" cellpadding="10">
-					<p:dataTable var="reparacaoLista" id="dataTbOrgaoEnvio" value="#"
+					<p:dataTable var="finaOrgao" id="dataTbOrgaoEnvio"
+						value="#{manterFinalizacaoMB.listaFinalizacaoOrgao}"
 						paginator="false" rows="5" style="margin-bottom:20px;width :100%"
 						emptyMessage="Não incluido dados de Reparação...">
 
 						<p:column headerText="Orgão">
-							<h:outputText id="tpEnvio" value="" />
+							<h:outputText id="tpEnvio"
+								value="#{finaOrgao.pessoaJuridica.nomePessoa}" />
 						</p:column>
 
 						<p:column headerText="Data Envio">
-							<h:outputText id="dataEnvio" value="" />
+							<h:outputText id="dataEnvio" value="#{finaOrgao.dataEnvio}">
+								<f:convertDateTime for="dataEnvio" locale="pt_BR"
+									dateStyle="default" pattern="dd/MM/yyyy" />
+							</h:outputText>
 						</p:column>
 
 						<p:column headerText="Ações" style="width:32px;text-align: center"
 							value="Ações">
-							<p:commandButton value="Remover" action="#"
-								icon="ui-icon ui-icon-trash" title="Remover do Reparação"
-								ajax="true" update=":tabView:formFinalizacao:">
-								<f:setPropertyActionListener value="#{reparacaoLista}"
-									target="#" />
-							</p:commandButton>
+							<h:panelGrid columns="2" cellpadding="10" styleClass="semBorda"
+								style="text-align:right; border:0">
+								<p:commandButton value="Editar"
+									action="#{manterFinalizacaoMB.editarOrgao}"
+									icon="ui-icon ui-icon-disck" title="Editar do Reparação"
+									ajax="true" update=":tabView:formFinalizacao:">
+									<f:setPropertyActionListener value="#{finaOrgao}"
+										target="#{manterFinalizacaoMB.finalizacaoOrgao}" />
+								</p:commandButton>
+								<p:commandButton value="Remover"
+									action="#{manterFinalizacaoMB.removerOrgao}"
+									icon="ui-icon ui-icon-trash" title="Remover do Reparação"
+									ajax="true" update=":tabView:formFinalizacao:">
+									<f:setPropertyActionListener value="#{finaOrgao}"
+										target="#{manterFinalizacaoMB.finalizacaoOrgao}" />
+									<p:confirm header="Comfirmação"
+										message="Comfirma a Exclusão do Orgão?" icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="Comfirma" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="Cancelar" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+
+							</h:panelGrid>
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>
@@ -284,7 +356,8 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Observações:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterFinalizacaoMB.finalizacaoProcesso.complemento}" />
 				</h:panelGrid>
 
 			</p:panel>
@@ -303,28 +376,34 @@
 						<h:panelGrid columns="1" cellpadding="10"
 							style="margin-bottom:10px;width : 100%">
 							<h:outputLabel value="Tipo Envio:" />
-							<p:inputText size="15" maxlength="15" value="" />
+							<p:inputText size="15" maxlength="15"
+								value="#{manterFinalizacaoMB.finalizacaoNotificacao.tipo}" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="10"
 							style="margin-bottom:10px;">
 							<h:outputLabel value="Para quem foi enviado a Notificação:" />
-							<p:inputText size="100" maxlength="100" value="" />
+							<p:inputText size="100" maxlength="100"
+								value="#{manterFinalizacaoMB.finalizacaoNotificacao.envio}" />
 						</h:panelGrid>
 
 						<h:panelGrid columns="1" cellpadding="10">
 							<h:outputLabel value="Data Envio Notificação:" />
 							<p:calendar navigator="true"
-								value="#{manterAnaliseMB.analiseProcesso.dataCadastro}"
+								value="#{manterFinalizacaoMB.finalizacaoNotificacao.dataEnvio}"
 								showOn="button" locale="pt" pattern="dd/MM/yyyy" size="10" />
 						</h:panelGrid>
 					</h:panelGrid>
 
 					<h:panelGrid columns="2" cellpadding="10"
 						style="margin-bottom:20px;text-align:center; width : 70%;">
+
 						<p:commandButton value="Incluir" id="bt_incluir_notificacao"
-							style="horizontal-align:center" icon="ui-icon-disk">
+							style="horizontal-align:center" icon="ui-icon-disk"
+							update=":tabView:formFinalizacao:"
+							action="#{manterFinalizacaoMB.incluirNotificacao}">
 						</p:commandButton>
+
 						<p:commandButton value="Fechar" id="FecharNotificacao"
 							style="horizontal-align:center" type="button"
 							icon="ui-icon-closethick" onclick="PF('dlg_notificacao').hide();" />

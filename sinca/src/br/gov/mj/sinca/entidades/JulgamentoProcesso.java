@@ -1,412 +1,385 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the julgamento_processo database table.
  * 
  */
 @Entity
-@Table(name="julgamento_processo")
-@NamedQuery(name="JulgamentoProcesso.findAll", query="SELECT j FROM JulgamentoProcesso j")
+@Table(name = "julgamento_processo")
+@NamedQuery(name = "JulgamentoProcesso.findAll", query = "SELECT j FROM JulgamentoProcesso j")
 public class JulgamentoProcesso implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_JULGAMENTO_PROCESSO")
-	private Long idJulgamentoProcesso;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_JULGAMENTO_PROCESSO")
+    private Long idJulgamentoProcesso;
 
-	@Column(name="BOL_HOUVE_ALTERACAO_PROPOSTA")
-	private byte bolHouveAlteracaoProposta;
+    @Column(name = "BOL_HOUVE_ALTERACAO_PROPOSTA")
+    private Byte bolHouveAlteracaoProposta;
 
-	@Column(name="BOL_HOUVE_NOVAS_DILIGENCIAS")
-	private byte bolHouveNovasDiligencias;
+    @Column(name = "BOL_HOUVE_NOVAS_DILIGENCIAS")
+    private Byte bolHouveNovasDiligencias;
 
-	@Column(name="BOL_HOUVE_PEDIDO_VISTA")
-	private byte bolHouvePedidoVista;
+    @Column(name = "BOL_HOUVE_PEDIDO_VISTA")
+    private Byte bolHouvePedidoVista;
 
-	@Column(name="BOL_HOUVE_REVISAO_MINUTA")
-	private byte bolHouveRevisaoMinuta;
+    @Column(name = "BOL_HOUVE_REVISAO_MINUTA")
+    private Byte bolHouveRevisaoMinuta;
 
-	@Column(name="BOL_JULGAMENTO_ADIADO")
-	private byte bolJulgamentoAdiado;
+    @Column(name = "BOL_JULGAMENTO_ADIADO")
+    private Byte bolJulgamentoAdiado;
 
-	@Column(name="BOL_REPARACAO_ECONOMICA")
-	private BigInteger bolReparacaoEconomica;
+    @Column(name = "BOL_REPARACAO_ECONOMICA")
+    private Byte bolReparacaoEconomica;
 
-	@Column(name="BOL_REPARACAO_MORAL")
-	private BigInteger bolReparacaoMoral;
+    @Column(name = "BOL_REPARACAO_MORAL")
+    private Byte bolReparacaoMoral;
 
-	@Column(name="BOL_RESTITUICAO_DIREITOS")
-	private BigInteger bolRestituicaoDireitos;
+    @Column(name = "BOL_RESTITUICAO_DIREITOS")
+    private Byte bolRestituicaoDireitos;
 
-	@Column(name="COMPLEMENTO_ALTERACAO_PROPOSTA")
-	private String complementoAlteracaoProposta;
+    @Column(name = "COMPLEMENTO_ALTERACAO_PROPOSTA")
+    private String complementoAlteracaoProposta;
 
-	@Column(name="COMPLEMENTO_DILIGENCIA")
-	private String complementoDiligencia;
+    @Column(name = "COMPLEMENTO_DILIGENCIA")
+    private String complementoDiligencia;
 
-	@Column(name="COMPLEMENTO_JULGAMENTO")
-	private String complementoJulgamento;
+    @Column(name = "COMPLEMENTO_JULGAMENTO")
+    private String complementoJulgamento;
 
-	@Column(name="COMPLEMENTO_REPARACAO")
-	private String complementoReparacao;
+    @Column(name = "COMPLEMENTO_REPARACAO")
+    private String complementoReparacao;
 
-	@Column(name="COMPLEMENTO_REVISAO")
-	private BigInteger complementoRevisao;
+    @Column(name = "COMPLEMENTO_REVISAO")
+    private String complementoRevisao;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="DATA_ATUALIZACAO")
-	private Date dataAtualizacao;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DATA_ATUALIZACAO")
+    private Date dataAtualizacao;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="DATA_CADASTRO")
-	private Date dataCadastro;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_CADASTRO")
+    private Date dataCadastro;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="DATA_DISTRIBUICAO")
-	private Date dataDistribuicao;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_DISTRIBUICAO")
+    private Date dataDistribuicao;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="DATA_JULGAMENTO")
-	private Date dataJulgamento;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_JULGAMENTO")
+    private Date dataJulgamento;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="DATA_PREVISAO_PAUTA")
-	private Date dataPrevisaoPauta;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_PREVISAO_PAUTA")
+    private Date dataPrevisaoPauta;
 
-	@Column(name="ID_USUARIO")
-	private int idUsuario;
+    @Column(name = "ID_USUARIO")
+    private int idUsuario;
 
-	@Column(name="ID_USUARIO_RELATOR")
-	private BigInteger idUsuarioRelator;
+    @Column(name = "ID_USUARIO_RELATOR")
+    private Integer idUsuarioRelator;
 
-	@Column(name="ID_USUARIO_VISTAS")
-	private int idUsuarioVistas;
+    @Column(name = "ID_USUARIO_VISTAS")
+    private Integer idUsuarioVistas;
 
-	//bi-directional many-to-one association to ConselheirosJulgamento
-	@OneToMany(mappedBy="julgamentoProcesso")
-	private List<ConselheirosJulgamento> conselheirosJulgamentos;
+    // bi-directional many-to-one association to ConselheirosJulgamento
+    @OneToMany(mappedBy = "julgamentoProcesso")
+    private List<ConselheirosJulgamento> conselheirosJulgamentos;
 
-	@ManyToOne
-	@JoinColumn(name="COD_TIPO_DESICAO")
-	private TipoDesicaoJulgamento tipoDesicaoJulgamento;
-	
-	@ManyToOne
-	@JoinColumn(name="CD_TIPO_JULGAMENTO")
-	private TipoJulgamentoAnalise tipoJulgamentoAnalise;
+    // bi-directional many-to-one association to ConselheirosJulgamento
+    @OneToMany(mappedBy = "julgamentoProcesso")
+    private List<PresentesJulgamento> presentesJulgamentos;
+   
+    @ManyToOne
+    @JoinColumn(name = "COD_TIPO_DESICAO")
+    private TipoDesicaoJulgamento tipoDesicaoJulgamento;
 
-	@ManyToOne
-	@JoinColumn(name="ID_PROCESSO")
-	private Processo processo;
+    @ManyToOne
+    @JoinColumn(name = "CD_TIPO_JULGAMENTO")
+    private TipoJulgamentoAnalise tipoJulgamentoAnalise;
 
-	//bi-directional many-to-one association to ReparacaoDireitoJulgamento
-	@OneToMany(mappedBy="julgamentoProcesso")
-	private List<ReparacaoDireitoJulgamento> reparacaoDireitoJulgamentos;
+    @ManyToOne
+    @JoinColumn(name = "ID_PROCESSO")
+    private Processo processo;
 
-	//bi-directional many-to-one association to ReparacaoEconomicaJulgamento
-	@OneToMany(mappedBy="julgamentoProcesso")
-	private List<ReparacaoEconomicaJulgamento> reparacaoEconomicaJulgamentos;
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_DIREITO")
+    private ReparacaoDireitoJulgamento reparacaoDireitoJulgamentos;
 
-	//bi-directional many-to-one association to ReparacaoMoralJulgamento
-	@OneToMany(mappedBy="julgamentoProcesso")
-	private List<ReparacaoMoralJulgamento> reparacaoMoralJulgamentos;
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_ECONOMICA")
+    private ReparacaoEconomicaJulgamento reparacaoEconomicaJulgamentos;
 
-	public JulgamentoProcesso() {
-	}
-
-	public Long getIdJulgamentoProcesso() {
-		return this.idJulgamentoProcesso;
-	}
-
-	public void setIdJulgamentoProcesso(Long idJulgamentoProcesso) {
-		this.idJulgamentoProcesso = idJulgamentoProcesso;
-	}
-
-	public byte getBolHouveAlteracaoProposta() {
-		return this.bolHouveAlteracaoProposta;
-	}
-
-	public void setBolHouveAlteracaoProposta(byte bolHouveAlteracaoProposta) {
-		this.bolHouveAlteracaoProposta = bolHouveAlteracaoProposta;
-	}
-
-	public byte getBolHouveNovasDiligencias() {
-		return this.bolHouveNovasDiligencias;
-	}
-
-	public void setBolHouveNovasDiligencias(byte bolHouveNovasDiligencias) {
-		this.bolHouveNovasDiligencias = bolHouveNovasDiligencias;
-	}
-
-	public byte getBolHouvePedidoVista() {
-		return this.bolHouvePedidoVista;
-	}
-
-	public void setBolHouvePedidoVista(byte bolHouvePedidoVista) {
-		this.bolHouvePedidoVista = bolHouvePedidoVista;
-	}
-
-	public byte getBolHouveRevisaoMinuta() {
-		return this.bolHouveRevisaoMinuta;
-	}
-
-	public void setBolHouveRevisaoMinuta(byte bolHouveRevisaoMinuta) {
-		this.bolHouveRevisaoMinuta = bolHouveRevisaoMinuta;
-	}
-
-	public byte getBolJulgamentoAdiado() {
-		return this.bolJulgamentoAdiado;
-	}
-
-	public void setBolJulgamentoAdiado(byte bolJulgamentoAdiado) {
-		this.bolJulgamentoAdiado = bolJulgamentoAdiado;
-	}
-
-	public BigInteger getBolReparacaoEconomica() {
-		return this.bolReparacaoEconomica;
-	}
-
-	public void setBolReparacaoEconomica(BigInteger bolReparacaoEconomica) {
-		this.bolReparacaoEconomica = bolReparacaoEconomica;
-	}
-
-	public BigInteger getBolReparacaoMoral() {
-		return this.bolReparacaoMoral;
-	}
-
-	public void setBolReparacaoMoral(BigInteger bolReparacaoMoral) {
-		this.bolReparacaoMoral = bolReparacaoMoral;
-	}
-
-	public BigInteger getBolRestituicaoDireitos() {
-		return this.bolRestituicaoDireitos;
-	}
-
-	public void setBolRestituicaoDireitos(BigInteger bolRestituicaoDireitos) {
-		this.bolRestituicaoDireitos = bolRestituicaoDireitos;
-	}
-
-	public String getComplementoAlteracaoProposta() {
-		return this.complementoAlteracaoProposta;
-	}
-
-	public void setComplementoAlteracaoProposta(String complementoAlteracaoProposta) {
-		this.complementoAlteracaoProposta = complementoAlteracaoProposta;
-	}
-
-	public String getComplementoDiligencia() {
-		return this.complementoDiligencia;
-	}
-
-	public void setComplementoDiligencia(String complementoDiligencia) {
-		this.complementoDiligencia = complementoDiligencia;
-	}
-
-	public String getComplementoJulgamento() {
-		return this.complementoJulgamento;
-	}
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_MORAL")
+    private ReparacaoMoralJulgamento reparacaoMoralJulgamentos;
 
-	public void setComplementoJulgamento(String complementoJulgamento) {
-		this.complementoJulgamento = complementoJulgamento;
-	}
+    public JulgamentoProcesso() {
+    }
+
+    public Long getIdJulgamentoProcesso() {
+	return this.idJulgamentoProcesso;
+    }
+
+    public void setIdJulgamentoProcesso(Long idJulgamentoProcesso) {
+	this.idJulgamentoProcesso = idJulgamentoProcesso;
+    }
+
+    public Byte getBolHouveAlteracaoProposta() {
+	return this.bolHouveAlteracaoProposta;
+    }
+
+    public void setBolHouveAlteracaoProposta(Byte bolHouveAlteracaoProposta) {
+	this.bolHouveAlteracaoProposta = bolHouveAlteracaoProposta;
+    }
+
+    public Byte getBolHouveNovasDiligencias() {
+	return this.bolHouveNovasDiligencias;
+    }
+
+    public void setBolHouveNovasDiligencias(Byte bolHouveNovasDiligencias) {
+	this.bolHouveNovasDiligencias = bolHouveNovasDiligencias;
+    }
+
+    public Byte getBolHouvePedidoVista() {
+	return this.bolHouvePedidoVista;
+    }
+
+    public void setBolHouvePedidoVista(Byte bolHouvePedidoVista) {
+	this.bolHouvePedidoVista = bolHouvePedidoVista;
+    }
+
+    public Byte getBolHouveRevisaoMinuta() {
+	return this.bolHouveRevisaoMinuta;
+    }
+
+    public void setBolHouveRevisaoMinuta(Byte bolHouveRevisaoMinuta) {
+	this.bolHouveRevisaoMinuta = bolHouveRevisaoMinuta;
+    }
+
+    public Byte getBolJulgamentoAdiado() {
+	return this.bolJulgamentoAdiado;
+    }
+
+    public void setBolJulgamentoAdiado(Byte bolJulgamentoAdiado) {
+	this.bolJulgamentoAdiado = bolJulgamentoAdiado;
+    }
+
+    public Byte getBolReparacaoEconomica() {
+	return this.bolReparacaoEconomica;
+    }
+
+    public void setBolReparacaoEconomica(Byte bolReparacaoEconomica) {
+	this.bolReparacaoEconomica = bolReparacaoEconomica;
+    }
+
+    public Byte getBolReparacaoMoral() {
+	return this.bolReparacaoMoral;
+    }
+
+    public void setBolReparacaoMoral(Byte bolReparacaoMoral) {
+	this.bolReparacaoMoral = bolReparacaoMoral;
+    }
+
+    public Byte getBolRestituicaoDireitos() {
+	return this.bolRestituicaoDireitos;
+    }
+
+    public void setBolRestituicaoDireitos(Byte bolRestituicaoDireitos) {
+	this.bolRestituicaoDireitos = bolRestituicaoDireitos;
+    }
+
+    public String getComplementoAlteracaoProposta() {
+	return this.complementoAlteracaoProposta;
+    }
+
+    public void setComplementoAlteracaoProposta(String complementoAlteracaoProposta) {
+	this.complementoAlteracaoProposta = complementoAlteracaoProposta;
+    }
+
+    public String getComplementoDiligencia() {
+	return this.complementoDiligencia;
+    }
+
+    public void setComplementoDiligencia(String complementoDiligencia) {
+	this.complementoDiligencia = complementoDiligencia;
+    }
+
+    public String getComplementoJulgamento() {
+	return this.complementoJulgamento;
+    }
 
-	public String getComplementoReparacao() {
-		return this.complementoReparacao;
-	}
+    public void setComplementoJulgamento(String complementoJulgamento) {
+	this.complementoJulgamento = complementoJulgamento;
+    }
 
-	public void setComplementoReparacao(String complementoReparacao) {
-		this.complementoReparacao = complementoReparacao;
-	}
+    public String getComplementoReparacao() {
+	return this.complementoReparacao;
+    }
 
-	public BigInteger getComplementoRevisao() {
-		return this.complementoRevisao;
-	}
+    public void setComplementoReparacao(String complementoReparacao) {
+	this.complementoReparacao = complementoReparacao;
+    }
 
-	public void setComplementoRevisao(BigInteger complementoRevisao) {
-		this.complementoRevisao = complementoRevisao;
-	}
+    public String getComplementoRevisao() {
+	return this.complementoRevisao;
+    }
 
-	public Date getDataAtualizacao() {
-		return this.dataAtualizacao;
-	}
+    public void setComplementoRevisao(String complementoRevisao) {
+	this.complementoRevisao = complementoRevisao;
+    }
 
-	public void setDataAtualizacao(Date dataAtualizacao) {
-		this.dataAtualizacao = dataAtualizacao;
-	}
+    public Date getDataAtualizacao() {
+	return this.dataAtualizacao;
+    }
 
-	public Date getDataCadastro() {
-		return this.dataCadastro;
-	}
+    public void setDataAtualizacao(Date dataAtualizacao) {
+	this.dataAtualizacao = dataAtualizacao;
+    }
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
+    public Date getDataCadastro() {
+	return this.dataCadastro;
+    }
 
-	public Date getDataDistribuicao() {
-		return this.dataDistribuicao;
-	}
+    public void setDataCadastro(Date dataCadastro) {
+	this.dataCadastro = dataCadastro;
+    }
 
-	public void setDataDistribuicao(Date dataDistribuicao) {
-		this.dataDistribuicao = dataDistribuicao;
-	}
+    public Date getDataDistribuicao() {
+	return this.dataDistribuicao;
+    }
 
-	public Date getDataJulgamento() {
-		return this.dataJulgamento;
-	}
+    public void setDataDistribuicao(Date dataDistribuicao) {
+	this.dataDistribuicao = dataDistribuicao;
+    }
 
-	public void setDataJulgamento(Date dataJulgamento) {
-		this.dataJulgamento = dataJulgamento;
-	}
+    public Date getDataJulgamento() {
+	return this.dataJulgamento;
+    }
 
-	public Date getDataPrevisaoPauta() {
-		return this.dataPrevisaoPauta;
-	}
+    public void setDataJulgamento(Date dataJulgamento) {
+	this.dataJulgamento = dataJulgamento;
+    }
 
-	public void setDataPrevisaoPauta(Date dataPrevisaoPauta) {
-		this.dataPrevisaoPauta = dataPrevisaoPauta;
-	}
+    public Date getDataPrevisaoPauta() {
+	return this.dataPrevisaoPauta;
+    }
 
-	public int getIdUsuario() {
-		return this.idUsuario;
-	}
+    public void setDataPrevisaoPauta(Date dataPrevisaoPauta) {
+	this.dataPrevisaoPauta = dataPrevisaoPauta;
+    }
 
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
-	}
+    public int getIdUsuario() {
+	return this.idUsuario;
+    }
 
-	public BigInteger getIdUsuarioRelator() {
-		return this.idUsuarioRelator;
-	}
+    public void setIdUsuario(int idUsuario) {
+	this.idUsuario = idUsuario;
+    }
 
-	public void setIdUsuarioRelator(BigInteger idUsuarioRelator) {
-		this.idUsuarioRelator = idUsuarioRelator;
-	}
+    public Integer getIdUsuarioRelator() {
+	return this.idUsuarioRelator;
+    }
 
-	public int getIdUsuarioVistas() {
-		return this.idUsuarioVistas;
-	}
+    public void setIdUsuarioRelator(Integer idUsuarioRelator) {
+	this.idUsuarioRelator = idUsuarioRelator;
+    }
 
-	public void setIdUsuarioVistas(int idUsuarioVistas) {
-		this.idUsuarioVistas = idUsuarioVistas;
-	}
+    public int getIdUsuarioVistas() {
+	return this.idUsuarioVistas;
+    }
 
-	public List<ConselheirosJulgamento> getConselheirosJulgamentos() {
-		return this.conselheirosJulgamentos;
-	}
+    public void setIdUsuarioVistas(int idUsuarioVistas) {
+	this.idUsuarioVistas = idUsuarioVistas;
+    }
 
-	public void setConselheirosJulgamentos(List<ConselheirosJulgamento> conselheirosJulgamentos) {
-		this.conselheirosJulgamentos = conselheirosJulgamentos;
-	}
+    public List<ConselheirosJulgamento> getConselheirosJulgamentos() {
+	return this.conselheirosJulgamentos;
+    }
 
-	public ConselheirosJulgamento addConselheirosJulgamento(ConselheirosJulgamento conselheirosJulgamento) {
-		getConselheirosJulgamentos().add(conselheirosJulgamento);
-		conselheirosJulgamento.setJulgamentoProcesso(this);
+    public void setConselheirosJulgamentos(List<ConselheirosJulgamento> conselheirosJulgamentos) {
+	this.conselheirosJulgamentos = conselheirosJulgamentos;
+    }
 
-		return conselheirosJulgamento;
-	}
+    public ConselheirosJulgamento addConselheirosJulgamento(ConselheirosJulgamento conselheirosJulgamento) {
+	getConselheirosJulgamentos().add(conselheirosJulgamento);
+	conselheirosJulgamento.setJulgamentoProcesso(this);
 
-	public ConselheirosJulgamento removeConselheirosJulgamento(ConselheirosJulgamento conselheirosJulgamento) {
-		getConselheirosJulgamentos().remove(conselheirosJulgamento);
-		conselheirosJulgamento.setJulgamentoProcesso(null);
+	return conselheirosJulgamento;
+    }
 
-		return conselheirosJulgamento;
-	}
+    public ConselheirosJulgamento removeConselheirosJulgamento(ConselheirosJulgamento conselheirosJulgamento) {
+	getConselheirosJulgamentos().remove(conselheirosJulgamento);
+	conselheirosJulgamento.setJulgamentoProcesso(null);
 
-	public TipoDesicaoJulgamento getTipoDesicaoJulgamento() {
-		return this.tipoDesicaoJulgamento;
-	}
+	return conselheirosJulgamento;
+    }
 
-	public void setTipoDesicaoJulgamento(TipoDesicaoJulgamento tipoDesicaoJulgamento) {
-		this.tipoDesicaoJulgamento = tipoDesicaoJulgamento;
-	}
+    public TipoDesicaoJulgamento getTipoDesicaoJulgamento() {
+	return this.tipoDesicaoJulgamento;
+    }
 
-	public Processo getProcesso() {
-		return this.processo;
-	}
+    public void setTipoDesicaoJulgamento(TipoDesicaoJulgamento tipoDesicaoJulgamento) {
+	this.tipoDesicaoJulgamento = tipoDesicaoJulgamento;
+    }
 
-	public void setProcesso(Processo processo) {
-		this.processo = processo;
-	}
+    public Processo getProcesso() {
+	return this.processo;
+    }
 
-	public List<ReparacaoDireitoJulgamento> getReparacaoDireitoJulgamentos() {
-		return this.reparacaoDireitoJulgamentos;
-	}
+    public void setProcesso(Processo processo) {
+	this.processo = processo;
+    }
 
-	public void setReparacaoDireitoJulgamentos(List<ReparacaoDireitoJulgamento> reparacaoDireitoJulgamentos) {
-		this.reparacaoDireitoJulgamentos = reparacaoDireitoJulgamentos;
-	}
+    public TipoJulgamentoAnalise getTipoJulgamentoAnalise() {
+	return tipoJulgamentoAnalise;
+    }
 
-	public ReparacaoDireitoJulgamento addReparacaoDireitoJulgamento(ReparacaoDireitoJulgamento reparacaoDireitoJulgamento) {
-		getReparacaoDireitoJulgamentos().add(reparacaoDireitoJulgamento);
-		reparacaoDireitoJulgamento.setJulgamentoProcesso(this);
+    public void setTipoJulgamentoAnalise(TipoJulgamentoAnalise tipoJulgamentoAnalise) {
+	this.tipoJulgamentoAnalise = tipoJulgamentoAnalise;
+    }
 
-		return reparacaoDireitoJulgamento;
-	}
+    public ReparacaoDireitoJulgamento getReparacaoDireitoJulgamentos() {
+        return reparacaoDireitoJulgamentos;
+    }
 
-	public ReparacaoDireitoJulgamento removeReparacaoDireitoJulgamento(ReparacaoDireitoJulgamento reparacaoDireitoJulgamento) {
-		getReparacaoDireitoJulgamentos().remove(reparacaoDireitoJulgamento);
-		reparacaoDireitoJulgamento.setJulgamentoProcesso(null);
+    public ReparacaoEconomicaJulgamento getReparacaoEconomicaJulgamentos() {
+        return reparacaoEconomicaJulgamentos;
+    }
 
-		return reparacaoDireitoJulgamento;
-	}
+    public ReparacaoMoralJulgamento getReparacaoMoralJulgamentos() {
+        return reparacaoMoralJulgamentos;
+    }
 
-	public List<ReparacaoEconomicaJulgamento> getReparacaoEconomicaJulgamentos() {
-		return this.reparacaoEconomicaJulgamentos;
-	}
+    public void setReparacaoDireitoJulgamentos(ReparacaoDireitoJulgamento reparacaoDireitoJulgamentos) {
+        this.reparacaoDireitoJulgamentos = reparacaoDireitoJulgamentos;
+    }
 
-	public void setReparacaoEconomicaJulgamentos(List<ReparacaoEconomicaJulgamento> reparacaoEconomicaJulgamentos) {
-		this.reparacaoEconomicaJulgamentos = reparacaoEconomicaJulgamentos;
-	}
+    public void setReparacaoEconomicaJulgamentos(ReparacaoEconomicaJulgamento reparacaoEconomicaJulgamentos) {
+        this.reparacaoEconomicaJulgamentos = reparacaoEconomicaJulgamentos;
+    }
 
-	public ReparacaoEconomicaJulgamento addReparacaoEconomicaJulgamento(ReparacaoEconomicaJulgamento reparacaoEconomicaJulgamento) {
-		getReparacaoEconomicaJulgamentos().add(reparacaoEconomicaJulgamento);
-		reparacaoEconomicaJulgamento.setJulgamentoProcesso(this);
-
-		return reparacaoEconomicaJulgamento;
-	}
-
-	public ReparacaoEconomicaJulgamento removeReparacaoEconomicaJulgamento(ReparacaoEconomicaJulgamento reparacaoEconomicaJulgamento) {
-		getReparacaoEconomicaJulgamentos().remove(reparacaoEconomicaJulgamento);
-		reparacaoEconomicaJulgamento.setJulgamentoProcesso(null);
-
-		return reparacaoEconomicaJulgamento;
-	}
-
-	public List<ReparacaoMoralJulgamento> getReparacaoMoralJulgamentos() {
-		return this.reparacaoMoralJulgamentos;
-	}
-
-	public void setReparacaoMoralJulgamentos(List<ReparacaoMoralJulgamento> reparacaoMoralJulgamentos) {
-		this.reparacaoMoralJulgamentos = reparacaoMoralJulgamentos;
-	}
-
-	public ReparacaoMoralJulgamento addReparacaoMoralJulgamento(ReparacaoMoralJulgamento reparacaoMoralJulgamento) {
-		getReparacaoMoralJulgamentos().add(reparacaoMoralJulgamento);
-		reparacaoMoralJulgamento.setJulgamentoProcesso(this);
-
-		return reparacaoMoralJulgamento;
-	}
-
-	public ReparacaoMoralJulgamento removeReparacaoMoralJulgamento(ReparacaoMoralJulgamento reparacaoMoralJulgamento) {
-		getReparacaoMoralJulgamentos().remove(reparacaoMoralJulgamento);
-		reparacaoMoralJulgamento.setJulgamentoProcesso(null);
-
-		return reparacaoMoralJulgamento;
-	}
-
-	public TipoJulgamentoAnalise getTipoJulgamentoAnalise() {
-	    return tipoJulgamentoAnalise;
-	}
-
-	public void setTipoJulgamentoAnalise(TipoJulgamentoAnalise tipoJulgamentoAnalise) {
-	    this.tipoJulgamentoAnalise = tipoJulgamentoAnalise;
-	}
+    public void setReparacaoMoralJulgamentos(ReparacaoMoralJulgamento reparacaoMoralJulgamentos) {
+        this.reparacaoMoralJulgamentos = reparacaoMoralJulgamentos;
+    }
 
 }

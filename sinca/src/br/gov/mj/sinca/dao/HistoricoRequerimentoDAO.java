@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.gov.mj.sinca.entidades.HitoricoRequerimento;
+import br.gov.mj.sinca.entidades.HistoricoRequerimento;
 
-public class HistoricoRequerimentoDAO extends SincaAbastractDAO<HitoricoRequerimento> {
+public class HistoricoRequerimentoDAO extends SincaAbastractDAO<HistoricoRequerimento> {
     
 	public HistoricoRequerimentoDAO() {
 		super();
@@ -18,9 +18,9 @@ public class HistoricoRequerimentoDAO extends SincaAbastractDAO<HitoricoRequerim
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<HitoricoRequerimento> listaHistorico(Long idProcesso){
+	public List<HistoricoRequerimento> listaHistorico(Long idProcesso){
 		Query query = getEntityManager().createQuery(
-			"SELECT h FROM HitoricoRequerimento h where h.processo.idProcesso = " + idProcesso);
+			"SELECT h FROM HistoricoRequerimento h where h.processo.idProcesso = " + idProcesso);
 		return query.getResultList();
 	}
 	

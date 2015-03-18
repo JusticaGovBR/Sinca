@@ -48,12 +48,10 @@ public class ReparacaoDireitoJulgamento implements Serializable {
 
 	private String instituicao;
 
-	//bi-directional many-to-one association to JulgamentoProcesso
 	@ManyToOne
 	@JoinColumn(name="ID_JULGAMENTO_PROCESSO")
 	private JulgamentoProcesso julgamentoProcesso;
 
-	//bi-directional many-to-one association to TipoRestituicaoDireito
 	@ManyToOne
 	@JoinColumn(name="COD_TIPO_RESTITUICAO")
 	private TipoRestituicaoDireito tipoRestituicaoDireito;

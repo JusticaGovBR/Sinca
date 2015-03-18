@@ -1,7 +1,6 @@
 package br.gov.mj.sinca.mb.julgamento;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +22,10 @@ import br.gov.mj.sinca.dao.TipoDesicaoJulgamentoDAO;
 import br.gov.mj.sinca.dao.TipoJulgamentoAnaliseDAO;
 import br.gov.mj.sinca.dao.UsuarioDAO;
 import br.gov.mj.sinca.entidades.AnaliseProcesso;
-import br.gov.mj.sinca.entidades.HitoricoRequerimento;
+import br.gov.mj.sinca.entidades.HistoricoRequerimento;
 import br.gov.mj.sinca.entidades.JulgamentoProcesso;
 import br.gov.mj.sinca.entidades.PessoaProcesso;
+import br.gov.mj.sinca.entidades.Processo;
 import br.gov.mj.sinca.entidades.RecomendacaoAnalise;
 import br.gov.mj.sinca.entidades.ReparacaoDireitoAnalise;
 import br.gov.mj.sinca.entidades.ReparacaoDireitoJulgamento;
@@ -71,7 +71,8 @@ public class ManterJulgamentoMB implements Serializable {
 
     private JulgamentoProcesso julgamentoProcesso;
     private AnaliseProcesso analiseProcesso;
-    private HitoricoRequerimento hitoricoRequerimento;
+    private Processo processo;
+    private HistoricoRequerimento hitoricoRequerimento;
 
     private Usuario usuarioRelator;
     private Usuario usuarioVistas;
@@ -107,8 +108,9 @@ public class ManterJulgamentoMB implements Serializable {
 
 	if (pessoaProcesso != null && pessoaProcesso.getProcesso().getIdProcesso() > 0) {
 	    julgamentoProcesso.setProcesso(pessoaProcesso.getProcesso());
+	    this.processo = pessoaProcesso.getProcesso();
 	}
-	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
+	hitoricoRequerimento = (HistoricoRequerimento) JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
 	if (hitoricoRequerimento != null && hitoricoRequerimento.getIdHistorico() != null
 		&& hitoricoRequerimento.getIdHistorico().longValue() > 0) {
 	    hitoricoRequerimento = new HistoricoRequerimentoDAO().lerPorId(hitoricoRequerimento.getIdHistorico());
@@ -117,18 +119,15 @@ public class ManterJulgamentoMB implements Serializable {
 	    if (this.julgamentoProcesso != null && this.julgamentoProcesso.getIdJulgamentoProcesso() != null
 		    && this.julgamentoProcesso.getIdJulgamentoProcesso().intValue() > 0) {
 		julgamentoProcesso = new JulgamentoProcessoDAO().lerPorId(julgamentoProcesso.getIdJulgamentoProcesso());
-		julgamentoProcesso.getReparacaoDireitoJulgamentos().size();
-		julgamentoProcesso.getReparacaoEconomicaJulgamentos().size();
-		julgamentoProcesso.getReparacaoMoralJulgamentos().size();
 
-		if (julgamentoProcesso.getReparacaoDireitoJulgamentos() != null) {
-		    this.reparacaoDireitoJulgamento = julgamentoProcesso.getReparacaoDireitoJulgamentos().get(0);
+		if (julgamentoProcesso.getReparacaoDireitoJulgamentos() != null ) {
+		    this.reparacaoDireitoJulgamento = julgamentoProcesso.getReparacaoDireitoJulgamentos();
 		}
 		if (julgamentoProcesso.getReparacaoEconomicaJulgamentos() != null) {
-		    this.reparacaoEconomicaJulgamento = julgamentoProcesso.getReparacaoEconomicaJulgamentos().get(0);
+		    this.reparacaoEconomicaJulgamento = julgamentoProcesso.getReparacaoEconomicaJulgamentos();
 		}
-		if (julgamentoProcesso.getReparacaoMoralJulgamentos() != null) {
-		    this.reparacaoMoralJulgamento = julgamentoProcesso.getReparacaoMoralJulgamentos().get(0);
+		if (julgamentoProcesso.getReparacaoMoralJulgamentos() != null ) {
+		    this.reparacaoMoralJulgamento = julgamentoProcesso.getReparacaoMoralJulgamentos();
 		}
 	    }
 	    if (julgamentoProcesso == null){
@@ -140,10 +139,11 @@ public class ManterJulgamentoMB implements Serializable {
 		RecomendacaoAnalise recomendacaoAnalise = new RecomendacaoAnaliseDAO()
 			.buscarRecomendacaoAnalise(analiseProcesso.getIdAnalise());
 
-		if (recomendacaoAnalise != null && recomendacaoAnalise.getIdRecomendacao().longValue() > 0) {
-		    recomendacaoAnalise.getReparacaoEconomicaAnalises().size();
-		    recomendacaoAnalise.getReparacaoMoralAnalises().size();
-		    recomendacaoAnalise.getReparacaoDireitoAnalises().size();
+		if (recomendacaoAnalise != null && recomendacaoAnalise.getIdRecomendacao()!=null &&
+			recomendacaoAnalise.getIdRecomendacao().longValue() > 0) {
+		    recomendacaoAnalise.getReparacaoEconomicaAnalise();
+		    recomendacaoAnalise.getReparacaoMoralAnalise();
+		    recomendacaoAnalise.getReparacaoDireitoAnalise();
 
 		    carregarReparacaoEconomica(recomendacaoAnalise);
 
@@ -158,13 +158,14 @@ public class ManterJulgamentoMB implements Serializable {
     }
 
     private void carregaReparacaoDireito(RecomendacaoAnalise recomendacaoAnalise) {
-	if (!recomendacaoAnalise.getReparacaoDireitoAnalises().isEmpty()) {
+	if (recomendacaoAnalise.getReparacaoDireitoAnalise()!=null) {
 	if (reparacaoDireitoJulgamento == null
 		|| reparacaoDireitoJulgamento.getIdReparacao() == null
 		|| reparacaoDireitoJulgamento.getIdReparacao().intValue() == 0) {
 	    bolReparacaoMoral= true;
-	    julgamentoProcesso.setBolReparacaoMoral(new BigInteger("1"));
-	    ReparacaoDireitoAnalise direitoAnalise = recomendacaoAnalise.getReparacaoDireitoAnalises().get(0);
+	    julgamentoProcesso.setBolReparacaoMoral(new Byte("1"));
+	    ReparacaoDireitoAnalise direitoAnalise = recomendacaoAnalise.getReparacaoDireitoAnalise();
+	    reparacaoDireitoJulgamento = new ReparacaoDireitoJulgamento();
 	    reparacaoDireitoJulgamento.setIdUsuario(usuario.getIdUsuario());
 	    reparacaoDireitoJulgamento.setJulgamentoProcesso(julgamentoProcesso);
 	    reparacaoDireitoJulgamento.setComplemento(direitoAnalise.getComplemento());
@@ -179,13 +180,14 @@ public class ManterJulgamentoMB implements Serializable {
     }
 
     private void carregaReparacaoMoral(RecomendacaoAnalise recomendacaoAnalise) {
-	if (!recomendacaoAnalise.getReparacaoMoralAnalises().isEmpty()) {
+	if (recomendacaoAnalise.getReparacaoMoralAnalise()!=null) {
 	if (reparacaoMoralJulgamento == null
 		|| reparacaoMoralJulgamento.getIdReparacao() == null
 		|| reparacaoMoralJulgamento.getIdReparacao().intValue() == 0) {
 	    bolReparacaoMoral= true;
-	    julgamentoProcesso.setBolReparacaoMoral(new BigInteger("1"));
-	    ReparacaoMoralAnalise moralAnalise = recomendacaoAnalise.getReparacaoMoralAnalises().get(0);
+	    julgamentoProcesso.setBolReparacaoMoral(new Byte("1"));
+	    ReparacaoMoralAnalise moralAnalise = recomendacaoAnalise.getReparacaoMoralAnalise();
+	    reparacaoMoralJulgamento = new ReparacaoMoralJulgamento();
 	    reparacaoMoralJulgamento.setIdUsuario(usuario.getIdUsuario());
 	    reparacaoMoralJulgamento.setJulgamentoProcesso(julgamentoProcesso);
 	    reparacaoMoralJulgamento.setDeclaracaoRetificacao(moralAnalise.getDeclaracaoRetificacao());
@@ -195,14 +197,14 @@ public class ManterJulgamentoMB implements Serializable {
     }
 
     private void carregarReparacaoEconomica(RecomendacaoAnalise recomendacaoAnalise) {
-	if (!recomendacaoAnalise.getReparacaoEconomicaAnalises().isEmpty()) {
+	if (recomendacaoAnalise.getReparacaoEconomicaAnalise()!=null) {
 	if (reparacaoEconomicaJulgamento == null
 		|| reparacaoEconomicaJulgamento.getIdReparacao() == null
 		|| reparacaoEconomicaJulgamento.getIdReparacao().intValue() == 0) {
 	    bolReparacaoEconomica = true;
-	    julgamentoProcesso.setBolReparacaoEconomica(new BigInteger("1"));
-	    ReparacaoEconomicaAnalise economicaAnalise = recomendacaoAnalise
-		    .getReparacaoEconomicaAnalises().get(0);
+	    reparacaoEconomicaJulgamento = new ReparacaoEconomicaJulgamento();
+	    julgamentoProcesso.setBolReparacaoEconomica(Byte.parseByte("1"));
+	    ReparacaoEconomicaAnalise economicaAnalise = recomendacaoAnalise.getReparacaoEconomicaAnalise();
 	    reparacaoEconomicaJulgamento.setValorPu(economicaAnalise.getValorPu());
 	    reparacaoEconomicaJulgamento.setValorPmpc(economicaAnalise.getValorPmpc());
 	    reparacaoEconomicaJulgamento.setDataInicioPu(economicaAnalise.getDataInicioPu());
@@ -220,6 +222,11 @@ public class ManterJulgamentoMB implements Serializable {
 	try {
 	    this.mensagem = "Salvando Dados do Julgamento";
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_julgamento').show()");
+	    if( processo==null || processo.getIdProcesso()==null || processo.getIdProcesso().longValue()==0l){
+		    JSFUtil.retornarMensagemModal("Julgamento", "Requerimento de Anistia não Atualizado....");
+		    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_julgamento').hide()");
+		return null;
+	    }
 
 	    if(julgamentoProcesso.getIdJulgamentoProcesso()==null || julgamentoProcesso.getIdJulgamentoProcesso().longValue()==0){
 		julgamentoProcesso.setDataCadastro(new Date());
@@ -233,15 +240,18 @@ public class ManterJulgamentoMB implements Serializable {
 		julgamentoProcesso.setTipoDesicaoJulgamento(new TipoDesicaoJulgamentoDAO().lerPorId(idDesicaoConselhero));
 	    }
 	    julgamentoProcesso.setIdUsuario(usuario.getIdUsuario());
-	    
+	    julgamentoProcesso.setProcesso(this.hitoricoRequerimento.getProcesso());
 	    julgamentoProcesso = new JulgamentoProcessoDAO().salvar(julgamentoProcesso);
 	    if(bolReparacaoDireito){
+		reparacaoDireitoJulgamento.setJulgamentoProcesso(julgamentoProcesso);
 		reparacaoDireitoJulgamento = new ReparacaoDireitoJulgamentoDAO().salvar(reparacaoDireitoJulgamento);	
 	    }
 	    if(bolReparacaoEconomica){
+		reparacaoEconomicaJulgamento.setJulgamentoProcesso(julgamentoProcesso);
 		reparacaoEconomicaJulgamento = new ReparacaoEconomicaJulgamentoDAO().salvar(reparacaoEconomicaJulgamento);	
 	    }
 	    if(bolReparacaoDireito){
+		reparacaoDireitoJulgamento.setJulgamentoProcesso(julgamentoProcesso);
 		reparacaoDireitoJulgamento = new ReparacaoDireitoJulgamentoDAO().salvar(reparacaoDireitoJulgamento);	
 	    }
 	    salvarHistoricoRequerimento(julgamentoProcesso);
@@ -257,7 +267,7 @@ public class ManterJulgamentoMB implements Serializable {
     }
     
     private void salvarHistoricoRequerimento(JulgamentoProcesso julgamentoProcesso) {
-	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
+	hitoricoRequerimento = (HistoricoRequerimento) JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
 	if (hitoricoRequerimento != null && analiseProcesso != null && analiseProcesso.getIdAnalise().longValue() > 0) {
 	    if (hitoricoRequerimento.getIdHistorico() == null || hitoricoRequerimento.getIdHistorico().intValue() == 0) {
 		hitoricoRequerimento.setDataCadastro(new Date());
@@ -405,7 +415,7 @@ public class ManterJulgamentoMB implements Serializable {
 	return analiseProcesso;
     }
 
-    public HitoricoRequerimento getHitoricoRequerimento() {
+    public HistoricoRequerimento getHitoricoRequerimento() {
 	return hitoricoRequerimento;
     }
 
@@ -413,7 +423,7 @@ public class ManterJulgamentoMB implements Serializable {
 	this.analiseProcesso = analiseProcesso;
     }
 
-    public void setHitoricoRequerimento(HitoricoRequerimento hitoricoRequerimento) {
+    public void setHitoricoRequerimento(HistoricoRequerimento hitoricoRequerimento) {
 	this.hitoricoRequerimento = hitoricoRequerimento;
     }
 
@@ -455,6 +465,14 @@ public class ManterJulgamentoMB implements Serializable {
 
     public void setListarTipoJulgamentoAnalise(List<TipoJulgamentoAnalise> listarTipoJulgamentoAnalise) {
         this.listarTipoJulgamentoAnalise = listarTipoJulgamentoAnalise;
+    }
+
+    public Processo getProcesso() {
+        return processo;
+    }
+
+    public void setProcesso(Processo processo) {
+        this.processo = processo;
     }
 
 }

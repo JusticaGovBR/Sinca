@@ -100,11 +100,13 @@ public class ConsultarProcessoMB implements Serializable {
     }
 
     public String acaoNovoProcesso() throws IOException {
+	JSFUtil.refresh();
 	JSFUtil.getSessionMap().put("pessoaProcesso", null);
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
 
     public String detalharProcesso() {
+	JSFUtil.refresh();
 	JSFUtil.limparObjetosSessao("historico");
 	JSFUtil.limparObjetosSessao("NOVO");
 	JSFUtil.limparObjetosSessao("L");
@@ -112,6 +114,7 @@ public class ConsultarProcessoMB implements Serializable {
 	return "/pages/processo/manterProcesso" + "?faces-redirect=true";
     }
     public void manterDiligencia() {
+	JSFUtil.refresh();
 	JSFUtil.getSessionMap().put("pessoaProcessoDiligenica", JSFUtil.getRequestMap().get("processoLista"));
 	getManterDiligenciaMB().carregarDaddos();
 	//JSFUtil.getRequestContext().execute("PF('dlg_diligencia').show()");

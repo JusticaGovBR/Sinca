@@ -89,8 +89,7 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" cellpadding="10"
-					style="width :100%;">
+				<h:panelGrid columns="2" cellpadding="10" style="width :100%;">
 					<h:panelGrid columns="2" cellpadding="10" style="width :300px;">
 						<h:outputLabel value="Situação do RA:" />
 						<h:outputLabel value="#{manterProcessoMB.descSituacao}" />
@@ -98,7 +97,8 @@
 
 					<h:panelGrid columns="2" cellpadding="10" style="width :400px;">
 						<h:outputLabel value="Detalhamento da Situação do RA:" />
-						<h:outputLabel value="#{manterProcessoMB.descDetalhamentoSituacao}" />
+						<h:outputLabel
+							value="#{manterProcessoMB.descDetalhamentoSituacao}" />
 					</h:panelGrid>
 				</h:panelGrid>
 
@@ -130,57 +130,92 @@
 			</p:dialog>
 
 
-			<h:form>
+			<h:form id="fromHistorico">
 				<p:panel id="pnlHistorico"
 					header="Histórico do Requerimento de Anistia:" rendered="true"
 					style="margin-bottom:5px;width : 100%" toggleable="true">
 
-
-
-					<p:dataTable var="historicoLista" value="#{manterProcessoMB.listarHitorico}" paginator="true" rows="5"
-						style="margin-bottom:10px;width : 100%"
+					<p:dataTable var="historicoLista" id="tbHistorico" 
+						value="#{manterProcessoMB.listarHitorico}" paginator="true"
+						rows="5" style="margin-bottom:10px;width : 98%"
+						resizableColumns="true" liveResize="true"
 						emptyMessage="Não incluido histórico do Requerimento">
 
-						<p:column headerText="Data Recebimento">
-							<h:outputText id="dataRecebimento" value="#{historicoLista.dataRecebimento}">
-								<f:convertDateTime for="dataRecebimento" locale="pt_BR" dateStyle="default"
-									pattern="dd/MM/yyyy HH:mm:ss" />
+						<p:column headerText="Data Recebimento" resizable="true">
+							<h:outputText id="dataRecebimento"
+								value="#{historicoLista.dataRecebimento}">
+								<f:convertDateTime for="dataRecebimento" locale="pt_BR"
+									dateStyle="default" pattern="dd/MM/yyyy HH:mm:ss" />
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Analista">
-							<h:outputText value="#{historicoLista.usuarioAnalista.descUsuario}"/>
+						<p:column headerText="Analista" resizable="true">
+							<h:outputText
+								value="#{historicoLista.usuarioAnalista.descUsuario}" />
 						</p:column>
 
-						<p:column headerText="Data Conclusão">
-							<h:outputText id="dataConclusao"  value="#{historicoLista.dataConclusao}">
-								<f:convertDateTime for="dataConclusao" locale="pt_BR" dateStyle="default"
-									pattern="dd/MM/yyyy" />
+						<p:column headerText="Data Conclusão" resizable="true">
+							<h:outputText id="dataConclusao"
+								value="#{historicoLista.dataConclusao}">
+								<f:convertDateTime for="dataConclusao" locale="pt_BR"
+									dateStyle="default" pattern="dd/MM/yyyy" />
 
 							</h:outputText>
 						</p:column>
 
-						<p:column headerText="Julgamento Proposto">
-							<h:outputText value="#{historicoLista.julgamentoProcesso.tipoDesicaoJulgamento.decricao}"/>
+						<p:column headerText="Julgamento Proposto Análise" resizable="true">
+							<h:outputText
+								value="#{historicoLista.analiseProcesso1.recomendacaoAnalise.tipoAnaliseJulgamento.descricao}" />
+						</p:column>
+
+						<p:column headerText="Julgamento" resizable="true">
+							<h:outputText
+								value="#{historicoLista.julgamentoProcesso.tipoJulgamentoAnalise.decricao}" />
+						</p:column>
+
+						<p:column headerText="Decisão Julgamento" resizable="true">
+							<h:outputText
+								value="#{historicoLista.julgamentoProcesso.tipoDesicaoJulgamento.decricao}" />
 						</p:column>
 
 						<p:column headerText="Total Analise">
 							<h:outputText />
 						</p:column>
+						
+						<p:column headerText="Data Cadastro" resizable="true">
+							<h:outputText id="dataCadastro"
+								value="#{historicoLista.dataCadastro}">
+								<f:convertDateTime for="dataCadastro" locale="pt_BR"
+									dateStyle="default" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
 
-						<p:column headerText="Ações" style="text-align: center">
-							<p:commandButton value="Editar" action="#{manterProcessoMB.editarHistorico}" 
-								update=":pnl_tabs:" icon="ui-icon-aply"
-								title="Editar a Analise" ajax="false" >
+						<p:column headerText="Ações"
+							style="text-align: center; width : 210px;" resizable="true">
+							<p:commandButton value="Visualizar"
+								action="#{manterProcessoMB.editarHistorico}" update="@all" process=":tabView:"
+								icon="ui-icon-aply" title="Editar a Analise" ajax="false">
 								<f:setPropertyActionListener value="#{historicoLista}"
 									target="#{manterProcessoMB.hitoricoRequerimento}" />
 							</p:commandButton>
 
-							<p:commandButton value="Copiar" action="#{manterProcessoMB.editarHistorico}" icon="ui-icon-copy"
-								title="Gerar Copia da Analise" ajax="false" update=":pnl_tabs:">
+							<p:commandButton value="Copiar"
+								action="#{manterProcessoMB.criarCopiaHistorico}"
+								icon="ui-icon-copy" title="Gerar Copia da Analise" ajax="true"
+								update=":fromHistorico:">
 								<f:setPropertyActionListener value="#{historicoLista}"
 									target="#{manterProcessoMB.hitoricoRequerimento}" />
+								<p:confirm header="Comfirmação"
+									message="Deseja Criar a Copia do Histórico do Requerimento?"
+									icon="ui-icon-alert" />
 							</p:commandButton>
+							<p:confirmDialog global="true" showEffect="clip"
+								hideEffect="clip">
+								<p:commandButton value="Comfirma" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="Cancelar" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
 						</p:column>
 					</p:dataTable>
 

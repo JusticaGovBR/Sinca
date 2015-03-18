@@ -17,9 +17,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.axis.AxisFault;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.event.FlowEvent;
 
 import br.gov.mj.sinca.ConstantSinca;
+import br.gov.mj.sinca.dao.AnaliseProcessoDAO;
 import br.gov.mj.sinca.dao.CargoFuncaoDAO;
 import br.gov.mj.sinca.dao.DocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.DoencaDAO;
@@ -29,6 +31,7 @@ import br.gov.mj.sinca.dao.EstadoUfDAO;
 import br.gov.mj.sinca.dao.GrupoProcesssualDAO;
 import br.gov.mj.sinca.dao.GrupoSocialDAO;
 import br.gov.mj.sinca.dao.HistoricoRequerimentoDAO;
+import br.gov.mj.sinca.dao.JulgamentoProcessoDAO;
 import br.gov.mj.sinca.dao.LocalizacaoDAO;
 import br.gov.mj.sinca.dao.LoteProcessoDAO;
 import br.gov.mj.sinca.dao.PessoaEnderecoDAO;
@@ -44,6 +47,7 @@ import br.gov.mj.sinca.dao.TipoDocumentoPessoaDAO;
 import br.gov.mj.sinca.dao.TipoEnderecoDAO;
 import br.gov.mj.sinca.dao.TipoPessoaProcessoDAO;
 import br.gov.mj.sinca.dao.TipoTelefoneDAO;
+import br.gov.mj.sinca.entidades.AnaliseProcesso;
 import br.gov.mj.sinca.entidades.CargoFuncao;
 import br.gov.mj.sinca.entidades.Cidade;
 import br.gov.mj.sinca.entidades.DocumentoPessoa;
@@ -54,7 +58,8 @@ import br.gov.mj.sinca.entidades.Estado;
 import br.gov.mj.sinca.entidades.EstadoCivil;
 import br.gov.mj.sinca.entidades.GrupoProcessual;
 import br.gov.mj.sinca.entidades.GrupoSocial;
-import br.gov.mj.sinca.entidades.HitoricoRequerimento;
+import br.gov.mj.sinca.entidades.HistoricoRequerimento;
+import br.gov.mj.sinca.entidades.JulgamentoProcesso;
 import br.gov.mj.sinca.entidades.Localizacao;
 import br.gov.mj.sinca.entidades.LoteProcesso;
 import br.gov.mj.sinca.entidades.PessoaEndereco;
@@ -73,6 +78,9 @@ import br.gov.mj.sinca.entidades.TipoPessoaProcesso;
 import br.gov.mj.sinca.entidades.TipoTelefone;
 import br.gov.mj.sinca.entidades.Usuario;
 import br.gov.mj.sinca.mb.LoginMB;
+import br.gov.mj.sinca.mb.analise.ManterAnaliseMB;
+import br.gov.mj.sinca.mb.finalizacao.ManterFinalizacaoMB;
+import br.gov.mj.sinca.mb.julgamento.ManterJulgamentoMB;
 import br.gov.mj.sinca.util.CpfCnpjUtil;
 import br.gov.mj.sinca.util.JSFUtil;
 import br.gov.mj.sinca.ws.sei.RetornoConsultaProcedimento;
@@ -160,10 +168,10 @@ public class ManterProcessoMB implements Serializable {
     private LoteProcesso loteProcesso = new LoteProcesso();
     private List<LoteProcesso> listaLoteProcesso = new ArrayList<LoteProcesso>();
 
-    private List<HitoricoRequerimento> listarHitorico = new ArrayList<HitoricoRequerimento>();
-    
-    private HitoricoRequerimento hitoricoRequerimento;
- 
+    private List<HistoricoRequerimento> listarHitorico = new ArrayList<HistoricoRequerimento>();
+
+    private HistoricoRequerimento hitoricoRequerimento;
+
     private Integer[] idTipoPessoaProcesso;
     private boolean habilitaEdicaoPessoa;
     private boolean habilitaTabePessoa;
@@ -177,12 +185,11 @@ public class ManterProcessoMB implements Serializable {
     private Usuario usuario;
 
     private boolean proximo;
-    
+
     private String nomeRequerenteP;
     private String descLocalizacao;
     private String descSituacao;
     private String descDetalhamentoSituacao;
-    
 
     public boolean isProximo() {
 	return proximo;
@@ -204,6 +211,15 @@ public class ManterProcessoMB implements Serializable {
     @ManagedProperty(value = "#{loginMB}")
     private LoginMB loginMB;
 
+    @ManagedProperty(value = "#{manterFinalizacaoMB}")
+    private ManterFinalizacaoMB finalizacaoMB;
+
+    @ManagedProperty(value = "#{manterAnaliseMB}")
+    private ManterAnaliseMB manterAnaliseMB;
+
+    @ManagedProperty(value = "#{manterJulgamentoMB}")
+    private ManterJulgamentoMB manterJulgamentoMB;
+
     @PostConstruct
     public void Init() {
 	JSFUtil.getRequestContext().execute("PF('carregarDadosInicioDG').show()");
@@ -215,7 +231,7 @@ public class ManterProcessoMB implements Serializable {
 
     public String salvarProcesso() {
 	try {
-	    
+
 	    setComboProcesso();
 
 	    if (processo.getIdProcesso() == null || processo.getIdProcesso() == 0) {
@@ -241,17 +257,17 @@ public class ManterProcessoMB implements Serializable {
 	    }
 
 	    Processo processoSalvo = new ProcessoDAO().salvar(processo);
-	   
-	    if(processo.getIdProcesso()==null){
+
+	    if (processo.getIdProcesso() == null) {
 		PessoaProcesso pessoaProcesso = new PessoaProcesso();
 		pessoaProcesso.setProcesso(processoSalvo);
 		new PessoaProcessoDAO().salvar(pessoaProcesso);
 	    }
-	    
+
 	    JSFUtil.getSessionMap().put("PROCESSO_EDITADO_SESSAO", processoSalvo);
-	    
+
 	    salvarHistoricoRequerimento(processoSalvo);
-	    
+
 	    JSFUtil.getRequestContext().execute("PF('dlg_mensagem_processo').hide()");
 	    JSFUtil.retornarMensagemModal("Processo", "Processo Salvo....");
 	} catch (Exception e) {
@@ -290,19 +306,57 @@ public class ManterProcessoMB implements Serializable {
 	}
 
     }
-    
-    public void editarHistorico(){
-	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
+
+    public void editarHistorico() {
+	hitoricoRequerimento = (HistoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
 	JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
 	this.novo = true;
+	finalizacaoMB.Init();
+	manterAnaliseMB.Init();
+	manterJulgamentoMB.Init();
     }
 
-    public void criarCopiaHistorico(){
-	hitoricoRequerimento = (HitoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
-	hitoricoRequerimento.setIdHistorico(null);
-	hitoricoRequerimento = new HistoricoRequerimentoDAO().salvar(hitoricoRequerimento);
-	JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
-	this.novo = true;
+    public void criarCopiaHistorico() {
+	hitoricoRequerimento = (HistoricoRequerimento) JSFUtil.getRequestMap().get("historicoLista");
+	HistoricoRequerimento historico = new HistoricoRequerimento();
+	try {
+	    AnaliseProcesso analise2 = hitoricoRequerimento.getAnaliseProcesso1();
+	    JulgamentoProcesso julgamento1 = hitoricoRequerimento.getJulgamentoProcesso();
+	    BeanUtils.copyProperties(historico, hitoricoRequerimento);
+	    historico.setIdHistorico(null);
+	    historico.setAnaliseProcesso2(analise2);
+	    historico.setDataCadastro(new Date());
+
+	    if (historico.getJulgamentoProcesso() != null) {
+		JulgamentoProcesso julgamentoProcesso = new JulgamentoProcesso();
+		julgamento1.setIdJulgamentoProcesso(null);
+		BeanUtils.copyProperties(julgamentoProcesso, julgamento1);
+		julgamentoProcesso.setIdJulgamentoProcesso(null);
+		julgamentoProcesso.setDataCadastro(new Date());
+		julgamentoProcesso.setIdUsuario(usuario.getIdUsuario());
+		julgamentoProcesso = new JulgamentoProcessoDAO().salvar(julgamentoProcesso);
+		historico.setJulgamentoProcesso(julgamentoProcesso);
+	    }
+
+	    if (historico.getAnaliseProcesso1() != null) {
+		AnaliseProcesso analise = new AnaliseProcesso();
+		BeanUtils.copyProperties(analise, analise2);
+		analise.setIdAnalise(null);
+		analise.setDataCadastro(new Date());
+		analise.setIdUsuario(usuario.getIdUsuario());
+		analise = new AnaliseProcessoDAO().salvar(analise);
+		historico.setAnaliseProcesso1(analise);
+	    }
+
+	    historico = new HistoricoRequerimentoDAO().salvar(historico);
+
+	    carregarListahistoricoRA();
+	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    JSFUtil.retornarMensagemModal("Erro", "Erro ao criar a copia...." + e.getMessage());
+
+	}
     }
 
     public void habilitaNovo() {
@@ -311,9 +365,12 @@ public class ManterProcessoMB implements Serializable {
 	    this.novo = false;
 	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, null);
 	} else {
-	    HitoricoRequerimento hitorico = new HitoricoRequerimento();
+	    HistoricoRequerimento hitorico = new HistoricoRequerimento();
 	    hitorico.setProcesso(this.processo);
 	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitorico);
+	    finalizacaoMB.Init();
+	    manterAnaliseMB.Init();
+	    manterJulgamentoMB.Init();
 	    this.novo = true;
 	}
     }
@@ -346,32 +403,32 @@ public class ManterProcessoMB implements Serializable {
 	if (pessoaProcessoP != null) {
 	    // pessoa = pessoaProcessoP.getPessoa();
 	    processo = pessoaProcessoP.getProcesso();
-	    
+
 	    carregarListahistoricoRA();
-	    
+
 	    this.idLocalizacao = processo.getIdLocalizacao();
-	    
-	    if(this.idLocalizacao!=null && this.idLocalizacao.intValue()>0){
+
+	    if (this.idLocalizacao != null && this.idLocalizacao.intValue() > 0) {
 		Localizacao localizacao = new LocalizacaoDAO().lerPorId(this.idLocalizacao);
 		this.descLocalizacao = localizacao.getDescLocalizacao();
 	    }
-	    	    
+
 	    this.idStatusProcesso = (processo.getStatusProcesso() != null ? processo.getStatusProcesso()
 		    .getIdStatusProcesso() : null);
 
-	    if(this.idStatusProcesso!=null && this.idStatusProcesso.intValue()>0){
+	    if (this.idStatusProcesso != null && this.idStatusProcesso.intValue() > 0) {
 		StatusProcesso statusProcesso = new StatusProcessoDAO().lerPorId(this.idStatusProcesso);
 		this.descSituacao = statusProcesso.getDescStatusProcesso();
 	    }
-	    
+
 	    this.idSubStatusProcesso = (processo.getSubStatusProcesso() != null ? processo.getSubStatusProcesso()
 		    .getIdSubStatusProcesso() : null);
 
-	    if(this.idSubStatusProcesso!=null && this.idSubStatusProcesso.intValue()>0){
+	    if (this.idSubStatusProcesso != null && this.idSubStatusProcesso.intValue() > 0) {
 		SubStatusProcesso statusProcesso = new SubStatusProcessoDAO().lerPorId(this.idSubStatusProcesso);
 		this.descDetalhamentoSituacao = statusProcesso.getDescSubStatusProcesso();
 	    }
-	    	    
+
 	    this.idGrupoProcessual = (processo.getGrupoProcessual() != null ? processo.getGrupoProcessual()
 		    .getIdGrupoProcessual() : null);
 	    this.idGrupoSocial = (processo.getGrupoSocial() != null ? processo.getGrupoSocial().getIdGrupoSocial()
@@ -391,14 +448,14 @@ public class ManterProcessoMB implements Serializable {
 	    pessoaProcesso = pessoaProcessoP;
 	    numProcessoMJ = pessoaProcessoP.getProcesso().getNumProtocoloMj();
 	    listarPessoaProcesso = new PessoaProcessoDAO().listarProcesso(processo.getIdProcesso());
-	    
+
 	    for (PessoaProcesso pessoa : listarPessoaProcesso) {
-		 if(pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue()==2 
-			 || pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue()==4){
-		     nomeRequerenteP = pessoa.getPessoa().getNomePessoa();
-		 }
+		if (pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue() == 2
+			|| pessoa.getTipoPessoaProcesso().getIdTipoPessoaProcesso().intValue() == 4) {
+		    nomeRequerenteP = pessoa.getPessoa().getNomePessoa();
+		}
 	    }
-	    
+
 	    if (processo.getSituacaoCadastro() != null && processo.getSituacaoCadastro().getCodSituacaoCadastro() == 2) {
 		comfirmaDadosCorretos = true;
 	    }
@@ -606,7 +663,8 @@ public class ManterProcessoMB implements Serializable {
 
     public void salvarInteressadoProcesso() {
 	Processo processoAtual = (Processo) JSFUtil.getSessionMap().get("PROCESSO_EDITADO_SESSAO");
-	if (processoAtual == null || processoAtual.getIdProcesso()==null || processoAtual.getIdProcesso().longValue() == 0l) {
+	if (processoAtual == null || processoAtual.getIdProcesso() == null
+		|| processoAtual.getIdProcesso().longValue() == 0l) {
 	    JSFUtil.retornarMensagemModal("Interessados",
 		    "Requerimento não Criado ou Salvo! Favor Salvar o Requerimento de Anistia"
 			    + " para vincular os Interessados");
@@ -618,14 +676,15 @@ public class ManterProcessoMB implements Serializable {
 		}
 		processoAtual = new ProcessoDAO().lerPorId(processoAtual.getIdProcesso());
 		for (PessoaProcesso pessoaProcesso : listarPessoaProcesso) {
-		    if(pessoaProcesso.getPessoa()!=null || pessoaProcesso.getPessoa().getIdPessoa()>0){
+		    if (pessoaProcesso.getPessoa() != null || pessoaProcesso.getPessoa().getIdPessoa() > 0) {
 			pessoaProcesso.setProcesso(processoAtual);
 			this.pessoaProcesso = new PessoaProcessoDAO().salvar(pessoaProcesso);
-			System.out.println("Salvando pessoas no processo ::IdProcesso:: "+pessoaProcesso.getProcesso().getIdProcesso());
+			System.out.println("Salvando pessoas no processo ::IdProcesso:: "
+				+ pessoaProcesso.getProcesso().getIdProcesso());
 		    }
 		}
 		salvarHistoricoRequerimento(processoAtual);
-		    
+
 		JSFUtil.retornarMensagemModal("Interessados",
 			"Interssados no Requerimento de Anistia atualizados com Sucesso!");
 
@@ -638,20 +697,21 @@ public class ManterProcessoMB implements Serializable {
     }
 
     private void salvarHistoricoRequerimento(Processo processoAtual) {
-	hitoricoRequerimento = (HitoricoRequerimento)JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
-	if(hitoricoRequerimento!=null && processoAtual!=null && processoAtual.getIdProcesso().longValue()>0){
-	    if(hitoricoRequerimento.getIdHistorico()==null || hitoricoRequerimento.getIdHistorico().intValue()==0){
+	hitoricoRequerimento = (HistoricoRequerimento) JSFUtil.getSessionMap().get(ConstantSinca.NOVO_HISTORICO_RA);
+	if (hitoricoRequerimento != null && processoAtual != null && processoAtual.getIdProcesso().longValue() > 0) {
+	    if (hitoricoRequerimento.getIdHistorico() == null || hitoricoRequerimento.getIdHistorico().intValue() == 0) {
 		hitoricoRequerimento.setDataCadastro(new Date());
-	    }else if(hitoricoRequerimento.getIdHistorico() != null && hitoricoRequerimento.getIdHistorico().intValue() != 0){
+	    } else if (hitoricoRequerimento.getIdHistorico() != null
+		    && hitoricoRequerimento.getIdHistorico().intValue() != 0) {
 		hitoricoRequerimento = new HistoricoRequerimentoDAO().lerPorId(hitoricoRequerimento.getIdHistorico());
 	    }
 	    hitoricoRequerimento.setUsuario(usuario);
 	    hitoricoRequerimento.setProcesso(processoAtual);
 	    hitoricoRequerimento.setDataAtualizacao(new Date());
 	    hitoricoRequerimento = new HistoricoRequerimentoDAO().salvar(hitoricoRequerimento);
-	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA,hitoricoRequerimento);
+	    JSFUtil.getSessionMap().put(ConstantSinca.NOVO_HISTORICO_RA, hitoricoRequerimento);
 	}
-	
+
     }
 
     public void salvarInteressado() {
@@ -676,15 +736,15 @@ public class ManterProcessoMB implements Serializable {
 		List<PessoaEndereco> pssEndList = new PessoaEnderecoDAO().listarPorIdPessoa(pessoaSalva.getIdPessoa());
 
 		for (PessoaEndereco pessoaEndereco : pssEndList) {
-			new PessoaEnderecoDAO().excluir(pessoaEndereco);
+		    new PessoaEnderecoDAO().excluir(pessoaEndereco);
 		}
 
 		for (Endereco endereco : getListarEnderecos()) {
-		    	PessoaEndereco pessEnd = new PessoaEndereco();
-		    	Endereco endSalvo = new EnderecoDAO().salvar(endereco);
-		    		pessEnd.setEndereco(endSalvo );
-		    		pessEnd.setPessoa(pessoaSalva);
-		    	new PessoaEnderecoDAO().salvar(pessEnd);
+		    PessoaEndereco pessEnd = new PessoaEndereco();
+		    Endereco endSalvo = new EnderecoDAO().salvar(endereco);
+		    pessEnd.setEndereco(endSalvo);
+		    pessEnd.setPessoa(pessoaSalva);
+		    new PessoaEnderecoDAO().salvar(pessEnd);
 		}
 
 		Map<Integer, TelefonePessoa> mapTelefones = getMapTelefones();
@@ -1647,51 +1707,83 @@ public class ManterProcessoMB implements Serializable {
     }
 
     public String getNomeRequerenteP() {
-        return nomeRequerenteP;
+	return nomeRequerenteP;
     }
 
     public String getDescLocalizacao() {
-        return descLocalizacao;
+	return descLocalizacao;
     }
 
     public void setNomeRequerenteP(String nomeRequerenteP) {
-        this.nomeRequerenteP = nomeRequerenteP;
+	this.nomeRequerenteP = nomeRequerenteP;
     }
 
     public void setDescLocalizacao(String descLocalizacao) {
-        this.descLocalizacao = descLocalizacao;
+	this.descLocalizacao = descLocalizacao;
     }
 
     public String getDescSituacao() {
-        return descSituacao;
+	return descSituacao;
     }
 
     public String getDescDetalhamentoSituacao() {
-        return descDetalhamentoSituacao;
+	return descDetalhamentoSituacao;
     }
 
     public void setDescSituacao(String descSituacao) {
-        this.descSituacao = descSituacao;
+	this.descSituacao = descSituacao;
     }
 
     public void setDescDetalhamentoSituacao(String descDetalhamentoSituacao) {
-        this.descDetalhamentoSituacao = descDetalhamentoSituacao;
+	this.descDetalhamentoSituacao = descDetalhamentoSituacao;
     }
 
-    public List<HitoricoRequerimento> getListarHitorico() {
-        return listarHitorico;
+    public List<HistoricoRequerimento> getListarHitorico() {
+	return listarHitorico;
     }
 
-    public HitoricoRequerimento getHitoricoRequerimento() {
-        return hitoricoRequerimento;
+    public HistoricoRequerimento getHitoricoRequerimento() {
+	return hitoricoRequerimento;
     }
 
-    public void setListarHitorico(List<HitoricoRequerimento> listarHitorico) {
-        this.listarHitorico = listarHitorico;
+    public void setListarHitorico(List<HistoricoRequerimento> listarHitorico) {
+	this.listarHitorico = listarHitorico;
     }
 
-    public void setHitoricoRequerimento(HitoricoRequerimento hitoricoRequerimento) {
-        this.hitoricoRequerimento = hitoricoRequerimento;
+    public void setHitoricoRequerimento(HistoricoRequerimento hitoricoRequerimento) {
+	this.hitoricoRequerimento = hitoricoRequerimento;
+    }
+
+    public ManterFinalizacaoMB getFinalizacaoMB() {
+	return finalizacaoMB;
+    }
+
+    public void setFinalizacaoMB(ManterFinalizacaoMB finalizacaoMB) {
+	this.finalizacaoMB = finalizacaoMB;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public ManterAnaliseMB getManterAnaliseMB() {
+        return manterAnaliseMB;
+    }
+
+    public ManterJulgamentoMB getManterJulgamentoMB() {
+        return manterJulgamentoMB;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setManterAnaliseMB(ManterAnaliseMB manterAnaliseMB) {
+        this.manterAnaliseMB = manterAnaliseMB;
+    }
+
+    public void setManterJulgamentoMB(ManterJulgamentoMB manterJulgamentoMB) {
+        this.manterJulgamentoMB = manterJulgamentoMB;
     }
 
 }

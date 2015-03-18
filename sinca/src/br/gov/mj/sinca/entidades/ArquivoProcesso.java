@@ -18,7 +18,7 @@ public class ArquivoProcesso implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_ARQUIVO_PROCESSO")
-	private String idArquivoProcesso;
+	private Long idArquivoProcesso;
 
 	private String armario;
 
@@ -67,11 +67,11 @@ public class ArquivoProcesso implements Serializable {
 	public ArquivoProcesso() {
 	}
 
-	public String getIdArquivoProcesso() {
+	public Long getIdArquivoProcesso() {
 		return this.idArquivoProcesso;
 	}
 
-	public void setIdArquivoProcesso(String idArquivoProcesso) {
+	public void setIdArquivoProcesso(Long idArquivoProcesso) {
 		this.idArquivoProcesso = idArquivoProcesso;
 	}
 

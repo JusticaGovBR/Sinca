@@ -30,11 +30,25 @@
 					showDetail="true" autoUpdate="true" closable="true" />
 
 			</div>
+
+			<p:dialog header="ALERTA!" resizable="false" showEffect="explode"
+				closable="false" hideEffect="explode"
+				widgetVar="dlg_mensagem_arquivo" modal="true" width="250px">
+				<h:panelGrid columns="1" cellpadding="10"
+					style="margin-bottom:20px;text-align:center;">
+					<h:outputLabel value="Atualizando Informações..."
+						title="#{manterArquivoMB.mensagem}"
+						style="text-align:center;color:Crimson;font-style:normal;font-size:xx-large;text-decoration:none;font-weight:bolder;" />
+					<h:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</h:panelGrid>
+			</p:dialog>
+
 			<h:panelGrid columns="1" cellpadding="10"
 				style="margin-bottom:20px;text-align:center; width : 100%;">
-				<p:commandButton id="salvarAruivo"
-					value="Salvar Arquivo" 
-					icon="ui-icon-disk" title="Atualizar">
+				<p:commandButton id="salvarAruivo" value="Salvar Arquivo"
+					actionListener="#{manterArquivoMB.salvar}" ajax="true"
+					update=":tabView:formArquivo:" icon="ui-icon-disk"
+					title="Atualizar">
 					<p:confirm header="Comfirmação"
 						message="Comfirma as alterações realizadas?" icon="ui-icon-alert" />
 				</p:commandButton>
@@ -59,31 +73,36 @@
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Localização Física:" />
-						<p:inputText size="50" maxlength="50" value="" />
+						<p:inputText size="50" maxlength="50"
+							value="#{manterArquivoMB.arquivoProcesso.localizacao}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Sala:" />
-						<p:inputText size="10" maxlength="10" value="" />
+						<p:inputText size="10" maxlength="10"
+							value="#{manterArquivoMB.arquivoProcesso.sala}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Armário:" />
-						<p:inputText size="10" maxlength="10" value="" />
+						<p:inputText size="10" maxlength="10"
+							value="#{manterArquivoMB.arquivoProcesso.armario}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Prateleira:" />
-						<p:inputText size="10" maxlength="10" value="" />
+						<p:inputText size="10" maxlength="10"
+							value="#{manterArquivoMB.arquivoProcesso.prateleirA}" />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1" cellpadding="10"
 						style="margin-bottom:10px; width : 50%;">
 						<h:outputLabel value="Pilha / Caixa:" />
-						<p:inputText size="10" maxlength="10" value="" />
+						<p:inputText size="10" maxlength="10"
+							value="#{manterArquivoMB.arquivoProcesso.caixa}" />
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -91,7 +110,8 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Observações:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterArquivoMB.arquivoProcesso.complemento}" />
 				</h:panelGrid>
 
 			</p:panel>
@@ -105,7 +125,7 @@
 					<p:outputLabel for="prossuiErro" value="Possui Erro(s)?"
 						style=" width : 300px;" />
 					<h:selectOneRadio id="prossuiErro"
-						value="">
+						value="#{manterArquivoMB.arquivoProcesso.bolPossuiErro}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -114,7 +134,8 @@
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Característica(s) do Erro(s):" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterArquivoMB.arquivoProcesso.caracteristicas}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="2" style="margin-bottom:10px;width :30%"
@@ -122,7 +143,7 @@
 					<p:outputLabel for="existependencia"
 						value="Existe Pendência no Processo:" style=" width : 300px;" />
 					<h:selectOneRadio id="existependencia"
-						value="">
+						value="#{manterArquivoMB.arquivoProcesso.bolExistePendencia}">
 						<f:selectItem itemLabel="Não.." itemValue="0" />
 						<f:selectItem itemLabel="Sim" itemValue="1" />
 					</h:selectOneRadio>
@@ -130,19 +151,24 @@
 
 				<h:panelGrid columns="1" cellpadding="10">
 					<p:outputLabel value="Descrição Arquivistica do Processo:" />
-					<p:selectOneMenu value="#" effect="fade" style=" width: 400px;">
-						<f:selectItem itemValue="1" itemLabel="Selecione" />
-						<f:selectItem itemValue="2" itemLabel="CD/DVD" />
-						<f:selectItem itemValue="3" itemLabel="Malote" />
+					<p:selectOneMenu value="#{manterArquivoMB.arquivoProcesso.idArquivoProcesso}"
+						effect="fade" style=" width: 400px;">
+						<f:selectItem itemLabel="Selecione"
+							noSelectionOption="true" />
+						<f:selectItems value="#{manterArquivoMB.listaTipoDescricao}"
+							var="item" itemLabel="#{item.decricao}"
+							itemValue="#{item.idDescricaoArquivistica}" />
+							
 					</p:selectOneMenu>
 				</h:panelGrid>
-				
+
 				<h:panelGrid columns="1" cellpadding="30"
 					style="margin-bottom:10px; width : 100%">
 					<h:outputLabel value="Material Especial:" />
-					<p:inputTextarea maxlength="300" rows="3" cols="100" value="" />
+					<p:inputTextarea maxlength="300" rows="3" cols="100"
+						value="#{manterArquivoMB.arquivoProcesso.materialEspecial}" />
 				</h:panelGrid>
-				
+
 			</p:panel>
 
 		</h:form>

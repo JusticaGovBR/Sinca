@@ -14,6 +14,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -106,6 +107,10 @@ public class AnaliseProcesso implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_PROCESSO")
 	private Processo processo;
+
+	@OneToOne
+	@JoinColumn(name="ID_RECOMENDACAO")
+	private RecomendacaoAnalise recomendacaoAnalise;
 
 	//bi-directional many-to-one association to PerseguicaoAnalise
 	@OneToMany(mappedBy="analiseProcesso")
@@ -404,6 +409,14 @@ public class AnaliseProcesso implements Serializable {
 		provasAnalis.setAnaliseProcesso(null);
 
 		return provasAnalis;
+	}
+
+	public RecomendacaoAnalise getRecomendacaoAnalise() {
+	    return recomendacaoAnalise;
+	}
+
+	public void setRecomendacaoAnalise(RecomendacaoAnalise recomendacaoAnalise) {
+	    this.recomendacaoAnalise = recomendacaoAnalise;
 	}
 
 }

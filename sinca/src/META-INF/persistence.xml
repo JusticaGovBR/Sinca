@@ -5,6 +5,19 @@
 	version="1.0">
 
 
+  <persistence-unit name="sincaEM"  transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:/jdbc/MJSinca</jta-data-source>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+		</properties>
+	</persistence-unit>
+
+	
+	<!-- 
 	<persistence-unit name="sincaEM">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
@@ -17,21 +30,6 @@
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 	</persistence-unit>
-	
-	<!-- 
-
-
-  <persistence-unit name="sincaEM"  transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:/jdbc/MJSinca</jta-data-source>
-
-		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="true" />
-		</properties>
-	</persistence-unit>
-
 
 
 	 -->

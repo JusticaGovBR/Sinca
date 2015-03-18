@@ -10,9 +10,9 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="hitorico_requerimento")
-@NamedQuery(name="HitoricoRequerimento.findAll", query="SELECT h FROM HitoricoRequerimento h")
-public class HitoricoRequerimento implements Serializable {
+@Table(name="historico_requerimento")
+@NamedQuery(name="HistoricoRequerimento.findAll", query="SELECT h FROM HistoricoRequerimento h")
+public class HistoricoRequerimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -73,7 +73,7 @@ public class HitoricoRequerimento implements Serializable {
 	@JoinColumn(name="ID_USUARIO")
 	private Usuario usuario;
 
-	public HitoricoRequerimento() {
+	public HistoricoRequerimento() {
 	}
 
 	public Long getIdHistorico() {

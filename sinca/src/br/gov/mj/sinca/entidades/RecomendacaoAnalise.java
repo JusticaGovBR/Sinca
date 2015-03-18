@@ -1,239 +1,212 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the recomendacao_analise database table.
  * 
  */
 @Entity
-@Table(name="recomendacao_analise")
-@NamedQuery(name="RecomendacaoAnalise.findAll", query="SELECT r FROM RecomendacaoAnalise r")
+@Table(name = "recomendacao_analise")
+@NamedQuery(name = "RecomendacaoAnalise.findAll", query = "SELECT r FROM RecomendacaoAnalise r")
 public class RecomendacaoAnalise implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID_RECOMENDACAO")
-	private Long idRecomendacao;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_RECOMENDACAO")
+    private Long idRecomendacao;
 
-	@Column(name="BOL_HOUVE_REPARACAO")
-	private byte bolHouveReparacao;
+    @Column(name = "BOL_HOUVE_REPARACAO")
+    private Byte bolHouveReparacao;
 
-	@Column(name="BOL_HOVE_DILIGENCIA")
-	private BigInteger bolHoveDiligencia;
+    @Column(name = "BOL_HOVE_DILIGENCIA")
+    private Byte bolHoveDiligencia;
 
-	@Column(name="BOL_REPARACAO_ECONOMICA")
-	private BigInteger bolReparacaoEconomica;
+    @Column(name = "BOL_REPARACAO_ECONOMICA")
+    private Byte bolReparacaoEconomica;
 
-	@Column(name="BOL_REPARACAO_MORAL")
-	private BigInteger bolReparacaoMoral;
+    @Column(name = "BOL_REPARACAO_MORAL")
+    private Byte bolReparacaoMoral;
 
-	@Column(name="BOL_RESTITUICAO_DIREITOS")
-	private BigInteger bolRestituicaoDireitos;
+    @Column(name = "BOL_RESTITUICAO_DIREITOS")
+    private Byte bolRestituicaoDireitos;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="DATA_MINITUTA")
-	private Date dataMinituta;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_MINITUTA")
+    private Date dataMinituta;
 
-	@Column(name="DISPOSITIVO_RECOMENDACAO")
-	private String dispositivoRecomendacao;
+    @Column(name = "DISPOSITIVO_RECOMENDACAO")
+    private String dispositivoRecomendacao;
 
-	//bi-directional many-to-one association to TipoAnaliseJulgamento
-	@ManyToOne
-	@JoinColumn(name="ID_TIPO_JULGAMENTO")
-	private TipoAnaliseJulgamento tipoAnaliseJulgamento;
+    // bi-directional many-to-one association to TipoAnaliseJulgamento
+    @ManyToOne
+    @JoinColumn(name = "ID_TIPO_JULGAMENTO")
+    private TipoAnaliseJulgamento tipoAnaliseJulgamento;
 
-	@ManyToOne
-	@JoinColumn(name="ID_ANALISE_PROCESSO")
-	private AnaliseProcesso analiseProcesso;
+    @ManyToOne
+    @JoinColumn(name = "ID_ANALISE_PROCESSO")
+    private AnaliseProcesso analiseProcesso;
 
-	@OneToMany(mappedBy="recomendacaoAnalise")
-	private List<RecomendacaoDiligencia> recomendacaoDiligencias;
+    @OneToMany(mappedBy = "recomendacaoAnalise")
+    private List<RecomendacaoDiligencia> recomendacaoDiligencias;
 
-	@OneToMany(mappedBy="recomendacaoAnalise")
-	private List<ReparacaoDireitoAnalise> reparacaoDireitoAnalises;
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_ECONOMICA")
+    private ReparacaoEconomicaAnalise reparacaoEconomicaAnalise;
 
-	@OneToMany(mappedBy="recomendacaoAnalise")
-	private List<ReparacaoEconomicaAnalise> reparacaoEconomicaAnalises;
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_MORAL")
+    private ReparacaoMoralAnalise reparacaoMoralAnalise;
 
-	@OneToMany(mappedBy="recomendacaoAnalise")
-	private List<ReparacaoMoralAnalise> reparacaoMoralAnalises;
+    @OneToOne
+    @JoinColumn(name = "ID_REPARACAO_DIREITO")
+    private ReparacaoDireitoAnalise reparacaoDireitoAnalise;
 
-	public RecomendacaoAnalise() {
-	}
+    public RecomendacaoAnalise() {
+    }
 
-	public Long getIdRecomendacao() {
-		return this.idRecomendacao;
-	}
+    public Long getIdRecomendacao() {
+	return this.idRecomendacao;
+    }
 
-	public void setIdRecomendacao(Long idRecomendacao) {
-		this.idRecomendacao = idRecomendacao;
-	}
+    public void setIdRecomendacao(Long idRecomendacao) {
+	this.idRecomendacao = idRecomendacao;
+    }
 
-	public byte getBolHouveReparacao() {
-		return this.bolHouveReparacao;
-	}
+    public Byte getBolHouveReparacao() {
+	return this.bolHouveReparacao;
+    }
 
-	public void setBolHouveReparacao(byte bolHouveReparacao) {
-		this.bolHouveReparacao = bolHouveReparacao;
-	}
+    public void setBolHouveReparacao(Byte bolHouveReparacao) {
+	this.bolHouveReparacao = bolHouveReparacao;
+    }
 
-	public BigInteger getBolHoveDiligencia() {
-		return this.bolHoveDiligencia;
-	}
+    public Byte getBolHoveDiligencia() {
+	return this.bolHoveDiligencia;
+    }
 
-	public void setBolHoveDiligencia(BigInteger bolHoveDiligencia) {
-		this.bolHoveDiligencia = bolHoveDiligencia;
-	}
+    public void setBolHoveDiligencia(Byte bolHoveDiligencia) {
+	this.bolHoveDiligencia = bolHoveDiligencia;
+    }
 
-	public BigInteger getBolReparacaoEconomica() {
-		return this.bolReparacaoEconomica;
-	}
+    public Byte getBolReparacaoEconomica() {
+	return this.bolReparacaoEconomica;
+    }
 
-	public void setBolReparacaoEconomica(BigInteger bolReparacaoEconomica) {
-		this.bolReparacaoEconomica = bolReparacaoEconomica;
-	}
+    public void setBolReparacaoEconomica(Byte bolReparacaoEconomica) {
+	this.bolReparacaoEconomica = bolReparacaoEconomica;
+    }
 
-	public BigInteger getBolReparacaoMoral() {
-		return this.bolReparacaoMoral;
-	}
+    public Byte getBolReparacaoMoral() {
+	return this.bolReparacaoMoral;
+    }
 
-	public void setBolReparacaoMoral(BigInteger bolReparacaoMoral) {
-		this.bolReparacaoMoral = bolReparacaoMoral;
-	}
+    public void setBolReparacaoMoral(Byte bolReparacaoMoral) {
+	this.bolReparacaoMoral = bolReparacaoMoral;
+    }
 
-	public BigInteger getBolRestituicaoDireitos() {
-		return this.bolRestituicaoDireitos;
-	}
+    public Byte getBolRestituicaoDireitos() {
+	return this.bolRestituicaoDireitos;
+    }
 
-	public void setBolRestituicaoDireitos(BigInteger bolRestituicaoDireitos) {
-		this.bolRestituicaoDireitos = bolRestituicaoDireitos;
-	}
+    public void setBolRestituicaoDireitos(Byte bolRestituicaoDireitos) {
+	this.bolRestituicaoDireitos = bolRestituicaoDireitos;
+    }
 
-	public Date getDataMinituta() {
-		return this.dataMinituta;
-	}
+    public Date getDataMinituta() {
+	return this.dataMinituta;
+    }
 
-	public void setDataMinituta(Date dataMinituta) {
-		this.dataMinituta = dataMinituta;
-	}
+    public void setDataMinituta(Date dataMinituta) {
+	this.dataMinituta = dataMinituta;
+    }
 
-	public String getDispositivoRecomendacao() {
-		return this.dispositivoRecomendacao;
-	}
+    public String getDispositivoRecomendacao() {
+	return this.dispositivoRecomendacao;
+    }
 
-	public void setDispositivoRecomendacao(String dispositivoRecomendacao) {
-		this.dispositivoRecomendacao = dispositivoRecomendacao;
-	}
+    public void setDispositivoRecomendacao(String dispositivoRecomendacao) {
+	this.dispositivoRecomendacao = dispositivoRecomendacao;
+    }
 
-	public TipoAnaliseJulgamento getTipoAnaliseJulgamento() {
-		return this.tipoAnaliseJulgamento;
-	}
+    public TipoAnaliseJulgamento getTipoAnaliseJulgamento() {
+	return this.tipoAnaliseJulgamento;
+    }
 
-	public void setTipoAnaliseJulgamento(TipoAnaliseJulgamento tipoAnaliseJulgamento) {
-		this.tipoAnaliseJulgamento = tipoAnaliseJulgamento;
-	}
+    public void setTipoAnaliseJulgamento(TipoAnaliseJulgamento tipoAnaliseJulgamento) {
+	this.tipoAnaliseJulgamento = tipoAnaliseJulgamento;
+    }
 
-	public AnaliseProcesso getAnaliseProcesso() {
-		return this.analiseProcesso;
-	}
+    public AnaliseProcesso getAnaliseProcesso() {
+	return this.analiseProcesso;
+    }
 
-	public void setAnaliseProcesso(AnaliseProcesso analiseProcesso) {
-		this.analiseProcesso = analiseProcesso;
-	}
+    public void setAnaliseProcesso(AnaliseProcesso analiseProcesso) {
+	this.analiseProcesso = analiseProcesso;
+    }
 
-	public List<RecomendacaoDiligencia> getRecomendacaoDiligencias() {
-		return this.recomendacaoDiligencias;
-	}
+    public List<RecomendacaoDiligencia> getRecomendacaoDiligencias() {
+	return this.recomendacaoDiligencias;
+    }
 
-	public void setRecomendacaoDiligencias(List<RecomendacaoDiligencia> recomendacaoDiligencias) {
-		this.recomendacaoDiligencias = recomendacaoDiligencias;
-	}
+    public void setRecomendacaoDiligencias(List<RecomendacaoDiligencia> recomendacaoDiligencias) {
+	this.recomendacaoDiligencias = recomendacaoDiligencias;
+    }
 
-	public RecomendacaoDiligencia addRecomendacaoDiligencia(RecomendacaoDiligencia recomendacaoDiligencia) {
-		getRecomendacaoDiligencias().add(recomendacaoDiligencia);
-		recomendacaoDiligencia.setRecomendacaoAnalise(this);
+    public RecomendacaoDiligencia addRecomendacaoDiligencia(RecomendacaoDiligencia recomendacaoDiligencia) {
+	getRecomendacaoDiligencias().add(recomendacaoDiligencia);
+	recomendacaoDiligencia.setRecomendacaoAnalise(this);
 
-		return recomendacaoDiligencia;
-	}
+	return recomendacaoDiligencia;
+    }
 
-	public RecomendacaoDiligencia removeRecomendacaoDiligencia(RecomendacaoDiligencia recomendacaoDiligencia) {
-		getRecomendacaoDiligencias().remove(recomendacaoDiligencia);
-		recomendacaoDiligencia.setRecomendacaoAnalise(null);
+    public RecomendacaoDiligencia removeRecomendacaoDiligencia(RecomendacaoDiligencia recomendacaoDiligencia) {
+	getRecomendacaoDiligencias().remove(recomendacaoDiligencia);
+	recomendacaoDiligencia.setRecomendacaoAnalise(null);
 
-		return recomendacaoDiligencia;
-	}
+	return recomendacaoDiligencia;
+    }
 
-	public List<ReparacaoDireitoAnalise> getReparacaoDireitoAnalises() {
-		return this.reparacaoDireitoAnalises;
-	}
+    public ReparacaoEconomicaAnalise getReparacaoEconomicaAnalise() {
+        return reparacaoEconomicaAnalise;
+    }
 
-	public void setReparacaoDireitoAnalises(List<ReparacaoDireitoAnalise> reparacaoDireitoAnalises) {
-		this.reparacaoDireitoAnalises = reparacaoDireitoAnalises;
-	}
+    public ReparacaoMoralAnalise getReparacaoMoralAnalise() {
+        return reparacaoMoralAnalise;
+    }
 
-	public ReparacaoDireitoAnalise addReparacaoDireitoAnalis(ReparacaoDireitoAnalise reparacaoDireitoAnalis) {
-		getReparacaoDireitoAnalises().add(reparacaoDireitoAnalis);
-		reparacaoDireitoAnalis.setRecomendacaoAnalise(this);
+    public ReparacaoDireitoAnalise getReparacaoDireitoAnalise() {
+        return reparacaoDireitoAnalise;
+    }
 
-		return reparacaoDireitoAnalis;
-	}
+    public void setReparacaoEconomicaAnalise(ReparacaoEconomicaAnalise reparacaoEconomicaAnalise) {
+        this.reparacaoEconomicaAnalise = reparacaoEconomicaAnalise;
+    }
 
-	public ReparacaoDireitoAnalise removeReparacaoDireitoAnalis(ReparacaoDireitoAnalise reparacaoDireitoAnalis) {
-		getReparacaoDireitoAnalises().remove(reparacaoDireitoAnalis);
-		reparacaoDireitoAnalis.setRecomendacaoAnalise(null);
+    public void setReparacaoMoralAnalise(ReparacaoMoralAnalise reparacaoMoralAnalise) {
+        this.reparacaoMoralAnalise = reparacaoMoralAnalise;
+    }
 
-		return reparacaoDireitoAnalis;
-	}
+    public void setReparacaoDireitoAnalise(ReparacaoDireitoAnalise reparacaoDireitoAnalise) {
+        this.reparacaoDireitoAnalise = reparacaoDireitoAnalise;
+    }
 
-	public List<ReparacaoEconomicaAnalise> getReparacaoEconomicaAnalises() {
-		return this.reparacaoEconomicaAnalises;
-	}
-
-	public void setReparacaoEconomicaAnalises(List<ReparacaoEconomicaAnalise> reparacaoEconomicaAnalises) {
-		this.reparacaoEconomicaAnalises = reparacaoEconomicaAnalises;
-	}
-
-	public ReparacaoEconomicaAnalise addReparacaoEconomicaAnalis(ReparacaoEconomicaAnalise reparacaoEconomicaAnalis) {
-		getReparacaoEconomicaAnalises().add(reparacaoEconomicaAnalis);
-		reparacaoEconomicaAnalis.setRecomendacaoAnalise(this);
-
-		return reparacaoEconomicaAnalis;
-	}
-
-	public ReparacaoEconomicaAnalise removeReparacaoEconomicaAnalis(ReparacaoEconomicaAnalise reparacaoEconomicaAnalis) {
-		getReparacaoEconomicaAnalises().remove(reparacaoEconomicaAnalis);
-		reparacaoEconomicaAnalis.setRecomendacaoAnalise(null);
-
-		return reparacaoEconomicaAnalis;
-	}
-
-	public List<ReparacaoMoralAnalise> getReparacaoMoralAnalises() {
-		return this.reparacaoMoralAnalises;
-	}
-
-	public void setReparacaoMoralAnalises(List<ReparacaoMoralAnalise> reparacaoMoralAnalises) {
-		this.reparacaoMoralAnalises = reparacaoMoralAnalises;
-	}
-
-	public ReparacaoMoralAnalise addReparacaoMoralAnalis(ReparacaoMoralAnalise reparacaoMoralAnalis) {
-		getReparacaoMoralAnalises().add(reparacaoMoralAnalis);
-		reparacaoMoralAnalis.setRecomendacaoAnalise(this);
-
-		return reparacaoMoralAnalis;
-	}
-
-	public ReparacaoMoralAnalise removeReparacaoMoralAnalis(ReparacaoMoralAnalise reparacaoMoralAnalis) {
-		getReparacaoMoralAnalises().remove(reparacaoMoralAnalis);
-		reparacaoMoralAnalis.setRecomendacaoAnalise(null);
-
-		return reparacaoMoralAnalis;
-	}
-
+        
 }

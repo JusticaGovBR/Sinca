@@ -1,9 +1,19 @@
 package br.gov.mj.sinca.entidades;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -33,8 +43,9 @@ public class ReparacaoEconomicaJulgamento implements Serializable {
 	@Column(name="DATA_FIM_PU")
 	private Date dataFimPu;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="DATA_FINALIZACAO")
-	private BigInteger dataFinalizacao;
+	private Date dataFinalizacao;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="DATA_INICIO_PU")
@@ -57,10 +68,10 @@ public class ReparacaoEconomicaJulgamento implements Serializable {
 	private Date dataReotravidade;
 
 	@Column(name="ID_USUARIO")
-	private int idUsuario;
+	private Integer idUsuario;
 
 	@Column(name="ID_USUARIO_ANALISTA")
-	private BigInteger idUsuarioAnalista;
+	private Integer idUsuarioAnalista;
 
 	@Column(name="VALOR_PMPC")
 	private String valorPmpc;
@@ -108,11 +119,11 @@ public class ReparacaoEconomicaJulgamento implements Serializable {
 		this.dataFimPu = dataFimPu;
 	}
 
-	public BigInteger getDataFinalizacao() {
+	public Date getDataFinalizacao() {
 		return this.dataFinalizacao;
 	}
 
-	public void setDataFinalizacao(BigInteger dataFinalizacao) {
+	public void setDataFinalizacao(Date dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
 	}
 
@@ -156,19 +167,19 @@ public class ReparacaoEconomicaJulgamento implements Serializable {
 		this.dataReotravidade = dataReotravidade;
 	}
 
-	public int getIdUsuario() {
+	public Integer getIdUsuario() {
 		return this.idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 
-	public BigInteger getIdUsuarioAnalista() {
+	public Integer getIdUsuarioAnalista() {
 		return this.idUsuarioAnalista;
 	}
 
-	public void setIdUsuarioAnalista(BigInteger idUsuarioAnalista) {
+	public void setIdUsuarioAnalista(Integer idUsuarioAnalista) {
 		this.idUsuarioAnalista = idUsuarioAnalista;
 	}
 
